@@ -18,14 +18,14 @@ var myNewTabMod = {
 		NewTabURL.reset();
 	},
 	install: function() {
-		prefs.setCharPref("imageDir", "bingImg");
-		prefs.setIntPref("bingMaxHistory", 10);
+		prefs.setCharPref("imageDir", "bingImg");   //图片存储的文件夹名字
+		prefs.setIntPref("bingMaxHistory", 10);   //最大历史天数，可设置[2, 16]
 		prefs.setBoolPref("firstRun", true);
-		prefs.setBoolPref("isNewTab", true);
-		prefs.setCharPref("path", "myNewTabMod");
-		prefs.setIntPref("updateImageTime", 12);
-		prefs.setBoolPref("useBigImage", true);
-		prefs.setBoolPref("useBingImage", true);
+		prefs.setBoolPref("isNewTab", true);   //是否新标签页打开导航链接或搜索结果
+		prefs.setCharPref("path", "myNewTabMod");   //myNewTabMod文件夹的相对于配置文件的路径
+		prefs.setIntPref("updateImageTime", 12);   //更新bing背景图片的间隔（单位：小时）
+		prefs.setBoolPref("useBigImage", true);   //bing图片的尺寸，0为默认的1366x768，1为1920x1080
+		prefs.setBoolPref("useBingImage", true);   //使用bing的背景图片
 	},
 	uninstall: function() {
 		prefs.deleteBranch("");
