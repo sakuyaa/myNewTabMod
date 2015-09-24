@@ -18,9 +18,8 @@ var myNewTabMod = {
 		NewTabURL.reset();
 	},
 	install: function() {
-		prefs.setCharPref("imageDir", "bingImg");   //图片存储的文件夹名字
 		prefs.setIntPref("bingMaxHistory", 10);   //最大历史天数，可设置[2, 16]
-		prefs.setBoolPref("firstRun", true);
+		prefs.setCharPref("imageDir", "bingImg");   //图片存储的文件夹名字
 		prefs.setBoolPref("isNewTab", true);   //是否新标签页打开导航链接或搜索结果
 		prefs.setCharPref("path", "myNewTabMod");   //myNewTabMod文件夹的相对于配置文件的路径
 		prefs.setIntPref("updateImageTime", 12);   //更新bing背景图片的间隔（单位：小时）
