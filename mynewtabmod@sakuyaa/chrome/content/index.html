@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>我的主页</title>
+		<link rel="shortcut icon" href="img/logo.png"  type="image/x-icon"/>
+		<link href="style.css" rel="stylesheet" />
+		<script type="text/javascript" src="rili.js"></script>
+	</head>
+	<body>
+		<iframe class="weather" name="weather_inc" src="http://i.tianqi.com/index.php?c=code&id=8&num=3"  width="225" height="80" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
+		<div id="date">
+			<script language="Javascript">
+				    var dayName = new Array ("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六")
+					var monName = new Array ("1 月", "2 月", "3 月", "4 月", "5 月", "6 月", "7 月", "8 月", "9 月", "10 月" , "11 月", "12 月")
+					var now = new Date
+					document.write(monName[now.getMonth()] + now.getDate() + " 日 " + dayName[now.getDay()]  + "<span id=lunar><br>") 
+			</script>
+			<script language="JavaScript">showcal(0)</script>
+		</div>
+		<div id="navs">
+			<div id="navtitle">
+				<span>我的导航</span>
+				<a id="nav_edit" hidefocus="" title="编辑配置文件" onclick="edit();" href="javascript:;">
+					<img width="16" height="16" src="img/setting.png">编辑
+				</a>
+				<a id="nav_random" hidefocus="" title="切换或下载背景图片" onclick="changeImg();" href="javascript:;">
+					<img width="16" height="16" src="img/change.png">切换
+				</a>
+				<a id="nav_openfolder" hidefocus="" title="打开配置文件夹" onclick="openDir();" href="javascript:;">
+					<img width="16" height="16" src="img/add.png">定位
+				</a>
+			</div>
+			<table id="navtable"></table>
+		</div>
+	</body>
+	<script type="text/javascript" src="index.js"></script>
+</html>
