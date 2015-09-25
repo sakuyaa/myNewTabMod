@@ -5,8 +5,11 @@
 "use strict";
 
 var {classes: Cc, interfaces: Ci, utils: Cu, results: Cr} = Components;
-var prefs = Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefService).getBranch("extensions.myNewTabMod.");
 Cu.import("resource:///modules/NewTabURL.jsm");
+Cu.import("resource://gre/modules/Services.jsm");
+
+//https://developer.mozilla.org/zh-CN/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIPrefBranch
+var prefs = Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefService).getBranch("extensions.myNewTabMod.");
 
 var myNewTabMod = {
 	startup: function() {
@@ -18,6 +21,16 @@ var myNewTabMod = {
 		NewTabURL.reset();
 	},
 	install: function() {
+		//将data.js文件复制到目录外，以避免此文件修改之后导致扩展签名失败
+		//https://developer.mozilla.org/zh-CN/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIFile
+		var file = Services.dirsvc.get("ProfD", Ci.nsIFile);
+		var dataFile = file.clone();
+		file.appendRelativePath("extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\data.js");
+		dataFile.appendRelativePath("myNewTabMod\\data.js");
+		if (!dataFile.exists() && file.exists()) {
+			file.copyTo(dataFile.parent, null);
+		}
+
 		prefs.setIntPref("bingMaxHistory", 10);   //最大历史天数，可设置[2, 16]
 		prefs.setCharPref("imageDir", "bingImg");   //图片存储的文件夹名字
 		prefs.setBoolPref("isNewTab", true);   //是否新标签页打开导航链接或搜索结果
