@@ -12,13 +12,13 @@ var bingImageSize = prefs.getBoolPref("useBigImage");   //bing图片的尺寸，
 var useBingImage = prefs.getBoolPref("useBingImage");   //使用bing的背景图片
 
 
-var dsFile = Cc["@mozilla.org/file/directory_service;1"].getService(Ci.nsIProperties).get("ProfD", Ci.nsIFile);
-dsFile.appendRelativePath(newTabDirPath);
-dsFile.appendRelativePath('data.js');
+var dataFile = Services.dirsvc.get("ProfD", Ci.nsIFile);
+dataFile.appendRelativePath(newTabDirPath);
+dataFile.appendRelativePath('data.js');
 
 var script = document.createElement("script");
 script.type = "text/javascript";
-script.src = 'file:///' + encodeURI(dsFile.path.replace(/\\/g, '/'));   //转为本地路径
+script.src = 'file:///' + encodeURI(dataFile.path.replace(/\\/g, '/'));   //转为本地路径
 document.getElementsByTagName('head')[0].appendChild(script);
 
 
@@ -107,7 +107,8 @@ var NewTab = {
 			}
 
 			// 本地图片
-			var file = Cc["@mozilla.org/file/directory_service;1"].getService(Ci.nsIProperties).get("ProfD", Ci.nsIFile);
+			// file = Cc["@mozilla.org/file/directory_service;1"].getService(Ci.nsIProperties).get("ProfD", Ci.nsIFile);
+			var file = Services.dirsvc.get("ProfD", Ci.nsIFile);
 			file.appendRelativePath(newTabDirPath);
 			file.appendRelativePath(bingImageDir)
 			file.appendRelativePath(enddate + '-' + name.replace(/(\s|\(.*?\))/g, '') + ".jpg")
@@ -291,7 +292,7 @@ function changeImg() {
 
 //定位文件目录
 function openDir() {
-	dsFile = Cc["@mozilla.org/file/directory_service;1"].getService(Ci.nsIProperties).get("ProfD", Ci.nsIFile);
+	dsFile = Services.dirsvc.get("ProfD", Ci.nsIFile);
 	dsFile.appendRelativePath(newTabDirPath);
 	dsFile.reveal();
 }
@@ -317,7 +318,7 @@ function edit() {
 	    }
 	}
 
-	dsFile = Cc["@mozilla.org/file/directory_service;1"].getService(Ci.nsIProperties).get("ProfD", Ci.nsIFile);
+	dsFile = Services.dirsvc.get("ProfD", Ci.nsIFile);
 	dsFile.appendRelativePath(newTabDirPath);
 	dsFile.appendRelativePath('data.js');
 
