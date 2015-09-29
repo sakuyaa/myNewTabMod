@@ -27,8 +27,15 @@ var myNewTabMod = {
 		var dataFile = file.clone();
 		file.appendRelativePath("extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\data.js");
 		dataFile.appendRelativePath("myNewTabMod\\data.js");
-		if (!dataFile.exists() && file.exists()) {
+		if (!dataFile.exists() && file.exists()) {   //避免重复安装后覆盖data.js
 			file.copyTo(dataFile.parent, null);
+		}
+		file = Services.dirsvc.get("ProfD", Ci.nsIFile);
+		file.appendRelativePath("extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\ico");
+		try {
+			file.copyTo(dataFile.parent, null);   //复制ico文件夹
+		}
+		catch (e) {
 		}
 
 		prefs.setIntPref("bingMaxHistory", 10);   //最大历史天数，可设置[2, 16]
