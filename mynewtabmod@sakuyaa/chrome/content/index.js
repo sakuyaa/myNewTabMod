@@ -25,7 +25,7 @@ document.getElementsByTagName('head')[0].appendChild(script);
 "use strict";
 
 var NewTab = {
-	localLinkRegExp: /^[a-z]:\\[^ ]+$/i,  // windows 路径
+	localLinkRegExp: /^[a-z]:\\[^ ]+$/i,  //windows路径
 	/*get prefs() {
 	    delete this.prefs;
 	    return this.prefs = Services.prefs.getBranch("myNewTab.");
@@ -38,19 +38,19 @@ var NewTab = {
 		}
 
 		var siteData = this.parseDataText(Config.sites);
-		// console.log(siteData);
+		//console.log(siteData);
 		var tr, type;
 		for(type in siteData) {
 			tr = this.buildTr(type, siteData[type]);
 			table.appendChild(tr);
-			// !神秘的代码
+			//神秘的代码
 			if (type == "Yooo") {
 				tr.id = "Yooooo";
 				tr.style.visibility = 'hidden';
 			}
 		}
 		
-		// 获取 bing 中国主页的背景图片
+		//获取bing中国主页的背景图片
 		if (useBingImage) {
 			var data = NewTab.loadSetting();
 			if (data.backgroundImage && (Date.now() - data.lastCheckTime) < updateImageTime * 3600 * 1000) {
@@ -73,7 +73,7 @@ var NewTab = {
 		return jsonData;
 	},
 	
-	// 设置背景图片并保存设置
+	//设置背景图片并保存设置
 	setAndSave: function(ImgPath) {
 		document.body.style.backgroundImage = 'url(' + ImgPath + ')';
 		var Jsondata = {
@@ -98,7 +98,7 @@ var NewTab = {
 			var enddate = parseInt(data.images[0].enddate);
 			var imageUrl = data.images[0].url;
 
-			// 处理图片地址
+			//处理图片地址
 			if (bingImageSize) {
 				imageUrl = imageUrl.replace('1366x768', '1920x1080');
 			}
@@ -106,14 +106,14 @@ var NewTab = {
 				imageUrl = 'http://www.bing.com' + imageUrl;
 			}
 
-			// 本地图片
-			// file = Cc["@mozilla.org/file/directory_service;1"].getService(Ci.nsIProperties).get("ProfD", Ci.nsIFile);
+			//本地图片
+			//file = Cc["@mozilla.org/file/directory_service;1"].getService(Ci.nsIProperties).get("ProfD", Ci.nsIFile);
 			var file = Services.dirsvc.get("ProfD", Ci.nsIFile);
 			file.appendRelativePath(newTabDirPath);
 			file.appendRelativePath(bingImageDir)
 			file.appendRelativePath(enddate + '-' + name.replace(/(\s|\(.*?\))/g, '') + ".jpg")
 
-			// 转为本地路径
+			//转为本地路径
 			var filePath = 'file:///' + encodeURI(file.path.replace(/\\/g, '/'));
 			
 			if (file.exists()) {
@@ -130,7 +130,7 @@ var NewTab = {
 					Cc["@mozilla.org/embedding/browser/nsWebBrowserPersist;1"].createInstance(Ci.nsIWebBrowserPersist)
 						.saveURI(Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService).newURI(imageUrl, null, null), null, null, null, null, null, file, null);
 				} catch (err) {
-					// alert(err)
+					//alert(err)
 				}
 				setTimeout(function(){
 					NewTab.setAndSave(filePath);
@@ -144,7 +144,7 @@ var NewTab = {
 		var data = [],
 			lines, line, arr, type;
 
-		// 处理下，逗号修正为英文逗号
+		//处理下，逗号修正为英文逗号
 		text = text.replace(/，/g, ',');
 
 		lines = text.split('\n');
@@ -172,12 +172,12 @@ var NewTab = {
 			span = document.createElement('span'),
 			site, td, a, img, textNode, path;
 		
-		// 添加分类
+		//添加分类
 		span.innerHTML = type;
 		th.appendChild(span);
 		tr.appendChild(th);
 
-		// 添加站点
+		//添加站点
 		for (var i = 0, l = sites.length; i < l; i++) {
 			site = sites[i];
 
@@ -205,7 +205,7 @@ var NewTab = {
 				a.setAttribute('target', '_blank');
 			}
 			
-			// 设置图片的属性
+			//设置图片的属性
 			img.width = 16;
 			img.height = 16;
 			if (site.imgSrc) {
@@ -223,7 +223,7 @@ var NewTab = {
 	},
 	
 	handleUrl: function (urlOrPath) {
-		if (urlOrPath.indexOf('\\') == 0) {  // 相对 firefox 路径文件
+		if (urlOrPath.indexOf('\\') == 0) {   //相对firefox路径文件
 			urlOrPath = urlOrPath.replace(/\//g, '\\').toLocaleLowerCase();
 			var profileDir = Services.dirsvc.get("ProfD", Ci.nsILocalFile).path;
 			return profileDir + urlOrPath;
@@ -269,7 +269,7 @@ var NewTab = {
 		PlacesUtils.favicons.getFaviconDataForPage(uri, {
 		    onComplete: function(aURI, aDataLen, aData, aMimeType) {
 		        try {
-    			    // javascript: URI の host にアクセスするとエラー
+    			    //javascript: URI の host にアクセスするとエラー
     			    img.setAttribute("src", aURI && aURI.spec?
     			        "moz-anno:favicon:" + aURI.spec:
     			        "moz-anno:favicon:" + uri.scheme + "://" + uri.host + "/favicon.ico");
@@ -298,7 +298,7 @@ function openDir() {
 
 //编辑配置
 function edit() {
-	// get editor
+	//get editor
 	var editor;
 	try {
 	    editor = Services.prefs.getComplexValue("view_source.editor.path", Ci.nsILocalFile);
@@ -325,4 +325,33 @@ function edit() {
 	var args = [dsFile.path]
 	process.init(editor);
 	process.runw(false, args, args.length);
+}
+
+//神秘的代码
+document.onkeydown =function (e) {
+	var e=e||event;
+	var currKey=e.keyCode||e.which||e.charCode;
+	//var keyName = String.fromCharCode(currKey);
+	if (currKey == 81 && e.ctrlKey) {
+		document.getElementById("Yooooo").style.visibility = 'visible';
+		//alert("按键码: " + currKey + " 字符: " + keyName);
+	}
+};
+document.onkeyup =function (e) {
+	document.getElementById("Yooooo").style.visibility = 'hidden';
+};
+
+//从函数中获取多行注释的字符串
+function getMStr(fn) {
+	var fnSource = fn.toString();
+	var ret = {};
+	fnSource = fnSource.replace(/^[^{]+/, '');
+	//console.log(fnSource);
+	var matched;
+	var reg = /var\s+([$\w]+)[\s\S]*?\/\*([\s\S]+?)\*\//g;
+	while (matched = reg.exec(fnSource)) {
+		//console.log(matched);
+		ret[matched[1]] = matched[2];
+	};
+	return ret;
 }
