@@ -7,6 +7,7 @@ var bingMaxHistory = prefs.getIntPref("bingMaxHistory");   //最大历史天数�
 var bingImageDir = prefs.getCharPref("imageDir");   //图片存储的文件夹名字
 var isNewTab = prefs.getBoolPref("isNewTab");   //是否新标签页打开导航链接或搜索结果
 var newTabDirPath = prefs.getCharPref("path");   //myNewTabMod文件夹的相对于配置文件的路径
+var title = prefs.getCharPref("title");   //网页标题
 var updateImageTime = prefs.getIntPref("updateImageTime");   //更新bing背景图片的间隔（单位：小时）
 var bingImageSize = prefs.getBoolPref("useBigImage");   //bing图片的尺寸，0为默认的1366x768，1为1920x1080
 var useBingImage = prefs.getBoolPref("useBingImage");   //使用bing的背景图片
@@ -32,6 +33,8 @@ var NewTab = {
 	},*/
 
 	init: function() {
+		document.title = title;
+		
 		var table = document.getElementById("navtable");
 		if (table.children.lenth > 0) {
 			return;
