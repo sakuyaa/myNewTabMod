@@ -9,15 +9,15 @@ Cu.import("resource:///modules/NewTabURL.jsm");
 Cu.import("resource://gre/modules/Services.jsm");
 
 //https://developer.mozilla.org/zh-CN/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIPrefBranch
-var prefs = Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefService).getBranch("extensions.myNewTabMod.");
+var prefs = Services.prefs.getBranch("extensions.myNewTabMod.");
 
 var myNewTabMod = {
 	startup: function() {
-		Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefService).getBranch("").setCharPref("browser.startup.homepage", "chrome://mynewtabmod/content/index.html");
+		Services.prefs.getBranch("").setCharPref("browser.startup.homepage", "chrome://mynewtabmod/content/index.html");
 		NewTabURL.override("chrome://mynewtabmod/content/index.html");
 	},
 	shutdown: function() {
-		Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefService).getBranch("").clearUserPref("browser.startup.homepage");
+		Services.prefs.getBranch("").clearUserPref("browser.startup.homepage");
 		NewTabURL.reset();
 	},
 	install: function() {

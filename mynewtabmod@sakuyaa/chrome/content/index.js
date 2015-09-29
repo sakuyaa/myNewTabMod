@@ -2,7 +2,7 @@
 Cu.import("resource://gre/modules/PlacesUtils.jsm");
 Cu.import("resource://gre/modules/Services.jsm");
 
-var prefs = Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefService).getBranch("extensions.myNewTabMod.");
+var prefs = Services.prefs.getBranch("extensions.myNewTabMod.");
 var bingMaxHistory = prefs.getIntPref("bingMaxHistory");   //最大历史天数，可设置[2, 16]
 var bingImageDir = prefs.getCharPref("imageDir");   //图片存储的文件夹名字
 var isNewTab = prefs.getBoolPref("isNewTab");   //是否新标签页打开导航链接或搜索结果
@@ -225,8 +225,7 @@ var NewTab = {
 	handleUrl: function (urlOrPath) {
 		if (urlOrPath.indexOf('\\') == 0) {  // 相对 firefox 路径文件
 			urlOrPath = urlOrPath.replace(/\//g, '\\').toLocaleLowerCase();
-			var profileDir = Cc['@mozilla.org/file/directory_service;1'].getService(Ci.nsIProperties)
-					.get("ProfD", Ci.nsILocalFile).path;
+			var profileDir = Services.dirsvc.get("ProfD", Ci.nsILocalFile).path;
 			return profileDir + urlOrPath;
 		} else if (this.localLinkRegExp.test(urlOrPath)) {
 			return urlOrPath;
