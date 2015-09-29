@@ -209,7 +209,14 @@ var NewTab = {
 			img.width = 16;
 			img.height = 16;
 			if (site.imgSrc) {
-				img.src = site.imgSrc;
+				if (site.imgSrc.substr(0, 4) == "ico/") {
+					var icoFile = Services.dirsvc.get("ProfD", Ci.nsIFile);
+					icoFile.appendRelativePath(newTabDirPath);
+					icoFile.appendRelativePath(site.imgSrc.replace('/', '\\'));
+					img.src = 'file:///' + encodeURI(icoFile.path.replace(/\\/g, '/'));   //转为本地路径
+				} else {
+					img.src = site.imgSrc;
+				}
 			} else {
 				this.setIcon(img, site);
 			}
