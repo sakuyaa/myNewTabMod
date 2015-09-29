@@ -62,15 +62,15 @@ img { max-width: 100%;}
 	color:white;
 	border-bottom: 0.1em solid #555;
 }
-/*设置导航编辑、随机、定位按钮*/
-#nav_openfolder, #nav_random, #nav_edit{
+/*设置导航切换、定位、编辑按钮*/
+#nav_random, #nav_openfolder, #nav_edit{
 	float:right;
 	position:relative;
 	padding:0 0.2em;
 	opacity:0.3;
 	font-size:1em;
 }
-#nav_openfolder:hover, #nav_edit:hover, #nav_random:hover {
+#nav_random:hover, #nav_openfolder:hover, #nav_edit:hover {
     opacity:1;
 }
 /*设置导航地址间距*/
