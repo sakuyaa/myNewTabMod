@@ -4,9 +4,9 @@ Cu.import("resource://gre/modules/Services.jsm");
 
 var prefs = Services.prefs.getBranch("extensions.myNewTabMod.");
 var bingMaxHistory = prefs.getIntPref("bingMaxHistory");   //最大历史天数，可设置[2, 16]
-var bingImageDir = prefs.getCharPref("imageDir");   //图片存储的文件夹名字
+var bingImageDir = prefs.getComplexValue("imageDir", Ci.nsISupportsString).data;   //图片存储的文件夹名字
 var isNewTab = prefs.getBoolPref("isNewTab");   //是否新标签页打开导航链接或搜索结果
-var newTabDirPath = prefs.getCharPref("path");   //myNewTabMod文件夹的相对于配置文件的路径
+var newTabDirPath = prefs.getComplexValue("path", Ci.nsISupportsString).data;   //myNewTabMod文件夹的相对于配置文件的路径
 var title = prefs.getComplexValue("title", Ci.nsISupportsString).data;   //网页标题
 var updateImageTime = prefs.getIntPref("updateImageTime");   //更新bing背景图片的间隔（单位：小时）
 var bingImageSize = prefs.getBoolPref("useBigImage");   //bing图片的尺寸，0为默认的1366x768，1为1920x1080
