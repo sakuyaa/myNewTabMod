@@ -12,16 +12,21 @@ var updateImageTime = prefs.getIntPref("updateImageTime");   //更新bing背景�
 var bingImageSize = prefs.getBoolPref("useBigImage");   //bing图片的尺寸，0为默认的1366x768，1为1920x1080
 var useBingImage = prefs.getBoolPref("useBingImage");   //使用bing的背景图片
 
-
 var dataFile = Services.dirsvc.get("ProfD", Ci.nsIFile);
 dataFile.appendRelativePath(newTabDirPath);
+var styleFile = dataFile.clone();
 dataFile.appendRelativePath('data.js');
+styleFile.appendRelativePath('style.css');
 
 var script = document.createElement("script");
 script.type = "text/javascript";
 script.src = 'file:///' + encodeURI(dataFile.path.replace(/\\/g, '/'));   //转为本地路径
 document.getElementsByTagName('head')[0].appendChild(script);
-
+var style = document.createElement("link") 
+style.rel = "stylesheet";
+style.type = "text/css";
+style.href = 'file:///' + encodeURI(styleFile.path.replace(/\\/g, '/'));
+document.getElementsByTagName('head')[0].appendChild(style);
 
 "use strict";
 
