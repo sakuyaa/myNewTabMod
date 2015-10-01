@@ -12,6 +12,20 @@ Cu.import("resource://gre/modules/Services.jsm");
 var prefs = Services.prefs.getBranch("extensions.myNewTabMod.");
 
 var myNewTabMod = {
+	copyFile: function(oldFilePath, newFilePath) {
+		//https://developer.mozilla.org/zh-CN/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIFile
+		var oldFile = Services.dirsvc.get("ProfD", Ci.nsIFile);
+		var newFile = oldFile.clone();
+		oldFile.appendRelativePath(oldFilePath);
+		newFile.appendRelativePath(newFilePath);
+		if(arguments[2]) {   //第三个参数仅仅用于判断是文件夹复制操作
+			try {
+				oldFile.copyTo(newFile, null);
+			} catch (e) { }
+		} else if (!newFile.exists() && oldFile.exists()) {   //避免重复安装后覆盖
+			oldFile.copyTo(newFile.parent, null);
+		}
+	},
 	setPrefs: function(name, value) {
 		try {
 			switch(typeof value) {
@@ -40,22 +54,10 @@ var myNewTabMod = {
 		NewTabURL.reset();
 	},
 	install: function() {
-		//将data.js文件复制到目录外，以避免此文件修改之后导致扩展签名失败
-		//https://developer.mozilla.org/zh-CN/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIFile
-		var file = Services.dirsvc.get("ProfD", Ci.nsIFile);
-		var dataFile = file.clone();
-		file.appendRelativePath("extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\data.js");
-		dataFile.appendRelativePath("myNewTabMod\\data.js");
-		if (!dataFile.exists() && file.exists()) {   //避免重复安装后覆盖data.js
-			file.copyTo(dataFile.parent, null);
-		}
-		file = Services.dirsvc.get("ProfD", Ci.nsIFile);
-		file.appendRelativePath("extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\ico");
-		try {
-			file.copyTo(dataFile.parent, null);   //复制ico文件夹
-		}
-		catch (e) {
-		}
+		//将文件复制到目录外，以避免文件修改之后导致扩展签名失败
+		this.copyFile("extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\data.js", "myNewTabMod\\data.js");
+		this.copyFile("extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\style.css", "myNewTabMod\\style.css");
+		this.copyFile("extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\ico", "myNewTabMod", true);
 
 		this.setPrefs("bingMaxHistory", 10);   //最大历史天数，可设置[2, 16]
 		this.setPrefs("imageDir", "bingImg");   //图片存储的文件夹名字
