@@ -12,6 +12,25 @@ Cu.import("resource://gre/modules/Services.jsm");
 var prefs = Services.prefs.getBranch("extensions.myNewTabMod.");
 
 var myNewTabMod = {
+	setPrefs: function(name, value) {
+		try {
+			switch(typeof value) {
+				case 'string' :
+					prefs.setCharPref(name, value);
+					/*为什么用这个反而会乱码啊啊啊
+					var str = Cc["@mozilla.org/supports-string;1"].createInstance(Ci.nsISupportsString);
+					str.data = value;
+					prefs.setComplexValue(name, Ci.nsISupportsString, str);*/
+					break;
+				case 'number' :
+					prefs.setIntPref(name, value);
+					break;
+				case 'boolean':
+					prefs.setBoolPref(name, value);
+					break;
+			}
+		} catch(e) { }
+	},
 	startup: function() {
 		Services.prefs.getBranch("").setCharPref("browser.startup.homepage", "chrome://mynewtabmod/content/index.html");
 		NewTabURL.override("chrome://mynewtabmod/content/index.html");
@@ -38,14 +57,14 @@ var myNewTabMod = {
 		catch (e) {
 		}
 
-		prefs.setIntPref("bingMaxHistory", 10);   //最大历史天数，可设置[2, 16]
-		prefs.setCharPref("imageDir", "bingImg");   //图片存储的文件夹名字
-		prefs.setBoolPref("isNewTab", true);   //是否新标签页打开导航链接或搜索结果
-		prefs.setCharPref("path", "myNewTabMod");   //myNewTabMod文件夹的相对于配置文件的路径
-		prefs.setCharPref("title", "我的主页");   //网页标题
-		prefs.setIntPref("updateImageTime", 12);   //更新bing背景图片的间隔（单位：小时）
-		prefs.setBoolPref("useBigImage", true);   //bing图片的尺寸，0为默认的1366x768，1为1920x1080
-		prefs.setBoolPref("useBingImage", true);   //使用bing的背景图片
+		this.setPrefs("bingMaxHistory", 10);   //最大历史天数，可设置[2, 16]
+		this.setPrefs("imageDir", "bingImg");   //图片存储的文件夹名字
+		this.setPrefs("isNewTab", true);   //是否新标签页打开导航链接或搜索结果
+		this.setPrefs("path", "myNewTabMod");   //myNewTabMod文件夹的相对于配置文件的路径
+		this.setPrefs("title", "我的主页");   //网页标题
+		this.setPrefs("updateImageTime", 12);   //更新bing背景图片的间隔（单位：小时）
+		this.setPrefs("useBigImage", true);   //bing图片的尺寸，0为默认的1366x768，1为1920x1080
+		this.setPrefs("useBingImage", true);   //使用bing的背景图片
 	},
 	uninstall: function() {
 		prefs.deleteBranch("");
