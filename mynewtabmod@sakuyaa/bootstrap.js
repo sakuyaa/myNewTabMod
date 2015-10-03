@@ -4,6 +4,7 @@
 
 "use strict";
 
+//https://developer.mozilla.org/zh-CN/docs/Mozilla/Add-ons/Bootstrapped_extensions
 var {classes: Cc, interfaces: Ci, utils: Cu, results: Cr} = Components;
 Cu.import("resource:///modules/NewTabURL.jsm");
 Cu.import("resource://gre/modules/Services.jsm");
@@ -18,7 +19,7 @@ var myNewTabMod = {
 		var newFile = oldFile.clone();
 		oldFile.appendRelativePath(oldFilePath);
 		newFile.appendRelativePath(newFilePath);
-		if(arguments[2]) {   //第三个参数仅仅用于判断是文件夹复制操作
+		if (arguments[2]) {   //第三个参数仅仅用于判断是文件夹复制操作
 			try {
 				oldFile.copyTo(newFile, null);
 			} catch (e) { }
@@ -74,18 +75,20 @@ var myNewTabMod = {
 };
 
 /* bootstrap entry points */
+var startup = function(data, reason) {
+	if (reason == ADDON_ENABLE || reason == ADDON_INSTALL) {
+		myNewTabMod.startup();
+	}
+};
+var shutdown = function(data, reason) {
+	//https://bugzilla.mozilla.org/show_bug.cgi?id=620541
+	if (reason == ADDON_DISABLE || reason == ADDON_UNINSTALL) {
+		myNewTabMod.shutdown();
+	}
+};
 var install = function(data, reason) {
 	myNewTabMod.install();
 };
-
 var uninstall = function(data, reason) {
 	myNewTabMod.uninstall();
-};
-
-var startup = function(data, reason) {
-	myNewTabMod.startup();
-};
-
-var shutdown = function(data, reason) {
-	myNewTabMod.shutdown();
 };
