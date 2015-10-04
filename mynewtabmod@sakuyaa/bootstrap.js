@@ -2,20 +2,20 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-"use strict";
+'use strict';
 
 //https://developer.mozilla.org/zh-CN/docs/Mozilla/Add-ons/Bootstrapped_extensions
 var {classes: Cc, interfaces: Ci, utils: Cu, results: Cr} = Components;
-Cu.import("resource:///modules/NewTabURL.jsm");
-Cu.import("resource://gre/modules/Services.jsm");
+Cu.import('resource:///modules/NewTabURL.jsm');
+Cu.import('resource://gre/modules/Services.jsm');
 
 //https://developer.mozilla.org/zh-CN/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIPrefBranch
-var prefs = Services.prefs.getBranch("extensions.myNewTabMod.");
+var prefs = Services.prefs.getBranch('extensions.myNewTabMod.');
 
 var myNewTabMod = {
 	copyFile: function(oldFilePath, newFilePath) {
 		//https://developer.mozilla.org/zh-CN/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIFile
-		var oldFile = Services.dirsvc.get("ProfD", Ci.nsIFile);
+		var oldFile = Services.dirsvc.get('ProfD', Ci.nsIFile);
 		var newFile = oldFile.clone();
 		oldFile.appendRelativePath(oldFilePath);
 		newFile.appendRelativePath(newFilePath);
@@ -29,15 +29,15 @@ var myNewTabMod = {
 	},
 	setPrefs: function(name, value) {
 		try {
-			switch(typeof value) {
-				case 'string' :
+			switch (typeof value) {
+				case 'string':
 					prefs.setCharPref(name, value);
 					/*为什么用这个反而会乱码啊啊啊
-					var str = Cc["@mozilla.org/supports-string;1"].createInstance(Ci.nsISupportsString);
+					var str = Cc['@mozilla.org/supports-string;1'].createInstance(Ci.nsISupportsString);
 					str.data = value;
 					prefs.setComplexValue(name, Ci.nsISupportsString, str);*/
 					break;
-				case 'number' :
+				case 'number':
 					prefs.setIntPref(name, value);
 					break;
 				case 'boolean':
@@ -47,37 +47,43 @@ var myNewTabMod = {
 		} catch(e) { }
 	},
 	startup: function() {
-		Services.prefs.getBranch("").setCharPref("browser.startup.homepage", "chrome://mynewtabmod/content/index.html");
-		NewTabURL.override("chrome://mynewtabmod/content/index.html");
+		Services.prefs.getBranch('').setCharPref('browser.startup.homepage', 'chrome://mynewtabmod/content/index.html');
+		NewTabURL.override('chrome://mynewtabmod/content/index.html');
 	},
 	shutdown: function() {
-		Services.prefs.getBranch("").clearUserPref("browser.startup.homepage");
+		Services.prefs.getBranch('').clearUserPref('browser.startup.homepage');
 		NewTabURL.reset();
 	},
 	install: function() {
 		//将文件复制到目录外，以避免文件修改之后导致扩展签名失败
-		this.copyFile("extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\data.js", "myNewTabMod\\data.js");
-		this.copyFile("extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\style.css", "myNewTabMod\\style.css");
-		this.copyFile("extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\ico", "myNewTabMod", true);
+		this.copyFile('extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\data.js', 'myNewTabMod\\data.js');
+		this.copyFile('extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\style.css', 'myNewTabMod\\style.css');
+		this.copyFile('extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\ico', 'myNewTabMod', true);
 
-		this.setPrefs("bingMaxHistory", 10);   //最大历史天数，可设置[2, 16]
-		this.setPrefs("imageDir", "bingImg");   //图片存储的文件夹名字
-		this.setPrefs("isNewTab", true);   //是否新标签页打开导航链接或搜索结果
-		this.setPrefs("path", "myNewTabMod");   //myNewTabMod文件夹的相对于配置文件的路径
-		this.setPrefs("title", "我的主页");   //网页标题
-		this.setPrefs("updateImageTime", 12);   //更新bing背景图片的间隔（单位：小时）
-		this.setPrefs("useBigImage", true);   //bing图片的尺寸，0为默认的1366x768，1为1920x1080
-		this.setPrefs("useBingImage", true);   //使用bing的背景图片
+		this.setPrefs('bingMaxHistory', 10);   //最大历史天数，可设置[2, 16]
+		this.setPrefs('imageDir', 'bingImg');   //图片存储的文件夹名字
+		this.setPrefs('isNewTab', true);   //是否新标签页打开导航链接或搜索结果
+		this.setPrefs('path', 'myNewTabMod');   //myNewTabMod文件夹的相对于配置文件的路径
+		this.setPrefs('title', '我的主页');   //网页标题
+		this.setPrefs('updateImageTime', 12);   //更新bing背景图片的间隔（单位：小时）
+		this.setPrefs('useBigImage', true);   //bing图片的尺寸，0为默认的1366x768，1为1920x1080
+		this.setPrefs('useBingImage', true);   //使用bing的背景图片
 	},
 	uninstall: function() {
-		prefs.deleteBranch("");
+		prefs.deleteBranch('');
 	}
 };
 
 /* bootstrap entry points */
 var startup = function(data, reason) {
-	if (reason == ADDON_ENABLE || reason == ADDON_INSTALL) {
-		myNewTabMod.startup();
+	switch (reason) {
+		case ADDON_ENABLE:
+		case ADDON_INSTALL:
+			myNewTabMod.startup();
+			break;
+		case APP_STARTUP:
+			NewTabURL.override('chrome://mynewtabmod/content/index.html');
+			break;
 	}
 };
 var shutdown = function(data, reason) {
