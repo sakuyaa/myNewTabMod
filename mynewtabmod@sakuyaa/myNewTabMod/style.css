@@ -1,44 +1,44 @@
 .weather {
-	position:fixed !important;
-	position:absolute;
-	display:block;
-	top:1em;
-	left:0em;
+	position: fixed !important;
+	position: absolute;
+	display: block;
+	top: 1em;
+	left: 0em;
 }
 
 body {
-	overflow:auto;
+	overflow: auto;
 	background-color: #EDEDED;
 	background-image: url(img/default.png);
 	background-repeat: no-repeat;
-	background-size:1366px 768px; /* 如果屏幕没有铺满，请把auto改为你自己显示器分辨率 */
-    font-family:'Microsoft YaHei';
+	background-size: 1366px 768px;   /* 如果屏幕没有铺满，请把auto改为你自己显示器分辨率 */
+    font-family: "Microsoft YaHei";
 	/*背景固定*/
 	/*background-position: center;
-	background-attachment:fixed;
-	background-size:cover;
+	background-attachment: fixed;
+	background-size: cover;
 	font-family: 微软雅黑;*/
     font-size: 62.5%;
 }
-img { max-width: 100%;}
+img {max-width: 100%;}
 
 /*设置日期*/
 #date {
-	/*width:400px;*/
-	height:1em;
-	/*margin:0em auto;*/
-	margin-top:0.5em;
-	text-align:center;
+	/*width: 400px;*/
+	height: 1em;
+	/*margin: 0em auto;*/
+	margin-top: 0.5em;
+	text-align: center;
 	text-shadow: 0.1em 0.1em 0.1em black;
-	font-family:"Monotype Corsiva";
-	font-weight:bold;
-	font-size:6em;
-	color:#1E90FF;
+	font-family: "Monotype Corsiva";
+	font-weight: bold;
+	font-size: 6em;
+	color: #1E90FF;
 }
 /*设置农历*/
 #lunar {
-	font-size:0.8em;
-	color:#333;
+	font-size: 0.8em;
+	color: #333;
 	text-shadow: 0.1em 0.1em 0.1em silver;
 }
 
@@ -46,69 +46,69 @@ img { max-width: 100%;}
 #navs { 
 	float: left;
 	position: relative;
-	left: 13%;/*导航整体面板到窗口左边的距离*/
-	width:74%;/*导航整体面板宽度*/
-	top: 8em; /*导航整体面板到搜索框的距离*/
-	margin:0 auto;
+	left: 13%;   /*导航整体面板到窗口左边的距离*/
+	width: 74%;   /*导航整体面板宽度*/
+	top: 8em;   /*导航整体面板到搜索框的距离*/
+	margin: 0 auto;
 	padding: 0.6em;
 	background-color: #000;
-	opacity:0.65;
-	border:0.1em solid #000;
+	opacity: 0.65;
+	border: 0.1em solid #000;
 }
 /*设置导航标题字体*/
-#navtitle{
-	font-size:1.8em;
+#navtitle {
+	font-size: 1.8em;
 	font-weight: bold;
-	color:white;
+	color: white;
 	border-bottom: 0.1em solid #555;
 }
 /*设置导航切换、定位、编辑按钮*/
-#nav_random, #nav_openfolder, #nav_edit{
-	float:right;
-	position:relative;
-	padding:0 0.2em;
-	opacity:0.3;
-	font-size:1em;
+#nav_random, #nav_openfolder, #nav_edit {
+	float: right;
+	position: relative;
+	padding: 0 0.2em;
+	opacity: 0.3;
+	font-size: 1em;
 }
 #nav_random:hover, #nav_openfolder:hover, #nav_edit:hover {
-    opacity:1;
+    opacity: 1;
 }
 /*设置导航地址间距*/
-#navtable{
-	font-size:1.5em;
-    padding-top:0.6em;
+#navtable {
+	font-size: 1.5em;
+    padding-top: 0.6em;
     margin-left: 1em;
 }
 /*设置导航单元大小*/
-#navtable td{
+#navtable td {
 	list-style: none;
-	float:left;
-	height:2em;
-    width:7em;
-	text-align:left;
-	opacity:0.9;
+	float: left;
+	height: 2em;
+    width: 7em;
+	text-align: left;
+	opacity: 0.9;
 }
 /*设置导航分类*/
-#navtable th{
+#navtable th {
 	width: 5.4em;
-	text-align:left;
-	vertical-align:top;
+	text-align: left;
+	vertical-align: top;
 	color: gray;
 }
 /*设置导航链接字体*/
-#navs a{
+#navs a {
 	color: #FFF;
-	text-decoration:none;
+	text-decoration: none;
 }
 /*设置导航链接图标*/
-#navs img{
-	margin-right:0.25em;
+#navs img {
+	margin-right: 0.25em;
 	margin-bottom: -0.1em;
 }
 /*设置导航链接hover时*/
-#navtable a:hover{
+#navtable a:hover {
 	text-decoration: none;
-	transition:color 0.423s ease,text-shadow 0.423s ease;
-	color:rgba(255,200,0,0.9);
-	text-shadow:0 1px rgba(242,33,49,1), 0 1px 1px rgba(242,33,49,1), 0 -1px 1px rgba(242,33,49,1), 1px 0 1px rgba(242,33,49,1), -1px 0 1px rgba(242,33,49,1), 0 0 3px rgba(242,33,49,1);
+	transition: color 0.423s ease,text-shadow 0.423s ease;
+	color: rgba(255,200,0,0.9);
+	text-shadow: 0 1px rgba(242,33,49,1), 0 1px 1px rgba(242,33,49,1), 0 -1px 1px rgba(242,33,49,1), 1px 0 1px rgba(242,33,49,1), -1px 0 1px rgba(242,33,49,1), 0 0 3px rgba(242,33,49,1);
 }

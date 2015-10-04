@@ -4,12 +4,7 @@
 <Description about="urn:mozilla:install-manifest">
 
 	<em:id>mynewtabmod@sakuyaa</em:id>
-	<em:name>myNewTabMod</em:name>
 	<em:version>1.0</em:version>
-	<em:description>myNewTab modify by sakuyaa.</em:description>
-	<em:creator>defpt, ywzhaiqi</em:creator>
-	<em:contributor>sakuyaa</em:contributor>
-	<em:homepageURL>https://github.com/sakuyaa/myNewTabMod/</em:homepageURL>
 	<em:iconURL>chrome://mynewtabmod/skin/icon.png</em:iconURL>
 	<em:unpack>true</em:unpack>
 	<!--em:multiprocessCompatible>true</em:multiprocessCompatible-->
@@ -25,14 +20,20 @@
 		</Description>
 	</em:targetApplication>
  
+	<em:name>myNewTabMod</em:name>
+	<em:description>myNewTab modify by sakuyaa.</em:description>
+	<em:creator>defpt, ywzhaiqi</em:creator>
+	<em:contributor>sakuyaa</em:contributor>
+	<em:homepageURL>https://github.com/sakuyaa/myNewTabMod/</em:homepageURL>
+
 	<em:localized>
 		<Description>
 			<em:locale>zh-CN</em:locale>
 			<em:name>myNewTabMod</em:name>
 			<em:description>修改myNewTab这个扩展，使其可以实现扩展签名。感谢defpt、ywzhaiqi及卡饭各位大神</em:description>
 			<em:creator>defpt, ywzhaiqi</em:creator>
-		<em:contributor>sakuyaa</em:contributor>
-		<em:homepageURL>https://github.com/sakuyaa/myNewTabMod/</em:homepageURL>
+			<em:contributor>sakuyaa</em:contributor>
+			<em:homepageURL>https://github.com/sakuyaa/myNewTabMod/</em:homepageURL>
 		</Description>
 	</em:localized>
  

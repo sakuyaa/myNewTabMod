@@ -1,4 +1,4 @@
-var Config = getMStr(function(){
+var Config = getMStr(function() {
 	var sites;
 /*
 示例

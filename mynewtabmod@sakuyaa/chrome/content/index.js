@@ -1,46 +1,46 @@
 ﻿var {classes: Cc, interfaces: Ci, utils: Cu} = Components;
-Cu.import("resource://gre/modules/PlacesUtils.jsm");
-Cu.import("resource://gre/modules/Services.jsm");
+Cu.import('resource://gre/modules/PlacesUtils.jsm');
+Cu.import('resource://gre/modules/Services.jsm');
 
-var prefs = Services.prefs.getBranch("extensions.myNewTabMod.");
-var bingMaxHistory = prefs.getIntPref("bingMaxHistory");   //最大历史天数，可设置[2, 16]
-var bingImageDir = prefs.getComplexValue("imageDir", Ci.nsISupportsString).data;   //图片存储的文件夹名字
-var isNewTab = prefs.getBoolPref("isNewTab");   //是否新标签页打开导航链接或搜索结果
-var newTabDirPath = prefs.getComplexValue("path", Ci.nsISupportsString).data;   //myNewTabMod文件夹的相对于配置文件的路径
-var title = prefs.getComplexValue("title", Ci.nsISupportsString).data;   //网页标题
-var updateImageTime = prefs.getIntPref("updateImageTime");   //更新bing背景图片的间隔（单位：小时）
-var bingImageSize = prefs.getBoolPref("useBigImage");   //bing图片的尺寸，0为默认的1366x768，1为1920x1080
-var useBingImage = prefs.getBoolPref("useBingImage");   //使用bing的背景图片
+'use strict';
 
-var dataFile = Services.dirsvc.get("ProfD", Ci.nsIFile);
+var prefs = Services.prefs.getBranch('extensions.myNewTabMod.');
+var bingMaxHistory = prefs.getIntPref('bingMaxHistory');   //最大历史天数，可设置[2, 16]
+var bingImageDir = prefs.getComplexValue('imageDir', Ci.nsISupportsString).data;   //图片存储的文件夹名字
+var isNewTab = prefs.getBoolPref('isNewTab');   //是否新标签页打开导航链接或搜索结果
+var newTabDirPath = prefs.getComplexValue('path', Ci.nsISupportsString).data;   //myNewTabMod文件夹的相对于配置文件的路径
+var title = prefs.getComplexValue('title', Ci.nsISupportsString).data;   //网页标题
+var updateImageTime = prefs.getIntPref('updateImageTime');   //更新bing背景图片的间隔（单位：小时）
+var bingImageSize = prefs.getBoolPref('useBigImage');   //bing图片的尺寸，0为默认的1366x768，1为1920x1080
+var useBingImage = prefs.getBoolPref('useBingImage');   //使用bing的背景图片
+
+var dataFile = Services.dirsvc.get('ProfD', Ci.nsIFile);
 dataFile.appendRelativePath(newTabDirPath);
 var styleFile = dataFile.clone();
 dataFile.appendRelativePath('data.js');
 styleFile.appendRelativePath('style.css');
 
-var script = document.createElement("script");
-script.type = "text/javascript";
+var script = document.createElement('script');
+script.type = 'text/javascript';
 script.src = 'file:///' + encodeURI(dataFile.path.replace(/\\/g, '/'));   //转为本地路径
 document.getElementsByTagName('head')[0].appendChild(script);
-var style = document.createElement("link") 
-style.rel = "stylesheet";
-style.type = "text/css";
+var style = document.createElement('link');
+style.rel = 'stylesheet';
+style.type = 'text/css';
 style.href = 'file:///' + encodeURI(styleFile.path.replace(/\\/g, '/'));
 document.getElementsByTagName('head')[0].appendChild(style);
-
-"use strict";
 
 var NewTab = {
 	localLinkRegExp: /^[a-z]:\\[^ ]+$/i,  //windows路径
 	/*get prefs() {
 	    delete this.prefs;
-	    return this.prefs = Services.prefs.getBranch("myNewTab.");
+	    return this.prefs = Services.prefs.getBranch('myNewTab.');
 	},*/
 
 	init: function() {
 		document.title = title;
 		
-		var table = document.getElementById("navtable");
+		var table = document.getElementById('navtable');
 		if (table.children.lenth > 0) {
 			return;
 		}
@@ -52,8 +52,8 @@ var NewTab = {
 			tr = this.buildTr(type, siteData[type]);
 			table.appendChild(tr);
 			//神秘的代码
-			if (type == "Yooo") {
-				tr.id = "Yooooo";
+			if (type == 'Yooo') {
+				tr.id = 'Yooooo';
 				tr.style.visibility = 'hidden';
 			}
 		}
@@ -73,7 +73,7 @@ var NewTab = {
 	loadSetting: function() {
 		var jsonData;
 		try {
-			jsonData = prefs.getCharPref("jsonData");
+			jsonData = prefs.getCharPref('jsonData');
 			jsonData = JSON.parse(jsonData);
 		} catch(e) {
 			jsonData = {}
@@ -89,7 +89,7 @@ var NewTab = {
 			backgroundImage: ImgPath
 		};
 		try {
-			prefs.setCharPref("jsonData", JSON.stringify(Jsondata));
+			prefs.setCharPref('jsonData', JSON.stringify(Jsondata));
 		} catch(e) {}
 	},
 	
@@ -115,11 +115,11 @@ var NewTab = {
 			}
 
 			//本地图片
-			//file = Cc["@mozilla.org/file/directory_service;1"].getService(Ci.nsIProperties).get("ProfD", Ci.nsIFile);
-			var file = Services.dirsvc.get("ProfD", Ci.nsIFile);
+			//file = Cc['@mozilla.org/file/directory_service;1'].getService(Ci.nsIProperties).get('ProfD', Ci.nsIFile);
+			var file = Services.dirsvc.get('ProfD', Ci.nsIFile);
 			file.appendRelativePath(newTabDirPath);
-			file.appendRelativePath(bingImageDir)
-			file.appendRelativePath(enddate + '-' + name.replace(/(\s|\(.*?\))/g, '') + ".jpg")
+			file.appendRelativePath(bingImageDir);
+			file.appendRelativePath(enddate + '-' + name.replace(/(\s|\(.*?\))/g, '') + '.jpg');
 
 			//转为本地路径
 			var filePath = 'file:///' + encodeURI(file.path.replace(/\\/g, '/'));
@@ -134,13 +134,13 @@ var NewTab = {
 			t.src = imageUrl;
 			t.onload = function() {
 				try {
-					file.create(Ci.nsIFile.NOMAL_FILE_TYPE, 0777)
-					Cc["@mozilla.org/embedding/browser/nsWebBrowserPersist;1"].createInstance(Ci.nsIWebBrowserPersist)
-						.saveURI(Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService).newURI(imageUrl, null, null), null, null, null, null, null, file, null);
+					file.create(Ci.nsIFile.NOMAL_FILE_TYPE, 0777);
+					Cc['@mozilla.org/embedding/browser/nsWebBrowserPersist;1'].createInstance(Ci.nsIWebBrowserPersist)
+						.saveURI(Cc['@mozilla.org/network/io-service;1'].getService(Ci.nsIIOService).newURI(imageUrl, null, null), null, null, null, null, null, file, null);
 				} catch (err) {
 					//alert(err)
 				}
-				setTimeout(function(){
+				setTimeout(function() {
 					NewTab.setAndSave(filePath);
 				}, 100);
 			}
@@ -199,7 +199,7 @@ var NewTab = {
 			if (path) {
 				a.setAttribute('href', 'javascript:;');
 				a.setAttribute('localpath', path);
-				a.addEventListener('click', function(e){
+				a.addEventListener('click', function(e) {
 					var fullpath = e.target.getAttribute('localpath');
 					NewTab.exec(fullpath);
 				}, false);
@@ -217,8 +217,8 @@ var NewTab = {
 			img.width = 16;
 			img.height = 16;
 			if (site.imgSrc) {
-				if (site.imgSrc.substr(0, 4) == "ico/") {
-					var icoFile = Services.dirsvc.get("ProfD", Ci.nsIFile);
+				if (site.imgSrc.substr(0, 4) == 'ico/') {
+					var icoFile = Services.dirsvc.get('ProfD', Ci.nsIFile);
 					icoFile.appendRelativePath(newTabDirPath);
 					icoFile.appendRelativePath(site.imgSrc.replace('/', '\\'));
 					img.src = 'file:///' + encodeURI(icoFile.path.replace(/\\/g, '/'));   //转为本地路径
@@ -240,7 +240,7 @@ var NewTab = {
 	handleUrl: function (urlOrPath) {
 		if (urlOrPath.indexOf('\\') == 0) {   //相对firefox路径文件
 			urlOrPath = urlOrPath.replace(/\//g, '\\').toLocaleLowerCase();
-			var profileDir = Services.dirsvc.get("ProfD", Ci.nsILocalFile).path;
+			var profileDir = Services.dirsvc.get('ProfD', Ci.nsILocalFile).path;
 			return profileDir + urlOrPath;
 		} else if (this.localLinkRegExp.test(urlOrPath)) {
 			return urlOrPath;
@@ -260,17 +260,17 @@ var NewTab = {
 	
 	setIcon: function (img, obj) {
 		if (obj.exec) {
-		    var aFile = Cc["@mozilla.org/file/local;1"].createInstance(Ci.nsILocalFile);
+		    var aFile = Cc['@mozilla.org/file/local;1'].createInstance(Ci.nsILocalFile);
 		    try {
 		        aFile.initWithPath(obj.exec);
 		    } catch (e) {
 		        return;
 		    }
 		    if (!aFile.exists()) {
-		        img.setAttribute("disabled", "true");
+		        img.setAttribute('disabled', 'true');
 		    } else {
-		        var fileURL = Services.io.getProtocolHandler("file").QueryInterface(Ci.nsIFileProtocolHandler).getURLSpecFromFile(aFile);
-		        img.setAttribute("src", "moz-icon://" + fileURL + "?size=16");
+		        var fileURL = Services.io.getProtocolHandler('file').QueryInterface(Ci.nsIFileProtocolHandler).getURLSpecFromFile(aFile);
+		        img.setAttribute('src', 'moz-icon://' + fileURL + '?size=16');
 		    }
 		    return;
 		}
@@ -285,16 +285,16 @@ var NewTab = {
 		    onComplete: function(aURI, aDataLen, aData, aMimeType) {
 		        try {
     			    //javascript: URI の host にアクセスするとエラー
-    			    img.setAttribute("src", aURI && aURI.spec?
-    			        "moz-anno:favicon:" + aURI.spec:
-    			        "moz-anno:favicon:" + uri.scheme + "://" + uri.host + "/favicon.ico");
+    			    img.setAttribute('src', aURI && aURI.spec?
+    			        'moz-anno:favicon:' + aURI.spec :
+    			        'moz-anno:favicon:' + uri.scheme + '://' + uri.host + '/favicon.ico');
     			} catch (e) { }
 		    }
 		});
 	}
 };
 
-window.addEventListener('load', function(){
+window.addEventListener('load', function() {
 	NewTab.init();
 }, false);
 
@@ -306,7 +306,7 @@ function changeImg() {
 
 //定位文件目录
 function openDir() {
-	dsFile = Services.dirsvc.get("ProfD", Ci.nsIFile);
+	dsFile = Services.dirsvc.get('ProfD', Ci.nsIFile);
 	dsFile.appendRelativePath(newTabDirPath);
 	dsFile.reveal();
 }
@@ -316,28 +316,28 @@ function edit() {
 	//get editor
 	var editor;
 	try {
-	    editor = Services.prefs.getComplexValue("view_source.editor.path", Ci.nsILocalFile);
+	    editor = Services.prefs.getComplexValue('view_source.editor.path', Ci.nsILocalFile);
 	} catch(e) {}
 
 	if (!editor || !editor.exists()) {
-	    alert("请先设置编辑器的路径!!!");
+	    alert('请先设置编辑器的路径!!!');
 	    var fp = Cc['@mozilla.org/filepicker;1'].createInstance(Ci.nsIFilePicker);
-	    fp.init(window, "设置全局脚本编辑器", fp.modeOpen);
-	    fp.appendFilter("执行文件", "*.exe");
-	    if (fp.show() == fp.returnCancel || !fp.file)
+	    fp.init(window, '设置全局脚本编辑器', fp.modeOpen);
+	    fp.appendFilter('执行文件', '*.exe');
+	    if (fp.show() == fp.returnCancel || !fp.file) {
 	        return;
-	    else {
+	    } else {
 	    	editor = fp.file;
-	        Services.prefs.setCharPref("view_source.editor.path", editor.path);
+	        Services.prefs.setCharPref('view_source.editor.path', editor.path);
 	    }
 	}
 
-	dsFile = Services.dirsvc.get("ProfD", Ci.nsIFile);
+	dsFile = Services.dirsvc.get('ProfD', Ci.nsIFile);
 	dsFile.appendRelativePath(newTabDirPath);
 	dsFile.appendRelativePath('data.js');
 
-	var process = Cc["@mozilla.org/process/util;1"].createInstance(Ci.nsIProcess);
-	var args = [dsFile.path]
+	var process = Cc['@mozilla.org/process/util;1'].createInstance(Ci.nsIProcess);
+	var args = [dsFile.path];
 	process.init(editor);
 	process.runw(false, args, args.length);
 }
@@ -348,12 +348,12 @@ document.onkeydown =function (e) {
 	var currKey=e.keyCode||e.which||e.charCode;
 	//var keyName = String.fromCharCode(currKey);
 	if (currKey == 81 && e.ctrlKey) {
-		document.getElementById("Yooooo").style.visibility = 'visible';
-		//alert("按键码: " + currKey + " 字符: " + keyName);
+		document.getElementById('Yooooo').style.visibility = 'visible';
+		//alert('按键码: ' + currKey + ' 字符: ' + keyName);
 	}
 };
 document.onkeyup =function (e) {
-	document.getElementById("Yooooo").style.visibility = 'hidden';
+	document.getElementById('Yooooo').style.visibility = 'hidden';
 };
 
 //从函数中获取多行注释的字符串
