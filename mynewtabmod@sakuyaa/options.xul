@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mydialog SYSTEM "chrome://myaddon/locale/mydialog.dtd">
+
+<!--https://developer.mozilla.org/zh-CN/docs/Mozilla/Add-ons/Inline_Options-->
+<vbox xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	<setting pref="extensions.myNewTabMod.useBingImage" type="bool" title="使用Bing壁纸" />
+	<setting pref="extensions.myNewTabMod.isNewTab" type="bool" title="新标签页打开链接" />
+	<setting pref="extensions.myNewTabMod.bingMaxHistory" type="menulist" title="Bing壁纸最大历史天数">
+		切换壁纸时将会随机选取历史天数之内的壁纸。
+		<menulist>
+			<menupopup>
+				<menuitem value="2" label="2" />
+				<menuitem value="3" label="3" />
+				<menuitem value="4" label="4" />
+				<menuitem value="5" label="5" />
+				<menuitem value="6" label="6" />
+				<menuitem value="7" label="7" />
+				<menuitem value="8" label="8" />
+				<menuitem value="9" label="9" />
+				<menuitem value="10" label="10" />
+				<menuitem value="11" label="11" />
+				<menuitem value="12" label="12" />
+				<menuitem value="13" label="13" />
+				<menuitem value="14" label="14" />
+				<menuitem value="15" label="15" />
+				<menuitem value="16" label="16" />
+			</menupopup>
+		</menulist>
+	</setting>
+	<setting pref="extensions.myNewTabMod.useBigImage" type="radio" title="壁纸尺寸">
+		<radiogroup>
+			<radio value="true" label="1920x1080" />
+			<radio value="false" label="1366x768" />
+		</radiogroup>
+	</setting>
+	<setting pref="extensions.myNewTabMod.updateImageTime" type="integer" title="更新壁纸的间隔（小时）" />
+	<setting pref="extensions.myNewTabMod.title" type="string" title="主页标题" />
+	<setting pref="extensions.myNewTabMod.path" type="string" title="扩展存储文件夹名">
+		该扩展的一些文件将储存于此，这是相对于火狐配置文件的路径。
+	</setting>
+	<setting pref="extensions.myNewTabMod.imageDir" type="string" title="壁纸存储文件夹名">
+		壁纸存储文件夹位于配置扩展存储文件夹内。
+	</setting>
+	<setting pref="extensions.myNewTabMod.weatherSrc" type="string" title="天气代码URL" />
+</vbox>
