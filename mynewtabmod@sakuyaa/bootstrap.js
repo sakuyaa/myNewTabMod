@@ -68,6 +68,7 @@ var myNewTabMod = {
 		this.setPrefs('updateImageTime', 12);   //更新bing背景图片的间隔（单位：小时）
 		this.setPrefs('useBigImage', true);   //bing图片的尺寸，0为默认的1366x768，1为1920x1080
 		this.setPrefs('useBingImage', true);   //使用bing的背景图片
+		this.setPrefs('weatherSrc', 'http://i.tianqi.com/index.php?c=code&id=8&num=3');   //天气代码的URL
 	},
 	uninstall: function() {
 		prefs.deleteBranch('');

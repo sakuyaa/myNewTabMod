@@ -4,6 +4,7 @@ Cu.import('resource://gre/modules/Services.jsm');
 
 'use strict';
 
+//获取参数
 var prefs = Services.prefs.getBranch('extensions.myNewTabMod.');
 var bingMaxHistory = prefs.getIntPref('bingMaxHistory');   //最大历史天数，可设置[2, 16]
 var bingImageDir = prefs.getComplexValue('imageDir', Ci.nsISupportsString).data;   //图片存储的文件夹名字
@@ -13,7 +14,9 @@ var title = prefs.getComplexValue('title', Ci.nsISupportsString).data;   //网�
 var updateImageTime = prefs.getIntPref('updateImageTime');   //更新bing背景图片的间隔（单位：小时）
 var bingImageSize = prefs.getBoolPref('useBigImage');   //bing图片的尺寸，0为默认的1366x768，1为1920x1080
 var useBingImage = prefs.getBoolPref('useBingImage');   //使用bing的背景图片
+var weatherSrc = prefs.getComplexValue('weatherSrc', Ci.nsISupportsString).data;   //天气代码的URL
 
+//插入文件
 var dataFile = Services.dirsvc.get('ProfD', Ci.nsIFile);
 dataFile.appendRelativePath(newTabDirPath);
 var styleFile = dataFile.clone();
@@ -39,6 +42,7 @@ var NewTab = {
 
 	init: function() {
 		document.title = title;
+		document.getElementById("weather").src = weatherSrc;
 		
 		var table = document.getElementById('navtable');
 		if (table.children.lenth > 0) {
