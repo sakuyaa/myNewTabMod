@@ -11,14 +11,13 @@ body {
 	background-color: #EDEDED;
 	background-image: url(img/default.png);
 	background-repeat: no-repeat;
-	background-size: 1366px 768px;   /* 如果屏幕没有铺满，请把auto改为你自己显示器分辨率 */
-    font-family: "Microsoft YaHei";
+	background-size: 1366px 768px;   /*如果屏幕没有铺满，请把auto改为你自己显示器分辨率*/
+	font-family: "Microsoft YaHei", Sans-serif;
 	/*背景固定*/
 	/*background-position: center;
 	background-attachment: fixed;
-	background-size: cover;
-	font-family: 微软雅黑;*/
-    font-size: 62.5%;
+	background-size: cover;*/
+	font-size: 62.5%;
 }
 img {max-width: 100%;}
 
@@ -30,7 +29,7 @@ img {max-width: 100%;}
 	margin-top: 0.5em;
 	text-align: center;
 	text-shadow: 0.1em 0.1em 0.1em black;
-	font-family: "Monotype Corsiva";
+	font-family: "Monotype Corsiva", Sans-serif;
 	font-weight: bold;
 	font-size: 6em;
 	color: #1E90FF;
@@ -71,20 +70,20 @@ img {max-width: 100%;}
 	font-size: 1em;
 }
 #nav_random:hover, #nav_openfolder:hover, #nav_edit:hover {
-    opacity: 1;
+	opacity: 1;
 }
 /*设置导航地址间距*/
 #navtable {
 	font-size: 1.5em;
-    padding-top: 0.6em;
-    margin-left: 1em;
+	padding-top: 0.6em;
+	margin-left: 1em;
 }
 /*设置导航单元大小*/
 #navtable td {
 	list-style: none;
 	float: left;
 	height: 2em;
-    width: 7em;
+	width: 7em;
 	text-align: left;
 	opacity: 0.9;
 }
