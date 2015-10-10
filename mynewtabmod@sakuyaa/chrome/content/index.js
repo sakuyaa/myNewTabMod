@@ -98,7 +98,6 @@ var NewTab = {
 	},
 	
 	getBingImage: function(idx) {
-		var self = this;
 		var url = 'http://cn.bing.com/HPImageArchive.aspx?format=js&idx=' + idx + '&n=1&nc=';
 		//var url = 'http://www.bing.com/HPImageArchive.aspx?format=js&idx=' + idx + '&n=1&nc=' + Date.now() + '&pid=hp&scope=web';
 		var xhr = new XMLHttpRequest();
@@ -279,7 +278,7 @@ var NewTab = {
 		    return;
 		}
 
-		var uri, iconURI;
+		var uri;
 		try {
 		    uri = Services.io.newURI(obj.url, null, null);
 		} catch (e) { }
