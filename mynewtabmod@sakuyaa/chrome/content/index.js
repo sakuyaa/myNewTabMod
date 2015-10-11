@@ -35,14 +35,11 @@ document.getElementsByTagName('head')[0].appendChild(style);
 
 var NewTab = {
 	localLinkRegExp: /^[a-z]:\\[^ ]+$/i,  //windows路径
-	/*get prefs() {
-	    delete this.prefs;
-	    return this.prefs = Services.prefs.getBranch('myNewTab.');
-	},*/
+	Yooo: {},   //神秘的代码
 
 	init: function() {
 		document.title = title;
-		document.getElementById("weather").src = weatherSrc;
+		document.getElementById('weather').src = weatherSrc;
 		
 		var table = document.getElementById('navtable');
 		if (table.children.lenth > 0) {
@@ -53,13 +50,13 @@ var NewTab = {
 		//console.log(siteData);
 		var tr, type;
 		for(type in siteData) {
+			if (type == 'Yooo') {   //神秘的代码
+				this.Yooo = this.buildTr(type, siteData[type]);
+				this.Yooo.id = 'Yooo';
+				continue;
+			}
 			tr = this.buildTr(type, siteData[type]);
 			table.appendChild(tr);
-			//神秘的代码
-			if (type == 'Yooo') {
-				tr.id = 'Yooooo';
-				tr.style.visibility = 'hidden';
-			}
 		}
 		
 		//获取bing中国主页的背景图片
@@ -177,7 +174,7 @@ var NewTab = {
 		return data;
 	},
 	
-	buildTr: function (type, sites) {
+	buildTr: function(type, sites) {
 		var tr = document.createElement('tr'),
 			th = document.createElement('th'),
 			span = document.createElement('span'),
@@ -251,7 +248,7 @@ var NewTab = {
 		return false;
 	},
 	
-	exec: function (path) {
+	exec: function(path) {
 		var file = Cc['@mozilla.org/file/local;1'].createInstance(Ci.nsILocalFile);
 		file.initWithPath(path);
 		if (!file.exists()) {
@@ -261,7 +258,7 @@ var NewTab = {
 		file.launch();
 	},
 	
-	setIcon: function (img, obj) {
+	setIcon: function(img, obj) {
 		if (obj.exec) {
 		    var aFile = Cc['@mozilla.org/file/local;1'].createInstance(Ci.nsILocalFile);
 		    try {
@@ -346,17 +343,21 @@ function edit() {
 }
 
 //神秘的代码
-document.onkeydown =function (e) {
-	var e=e||event;
-	var currKey=e.keyCode||e.which||e.charCode;
+document.onkeydown = function(e) {
+	//Firefox only, not IE
+	//var e=e || event;
+	//var currKey = e.keyCode || e.which || e.charCode;
 	//var keyName = String.fromCharCode(currKey);
-	if (currKey == 81 && e.ctrlKey) {
-		document.getElementById('Yooooo').style.visibility = 'visible';
-		//alert('按键码: ' + currKey + ' 字符: ' + keyName);
+	//alert('按键码: ' + currKey + ' 字符: ' + keyName);
+	if (e.which == 81 && e.ctrlKey && document.getElementById('Yooo') == null) {
+		document.getElementById('navtable').appendChild(NewTab.Yooo);
 	}
 };
-document.onkeyup =function (e) {
-	document.getElementById('Yooooo').style.visibility = 'hidden';
+document.onkeyup = function(e) {
+	var tr = document.getElementById('Yooo');
+	if (tr != null) {
+		document.getElementById('navtable').removeChild(tr);
+	}
 };
 
 //从函数中获取多行注释的字符串
