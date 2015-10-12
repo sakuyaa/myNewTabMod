@@ -19,18 +19,15 @@ var weatherSrc = prefs.getComplexValue('weatherSrc', Ci.nsISupportsString).data;
 //插入文件
 var dataFile = Services.dirsvc.get('ProfD', Ci.nsIFile);
 dataFile.appendRelativePath(newTabDirPath);
-var styleFile = dataFile.clone();
-dataFile.appendRelativePath('data.js');
-styleFile.appendRelativePath('style.css');
 
 var script = document.createElement('script');
 script.type = 'text/javascript';
-script.src = 'file:///' + encodeURI(dataFile.path.replace(/\\/g, '/'));   //转为本地路径
+script.src = 'file:///' + encodeURI(dataFile.path.replace(/\\/g, '/')) + '/data.js';   //转为本地路径
 document.getElementsByTagName('head')[0].appendChild(script);
 var style = document.createElement('link');
 style.rel = 'stylesheet';
 style.type = 'text/css';
-style.href = 'file:///' + encodeURI(styleFile.path.replace(/\\/g, '/'));
+style.href = 'file:///' + encodeURI(dataFile.path.replace(/\\/g, '/')) + '/style.css';
 document.getElementsByTagName('head')[0].appendChild(style);
 
 var NewTab = {
@@ -217,11 +214,10 @@ var NewTab = {
 			img.width = 16;
 			img.height = 16;
 			if (site.imgSrc) {
-				if (site.imgSrc.substr(0, 4) == 'ico/') {
+				if (site.imgSrc[0] == '/') {
 					var icoFile = Services.dirsvc.get('ProfD', Ci.nsIFile);
 					icoFile.appendRelativePath(newTabDirPath);
-					icoFile.appendRelativePath(site.imgSrc.replace('/', '\\'));
-					img.src = 'file:///' + encodeURI(icoFile.path.replace(/\\/g, '/'));   //转为本地路径
+					img.src = 'file:///' + encodeURI(icoFile.path.replace(/\\/g, '/')) + site.imgSrc;   //转为本地路径
 				} else {
 					img.src = site.imgSrc;
 				}
