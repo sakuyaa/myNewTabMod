@@ -1,8 +1,8 @@
 /*--主页天气字体--*/
 @-moz-document domain("i.tianqi.com") {
 	.wtleft {
-		color: rgba(255,255,255,1) !important;
-		text-shadow: 0 1px rgba(64,64,255,0.9), 0 1px 1px rgba(64,64,255,0.9), 0 -1px 1px rgba(64,64,255,0.9), 
-			1px 0 1px rgba(64,64,255,0.9), -1px 0 1px rgba(64,64,255,0.9), 0 0 3px rgba(64,64,255,0.9) !important;
+		color: rgba(255, 255, 255, 1) !important;
+		text-shadow: 0 1px rgba(64, 64, 255, 0.9), 0 1px 1px rgba(64, 64, 255, 0.9), 0 -1px 1px rgba(64, 64, 255, 0.9), 
+			1px 0 1px rgba(64, 64, 255, 0.9), -1px 0 1px rgba(64, 64, 255, 0.9), 0 0 3px rgba(64, 64, 255, 0.9) !important;
 	}
 }
