@@ -1,113 +1,120 @@
+/*天气*/
 #weather {
-	position: fixed !important;
-	position: absolute;
-	display: block;
-	top: 1em;
+	position: fixed;
+	top: .5em;
 	left: 0em;
 }
 
+/*去除因主框架右移导致的滚动条*/
+html {
+	overflow-x: hidden;
+} 
+
 body {
-	overflow: auto;
+	font-family: "microsoft yahei", sans-serif;
+	background-attachment: fixed;
 	background-color: #EDEDED;
 	background-image: url(img/default.png);
+	background-position: center;
 	background-repeat: no-repeat;
-	background-size: 1366px 768px;   /*如果屏幕没有铺满，请把auto改为你自己显示器分辨率*/
-	font-family: "Microsoft YaHei", Sans-serif;
-	/*背景固定*/
-	/*background-position: center;
-	background-attachment: fixed;
-	background-size: cover;*/
-	font-size: 62.5%;
+	background-size: cover;   /*cover背景固定。设为auto时如果没有铺满，请把auto改为你自己显示器分辨率*/
+	overflow: auto;
 }
-img {max-width: 100%;}
 
-/*设置日期*/
+/*主框架右移*/
+#main {
+	left: 50%;
+	width: 100%;
+	position: absolute;
+	margin: auto;
+}
+
+/*日历整体*/
 #date {
-	/*width: 400px;*/
-	height: 1em;
-	/*margin: 0em auto;*/
-	margin-top: 0.5em;
-	text-align: center;
-	text-shadow: 0.1em 0.1em 0.1em black;
-	font-family: "Monotype Corsiva", Sans-serif;
-	font-weight: bold;
-	font-size: 6em;
+	transform: translateX(-50%);   /*左移使之居中*/
+	margin: .25em 0;
 	color: #1E90FF;
+	font-family: "monotype corsiva", sans-serif;
+	font-size: 4em;
+	font-weight: bold;
+	text-align: center;
+	text-shadow: .1em .1em .1em black;
 }
-/*设置农历*/
+/*农历*/
 #lunar {
-	font-size: 0.8em;
 	color: #333;
-	text-shadow: 0.1em 0.1em 0.1em silver;
+	font-size: .75em;
+	text-shadow: .1em .1em .1em silver;
 }
 
-/*设置导航整体面板*/
-#navs { 
-	float: left;
-	position: relative;
-	left: 13%;   /*导航整体面板到窗口左边的距离*/
-	width: 74%;   /*导航整体面板宽度*/
-	top: 8em;   /*导航整体面板到搜索框的距离*/
-	margin: 0 auto;
-	padding: 0.6em;
-	background-color: #000;
-	opacity: 0.65;
-	border: 0.1em solid #000;
+/*导航整体面板*/
+#navs {
+	float: left;   /*宽度自适应*/
+	transform: translateX(-50%);   /*左移使之居中*/
+	margin: auto;
+	padding: .5em;
+	max-width: 80%;   /*最大宽度*/
+	background-color: #333;
+	border: .1em solid #000;
+	opacity: .65;
 }
-/*设置导航标题字体*/
-#navtitle {
-	font-size: 1.8em;
-	font-weight: bold;
+/*导航链接*/
+#navs a {
 	color: white;
-	border-bottom: 0.1em solid #555;
+	text-decoration: none;
 }
-/*设置导航切换、定位、编辑按钮*/
+
+/*导航标题*/
+#navtitle {
+	padding-bottom: .4em;
+	color: white;
+	font-size: 1.25em;
+	font-weight: bold;
+	border-bottom: .15em solid #555;
+}
+/*导航标题链接图标*/
+#navtitle img {
+	margin-right: .25em;
+	margin-bottom: -.1em;
+}
+/*切换、定位、编辑按钮*/
 #nav_random, #nav_openfolder, #nav_edit {
 	float: right;
-	position: relative;
-	padding: 0 0.2em;
-	opacity: 0.3;
-	font-size: 1em;
+	padding: 0 .2em;
+	opacity: .5;
 }
 #nav_random:hover, #nav_openfolder:hover, #nav_edit:hover {
 	opacity: 1;
 }
-/*设置导航地址间距*/
+
+/*导航表格*/
 #navtable {
-	font-size: 1.5em;
-	padding-top: 0.6em;
-	margin-left: 1em;
+	padding: .5em;
 }
-/*设置导航单元大小*/
-#navtable td {
-	list-style: none;
-	float: left;
-	height: 2em;
-	width: 7em;
-	text-align: left;
-	opacity: 0.9;
+/*设置导航链接图标*/
+#navtable img {
+	margin-right: .25em;
+	margin-bottom: -.2em;
 }
 /*设置导航分类*/
 #navtable th {
-	width: 5.4em;
+	width: 6.5em;
+	padding-top: .1em;
+	color: gray;
 	text-align: left;
 	vertical-align: top;
-	color: gray;
 }
-/*设置导航链接字体*/
-#navs a {
-	color: #FFF;
-	text-decoration: none;
-}
-/*设置导航链接图标*/
-#navs img {
-	margin-right: 0.25em;
-	margin-bottom: -0.1em;
+/*设置导航单元大小*/
+#navtable td {
+	float: left;
+	height: 1.75em;
+	width: 7.5em;
+	opacity: .9;
 }
 /*设置导航链接hover时*/
 #navtable a:hover {
 	text-decoration: none;
-	transition: color 0.423s ease,text-shadow 0.423s ease;
-	color: rgba(255,200,0,0.9);
-	text-shadow: 0 1px rgba(242,33,49,1), 0 1px 1px rgba(242,33,49,1), 0 -1px 1px rgba(242,33,49,1), 1px 0 1px rgba(242,33,49,1), -1px 0 1px rgba(242,33,49,1), 0 0 3px rgba(242,33,49,1);
+	transition: color 0.423s ease, text-shadow 0.423s ease;
+	color: rgba(255, 200, 0, 0.9);
+	text-shadow: 0 1px rgba(242, 33, 49, 1), 0 1px 1px rgba(242, 33, 49, 1), 0 -1px 1px rgba(242, 33, 49, 1), 1px 0 1px rgba(242, 33, 49, 1), -1px 0 1px rgba(242, 33, 49, 1), 0 0 3px rgba(242, 33, 49, 1);
 }
