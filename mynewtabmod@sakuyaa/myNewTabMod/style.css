@@ -51,7 +51,7 @@ body {
 #navs {
 	float: left;   /*宽度自适应*/
 	transform: translateX(-50%);   /*左移使之居中*/
-	margin: auto;
+	margin-bottom: 1.5em;
 	padding: .5em;
 	max-width: 80%;   /*最大宽度*/
 	background-color: #333;
@@ -71,6 +71,7 @@ body {
 	font-size: 1.25em;
 	font-weight: bold;
 	border-bottom: .15em solid #555;
+	opacity: .7;
 }
 /*导航标题链接图标*/
 #navtitle img {
