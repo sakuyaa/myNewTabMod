@@ -56,6 +56,13 @@ var NewTab = {
 			table.appendChild(tr);
 		}
 		
+		//当主div不占满网页时使其居中偏上
+		var clientHeight = document.documentElement.clientHeight;
+		var offsetHeight = document.getElementById('main').offsetHeight;
+		if (offsetHeight < clientHeight) {
+			document.getElementById('main').style.marginTop = (clientHeight - offsetHeight) / 5 + 'px';
+		}
+		
 		//获取bing中国主页的背景图片
 		if (useBingImage) {
 			var data = NewTab.loadSetting();
