@@ -74,6 +74,8 @@ body {
 }
 /*导航标题链接图标*/
 #navtitle img {
+	height: 1em;
+	width: 1em;
 	margin-right: .25em;
 	margin-bottom: -.1em;
 }
@@ -93,6 +95,8 @@ body {
 }
 /*设置导航链接图标*/
 #navtable img {
+	height: 1em;
+	width: 1em;
 	margin-right: .25em;
 	margin-bottom: -.2em;
 }
