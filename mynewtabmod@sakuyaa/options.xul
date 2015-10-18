@@ -32,6 +32,9 @@
 			<radio value="false" label="1366x768" />
 		</radiogroup>
 	</setting>
+	<setting pref="extensions.myNewTabMod.backgroundImage" type="file" title="背景图片地址">
+		不使用Bing壁纸时，使用此图片
+	</setting>
 	<setting pref="extensions.myNewTabMod.updateImageTime" type="integer" title="更新壁纸的间隔（小时）" />
 	<setting pref="extensions.myNewTabMod.title" type="string" title="主页标题" />
 	<setting pref="extensions.myNewTabMod.path" type="string" title="扩展存储文件夹名">
