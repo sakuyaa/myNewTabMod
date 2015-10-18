@@ -60,6 +60,7 @@ var myNewTabMod = {
 		this.copyFile('extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\style.css', 'myNewTabMod\\style.css');
 		this.copyFile('extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\ico', 'myNewTabMod', true);
 
+		this.setPrefs('backgroundImage', '');   //背景图片地址
 		this.setPrefs('bingMaxHistory', 10);   //最大历史天数，可设置[2, 16]
 		this.setPrefs('imageDir', 'bingImg');   //图片存储的文件夹名字
 		this.setPrefs('isNewTab', true);   //是否新标签页打开导航链接或搜索结果

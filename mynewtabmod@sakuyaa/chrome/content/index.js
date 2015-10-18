@@ -6,6 +6,9 @@ Cu.import('resource://gre/modules/Services.jsm');
 
 //获取参数
 var prefs = Services.prefs.getBranch('extensions.myNewTabMod.');
+try {
+	var backgroundImage = prefs.getComplexValue('backgroundImage', Ci.nsILocalFile);   //背景图片地址
+} catch(e) {}
 var bingMaxHistory = prefs.getIntPref('bingMaxHistory');   //最大历史天数，可设置[2, 16]
 var bingImageDir = prefs.getComplexValue('imageDir', Ci.nsISupportsString).data;   //图片存储的文件夹名字
 var isNewTab = prefs.getBoolPref('isNewTab');   //是否新标签页打开导航链接或搜索结果
@@ -63,14 +66,27 @@ var NewTab = {
 			document.getElementById('main').style.marginTop = (clientHeight - offsetHeight) / 5 + 'px';
 		}
 		
-		//获取bing中国主页的背景图片
-		if (useBingImage) {
+		if (useBingImage) {   //获取bing中国主页的背景图片
 			var data = NewTab.loadSetting();
 			if (data.backgroundImage && (Date.now() - data.lastCheckTime) < updateImageTime * 3600 * 1000) {
 				document.body.style.backgroundImage = 'url(' + data.backgroundImage + ')';
 			} else {
 				NewTab.getBingImage(0);
 			}
+		} else {
+			if (!backgroundImage || !backgroundImage.exists()) {   //尚未设置背景图片路径
+				alert('请先设置背景图片的路径!!!');
+				var fp = Cc['@mozilla.org/filepicker;1'].createInstance(Ci.nsIFilePicker);
+				fp.init(window, '设置背景图片', fp.modeOpen);
+				fp.appendFilters(fp.filterImages);
+				if (fp.show() == fp.returnCancel || !fp.file) {
+					return;
+				} else {
+					backgroundImage = fp.file;
+					prefs.setCharPref('backgroundImage', backgroundImage.path);
+				}
+			}
+			document.body.style.backgroundImage = 'url(file:///' + encodeURI(backgroundImage.path.replace(/\\/g, '/')) + ')';
 		}
 	},
 	
