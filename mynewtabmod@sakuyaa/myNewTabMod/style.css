@@ -14,7 +14,6 @@ body {
 	font-family: "microsoft yahei", sans-serif;
 	background-attachment: fixed;
 	background-color: #EDEDED;
-	background-image: url(img/default.png);
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: cover;   /*cover背景固定。设为auto时如果没有铺满，请把auto改为你自己显示器分辨率*/
