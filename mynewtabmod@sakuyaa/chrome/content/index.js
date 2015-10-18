@@ -303,8 +303,10 @@ window.addEventListener('load', function() {
 
 //切换|下载背景图
 function changeImg() {
-	var n = Math.floor(Math.random() * bingMaxHistory);
-	NewTab.getBingImage(n);
+	if (useBingImage) {
+		var n = Math.floor(Math.random() * bingMaxHistory);
+		NewTab.getBingImage(n);
+	}
 }
 
 //定位文件目录
