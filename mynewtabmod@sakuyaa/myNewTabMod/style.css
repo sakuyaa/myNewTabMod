@@ -45,6 +45,14 @@ body {
 	font-size: .75em;
 	text-shadow: .1em .1em .1em silver;
 }
+/*节日*/
+.festival {
+	color: orangered;
+}
+/*法定假日*/
+.holiday {
+	color: red;
+}
 
 /*导航整体面板*/
 #navs {
