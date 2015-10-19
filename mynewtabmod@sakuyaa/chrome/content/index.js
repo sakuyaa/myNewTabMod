@@ -40,6 +40,8 @@ var NewTab = {
 	init: function() {
 		document.title = title;
 		document.getElementById('weather').src = weatherSrc;
+		document.getElementById('solar').innerHTML = Solar.getSolar(new Date());
+		document.getElementById('lunar').innerHTML = Lunar.getLunar(new Date());
 		
 		var table = document.getElementById('navtable');
 		if (table.children.lenth > 0) {
@@ -63,7 +65,7 @@ var NewTab = {
 		var clientHeight = document.documentElement.clientHeight;
 		var offsetHeight = document.getElementById('main').offsetHeight;
 		if (offsetHeight < clientHeight) {
-			document.getElementById('main').style.marginTop = (clientHeight - offsetHeight) / 5 + 'px';
+			document.getElementById('main').style.marginTop = (clientHeight - offsetHeight) / 4 + 'px';
 		}
 		
 		if (useBingImage) {   //获取bing中国主页的背景图片

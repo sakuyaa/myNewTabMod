@@ -5,19 +5,15 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>我的主页</title>
 		<link rel="shortcut icon" href="img/logo.png"  type="image/x-icon" />
-		<script type="text/javascript" src="rili.js"></script>
+		<script type="text/javascript" src="calendar.min.js"></script>
 	</head>
 	<body>
 		<iframe id="weather" name="weather_inc" width="225" height="80" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
 		<div id="main">
 			<div id="date">
-				<script language="Javascript">
-						var dayName = new Array ("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六")
-						var monName = new Array ("1 月", "2 月", "3 月", "4 月", "5 月", "6 月", "7 月", "8 月", "9 月", "10 月" , "11 月", "12 月")
-						var now = new Date
-						document.write(monName[now.getMonth()] + now.getDate() + " 日 " + dayName[now.getDay()]  + "<span id=lunar><br>") 
-				</script>
-				<script language="JavaScript">showcal(0)</script>
+				<span id="solar"></span>
+				<br />
+				<span id="lunar"></span>
 			</div>
 			<div id="navs">
 				<div id="navtitle">
