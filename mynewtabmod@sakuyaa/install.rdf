@@ -5,7 +5,7 @@
 
 	<em:id>mynewtabmod@sakuyaa</em:id>
 	<em:version>1.0</em:version>
-	<em:iconURL>chrome://mynewtabmod/skin/icon.png</em:iconURL>
+	<em:iconURL>chrome://mynewtabmod/skin/sakuyaa.png</em:iconURL>
 	<em:unpack>true</em:unpack>
 	<!--em:multiprocessCompatible>true</em:multiprocessCompatible-->
 	<em:type>2</em:type>
