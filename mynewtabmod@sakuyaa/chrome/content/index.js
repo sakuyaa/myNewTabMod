@@ -22,15 +22,6 @@ var weatherSrc = prefs.getComplexValue('weatherSrc', Ci.nsISupportsString).data;
 //插入文件
 var dataFile = Services.dirsvc.get('ProfD', Ci.nsIFile);
 dataFile.appendRelativePath(newTabDirPath);
-
-var script = document.createElement('script');
-script.type = 'text/javascript';
-script.src = 'file:///' + encodeURI(dataFile.path.replace(/\\/g, '/')) + '/data.js';   //转为本地路径
-document.getElementsByTagName('head')[0].appendChild(script);
-script = document.createElement('script');
-script.type = 'text/javascript';
-script.src = 'file:///' + encodeURI(dataFile.path.replace(/\\/g, '/')) + '/calendar.min.js';
-document.getElementsByTagName('head')[0].appendChild(script);
 var style = document.createElement('link');
 style.rel = 'stylesheet';
 style.type = 'text/css';
@@ -51,8 +42,29 @@ var NewTab = {
 		if (table.children.lenth > 0) {
 			return;
 		}
-
-		var siteData = this.parseDataText(Config.sites);
+		
+		//读取配置文件
+		dataFile.appendRelativePath('data.txt');
+		if (!dataFile.exists()) {
+			alert('文件不存在：' + dataFile.path); 
+			return;
+		}
+		try {
+			var fis = Cc['@mozilla.org/network/file-input-stream;1'].createInstance(Ci.nsIFileInputStream);
+			fis.init(dataFile, 0x01, 00004, null);
+			var sis = Cc['@mozilla.org/scriptableinputstream;1'].createInstance(Ci.nsIScriptableInputStream);
+			sis.init(fis);
+			var converter = Cc['@mozilla.org/intl/scriptableunicodeconverter'].createInstance(Ci.nsIScriptableUnicodeConverter);
+			converter.charset = 'UTF-8';
+			var content = converter.ConvertToUnicode(sis.read(sis.available()));
+		} catch(e) {
+			alert('不能读取文件：' + dataFile.path);
+			sis.close();
+			return;
+		}
+		sis.close();
+		
+		var siteData = this.parseDataText(content);
 		//console.log(siteData);
 		var tr, type;
 		for(type in siteData) {
@@ -361,7 +373,7 @@ function edit() {
 
 	dsFile = Services.dirsvc.get('ProfD', Ci.nsIFile);
 	dsFile.appendRelativePath(newTabDirPath);
-	dsFile.appendRelativePath('data.js');
+	dsFile.appendRelativePath('data.txt');
 
 	var process = Cc['@mozilla.org/process/util;1'].createInstance(Ci.nsIProcess);
 	var args = [dsFile.path];
@@ -388,7 +400,7 @@ document.onkeyup = function(e) {
 };
 
 //从函数中获取多行注释的字符串
-function getMStr(fn) {
+/*function getMStr(fn) {
 	var fnSource = fn.toString();
 	var ret = {};
 	fnSource = fnSource.replace(/^[^{]+/, '');
@@ -400,4 +412,4 @@ function getMStr(fn) {
 		ret[matched[1]] = matched[2];
 	};
 	return ret;
-}
+}*/

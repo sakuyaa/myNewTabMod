@@ -1,6 +1,3 @@
-var Config = getMStr(function() {
-	var sites;
-/*
 示例
 	项目地址, https://github.com/sakuyaa/myNewTabMod, /ico/github.svg
 	卡饭, http://bbs.kafan.cn/forum.php?mod=forumdisplay&fid=215&filter=author&orderby=dateline, /ico/kafan.ico
@@ -13,5 +10,3 @@ var Config = getMStr(function() {
 Yooo
 	王の教♂诲, http://www.bilibili.com/video/av1267
 	Pump♂it, http://www.bilibili.com/video/av212109
-*/
-});
