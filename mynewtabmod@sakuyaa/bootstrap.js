@@ -57,7 +57,6 @@ var myNewTabMod = {
 	install: function() {
 		//将文件复制到目录外，以避免文件修改之后导致扩展签名失败
 		this.copyFile('extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\data.js', 'myNewTabMod\\data.js');
-		this.copyFile('extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\calendar.min.js', 'myNewTabMod\\calendar.min.js');
 		this.copyFile('extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\style.css', 'myNewTabMod\\style.css');
 		this.copyFile('extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\ico', 'myNewTabMod', true);
 
