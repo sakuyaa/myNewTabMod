@@ -10,7 +10,7 @@
 						<em:minVersion>36.*</em:minVersion>
 						<em:maxVersion>*</em:maxVersion>
 						<em:updateLink>https://raw.githubusercontent.com/sakuyaa/myNewTabMod/master/xpi/mynewtabmod-1.0-fx.xpi</em:updateLink>
-						<em:updateInfoURL>https://raw.githubusercontent.com/sakuyaa/myNewTabMod/master/update/updateinfo1.0.xml</em:updateInfoURL>
+						<em:updateInfoURL>http://htmlpreview.github.com/?https://raw.githubusercontent.com/sakuyaa/myNewTabMod/master/update/updateinfo1.0.xml</em:updateInfoURL>
 					</RDF:Description>
 				</em:targetApplication>
 			</RDF:Description></RDF:li>
@@ -22,7 +22,7 @@
 						<em:minVersion>36.*</em:minVersion>
 						<em:maxVersion>*</em:maxVersion>
 						<em:updateLink>https://raw.githubusercontent.com/sakuyaa/myNewTabMod/master/xpi/mynewtabmod-1.1-fx.xpi</em:updateLink>
-						<em:updateInfoURL>https://raw.githubusercontent.com/sakuyaa/myNewTabMod/master/update/updateinfo1.1.xml</em:updateInfoURL>
+						<em:updateInfoURL>http://htmlpreview.github.com/?https://raw.githubusercontent.com/sakuyaa/myNewTabMod/master/update/updateinfo1.1.xml</em:updateInfoURL>
 					</RDF:Description>
 				</em:targetApplication>
 			</RDF:Description></RDF:li>
