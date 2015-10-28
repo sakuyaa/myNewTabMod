@@ -7,7 +7,8 @@
 1. 壁纸的命名还是采取壁纸的信息，且不自动删除，方便以后查看
 * 实现火狐41上设置为新标签页
 * 将参数存放在火狐preferences里面
-* 将导航配置、壁纸等可能有改动的文件设置在profile文件夹内，实现扩展签名（~~还要看看能不能通过先~~:flushed:最新消息：扩展人工审核失败:sob:，因为我把一部分代码移出扩展外了，看来还需要大改）
+* 将导航配置、壁纸等可能有改动的文件设置在profile文件夹内，实现扩展签名（~~还要看看能不能通过先~~:flushed:）  
+	最新消息：扩展人工审核失败:sob:，因为我把一部分代码移出扩展外了，看来还需要大改
 * 扩展重装后不会覆盖配置
 * 替换日历算法为我自己编写的算法，从而准确显示父亲节:man:、母亲节:woman:这样的节日
 * 神秘的代码:underage:
@@ -24,9 +25,18 @@
 * 待编辑
 
 ## 尚未实现（能力有限…）
-* 天气iframe内字体的设置（解决不了啊:scream:目前只能通过Stylish设置）
+* 天气iframe内字体的设置（解决不了啊:scream:目前只能通过Stylish设置如下）
+```css
+@-moz-document domain("i.tianqi.com") {
+	.wtleft {
+		color: rgba(255, 255, 255, 1) !important;
+		text-shadow: 0 1px rgba(64, 64, 255, 0.9), 0 1px 1px rgba(64, 64, 255, 0.9), 0 -1px 1px rgba(64, 64, 255, 0.9), 1px 0 1px rgba(64, 64, 255, 0.9), -1px 0 1px rgba(64, 64, 255, 0.9), 0 0 3px rgba(64, 64, 255, 0.9) !important;
+	}
+}
+```
 * 通过defaults\preferences设置扩展默认参数（试过了，不知道为什么参数不会自动导入:broken_heart:）
-* ~~将整个index.html移出扩展外，再作为iframe插入首页~~看来不可能实现了:worried:，不然通不过扩展审核
+* ~~将整个index.html移出扩展外，再作为iframe插入首页~~  
+	看来不可能实现了:worried:，不然通不过扩展审核
 ```javascript
 var frm = document.createElement('iframe');
 iframe.src = 'index.html';
