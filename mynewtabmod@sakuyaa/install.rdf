@@ -32,7 +32,7 @@
 			<em:name>myNewTabMod</em:name>
 			<em:description>修改myNewTab这个扩展，使其可以实现扩展签名。感谢defpt、ywzhaiqi及卡饭各位大神</em:description>
 			<em:creator>defpt, ywzhaiqi, sakuyaa</em:creator>
-			<em:homepageURL>https://github.com/sakuyaa/myNewTabMod/</em:homepageURL>
+			<em:homepageURL>http://sakuyaa.github.io/myNewTabMod/</em:homepageURL>
 		</Description>
 	</em:localized>
  
