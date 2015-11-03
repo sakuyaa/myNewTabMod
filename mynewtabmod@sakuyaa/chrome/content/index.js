@@ -1,4 +1,4 @@
-var {classes: Cc, interfaces: Ci, utils: Cu} = Components;
+const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 Cu.import('resource://gre/modules/PlacesUtils.jsm');
 Cu.import('resource://gre/modules/Services.jsm');
 
@@ -172,9 +172,9 @@ var NewTab = {
 			t.src = imageUrl;
 			t.onload = function() {
 				try {
-					file.create(file.NOMAL_FILE_TYPE, 0777);
+					file.create(file.NORMAL_FILE_TYPE, 0777);
 					Cc['@mozilla.org/embedding/browser/nsWebBrowserPersist;1'].createInstance(Ci.nsIWebBrowserPersist)
-						.saveURI(Cc['@mozilla.org/network/io-service;1'].getService(Ci.nsIIOService).newURI(imageUrl, null, null), null, null, null, null, null, file, null);
+						.saveURI(Services.io.newURI(imageUrl, null, null), null, null, null, null, null, file, null);
 				} catch (err) {
 					//alert(err)
 				}
