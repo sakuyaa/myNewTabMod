@@ -219,7 +219,7 @@ var NewTab = {
 			site, td, a, img, textNode, path;
 		
 		//添加分类
-		span.innerHTML = type;
+		span.textContent = type;
 		th.appendChild(span);
 		tr.appendChild(th);
 
