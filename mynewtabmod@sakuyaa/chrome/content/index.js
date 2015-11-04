@@ -232,6 +232,11 @@ var NewTab = {
 		th.appendChild(span);
 		tr.appendChild(th);
 
+		//图标地址
+		var icoFile = Services.dirsvc.get('ProfD', Ci.nsIFile)
+		icoFile.appendRelativePath(newTabDirPath);
+		var icoURL = 'file:///' + encodeURI(icoFile.path.replace(/\\/g, '/'));
+		
 		//添加站点
 		for (var i = 0, l = sites.length; i < l; i++) {
 			site = sites[i];
@@ -265,9 +270,7 @@ var NewTab = {
 			img.height = 16;
 			if (site.imgSrc) {
 				if (site.imgSrc[0] == '/') {
-					var icoFile = Services.dirsvc.get('ProfD', Ci.nsIFile);
-					icoFile.appendRelativePath(newTabDirPath);
-					img.src = 'file:///' + encodeURI(icoFile.path.replace(/\\/g, '/')) + site.imgSrc;   //转为本地路径
+					img.src = icoURL + site.imgSrc;   //转为本地路径
 				} else {
 					img.src = site.imgSrc;
 				}
