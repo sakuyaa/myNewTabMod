@@ -25,15 +25,6 @@
 * 待编辑
 
 ## 尚未实现（能力有限…）
-* 天气iframe内字体的设置（解决不了啊:scream:目前只能通过Stylish设置如下）
-```css
-@-moz-document domain("i.tianqi.com") {
-	.wtleft {
-		color: rgba(255, 255, 255, 1) !important;
-		text-shadow: 0 1px rgba(64, 64, 255, 0.9), 0 1px 1px rgba(64, 64, 255, 0.9), 0 -1px 1px rgba(64, 64, 255, 0.9), 1px 0 1px rgba(64, 64, 255, 0.9), -1px 0 1px rgba(64, 64, 255, 0.9), 0 0 3px rgba(64, 64, 255, 0.9) !important;
-	}
-}
-```
 * 通过defaults\preferences设置扩展默认参数（试过了，不知道为什么参数不会自动导入:broken_heart:）
 * ~~将整个index.html移出扩展外，再作为iframe插入首页~~  
 	看来不可能实现了:worried:，不然通不过扩展审核
