@@ -1,4 +1,5 @@
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
+Cu.import('resource://gre/modules/Downloads.jsm');
 Cu.import('resource://gre/modules/PlacesUtils.jsm');
 Cu.import('resource://gre/modules/Services.jsm');
 
@@ -186,10 +187,11 @@ var NewTab = {
 			t.onload = function() {
 				try {
 					file.create(file.NORMAL_FILE_TYPE, 0777);
-					Cc['@mozilla.org/embedding/browser/nsWebBrowserPersist;1'].createInstance(Ci.nsIWebBrowserPersist)
-						.saveURI(Services.io.newURI(imageUrl, null, null), null, null, null, null, null, file, null);
-				} catch (err) {
-					//alert(err)
+					Downloads.fetch(Services.io.newURI(imageUrl, null, null), file);
+					/*Cc['@mozilla.org/embedding/browser/nsWebBrowserPersist;1'].createInstance(Ci.nsIWebBrowserPersist)
+						.saveURI(Services.io.newURI(imageUrl, null, null), null, null, null, null, null, file, null);*/
+				} catch (ex if ex instanceof Downloads.Error && ex.becauseTargetFailed) {
+					console.log('Unable to write to the target file, ignoring the error.');
 				}
 				setTimeout(function() {
 					NewTab.setAndSave(filePath);
