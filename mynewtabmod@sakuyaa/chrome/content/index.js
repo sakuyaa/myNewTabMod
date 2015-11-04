@@ -113,7 +113,7 @@ var NewTab = {
 					prefs.setCharPref('backgroundImage', backgroundImage.path);
 				}
 			}
-			document.body.style.backgroundImage = 'url(file:///' + encodeURI(backgroundImage.path.replace(/\\/g, '/')) + ')';
+			document.body.style.backgroundImage = 'url(' + Services.io.newFileURI(backgroundImage) + ')';
 		}
 	},
 	
@@ -169,7 +169,7 @@ var NewTab = {
 			file.appendRelativePath(enddate + '-' + name.replace(/(\s|\(.*?\))/g, '') + '.jpg');
 
 			//转为本地路径
-			var filePath = 'file:///' + encodeURI(file.path.replace(/\\/g, '/'));
+			var filePath = Services.io.newFileURI(file);
 			
 			if (file.exists()) {
 				NewTab.setAndSave(filePath);
