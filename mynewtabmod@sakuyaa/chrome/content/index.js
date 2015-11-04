@@ -35,6 +35,15 @@ var NewTab = {
 	init: function() {
 		document.title = title;
 		document.getElementById('weather').src = weatherSrc;
+		
+		document.getElementById('weather').onload = function() {   //为天气iframe设置css
+			var cssFile = Services.dirsvc.get('ProfD', Ci.nsIFile);
+			cssFile.appendRelativePath('extensions\\mynewtabmod@sakuyaa\\chrome\\skin\\weather.css');
+			//https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDOMWindowUtils
+			var domWindowUtils = document.getElementById('weather').contentWindow.QueryInterface(Ci.nsIInterfaceRequestor).getInterface(Ci.nsIDOMWindowUtils);
+			domWindowUtils.loadSheet(Services.io.newFileURI(cssFile), domWindowUtils.USER_SHEET);
+		};
+
 		document.getElementById('solar').innerHTML = Solar.getSolar(new Date());
 		document.getElementById('lunar').innerHTML = Lunar.getLunar(new Date());
 		
