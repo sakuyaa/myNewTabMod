@@ -19,13 +19,19 @@ var bingImageSize = prefs.getBoolPref('useBigImage');   //bing图片的尺寸，
 var useBingImage = prefs.getBoolPref('useBingImage');   //使用bing的背景图片
 var weatherSrc = prefs.getComplexValue('weatherSrc', Ci.nsISupportsString).data;   //天气代码的URL
 
+
+var dataFolder = Services.dirsvc.get('ProfD', Ci.nsIFile);
+dataFolder.appendRelativePath(newTabDirPath);
+var dataFile = dataFolder.clone();
+dataFile.appendRelativePath('data.txt');
+var cssFile = dataFolder.clone();
+cssFile.appendRelativePath('style.css');
+
 //插入文件
-var dataFile = Services.dirsvc.get('ProfD', Ci.nsIFile);
-dataFile.appendRelativePath(newTabDirPath);
 var style = document.createElement('link');
 style.rel = 'stylesheet';
 style.type = 'text/css';
-style.href = 'file:///' + encodeURI(dataFile.path.replace(/\\/g, '/')) + '/style.css';
+style.href = Services.io.newFileURI(cssFile).spec;
 document.getElementsByTagName('head')[0].appendChild(style);
 
 var NewTab = {
@@ -37,11 +43,11 @@ var NewTab = {
 		document.getElementById('weather').src = weatherSrc;
 		
 		document.getElementById('weather').onload = function() {   //为天气iframe设置css
-			var cssFile = Services.dirsvc.get('ProfD', Ci.nsIFile);
-			cssFile.appendRelativePath('extensions\\mynewtabmod@sakuyaa\\chrome\\skin\\weather.css');
+			var cssWeather = Services.dirsvc.get('ProfD', Ci.nsIFile);
+			cssWeather.appendRelativePath('extensions\\mynewtabmod@sakuyaa\\chrome\\skin\\weather.css');
 			//https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDOMWindowUtils
 			var domWindowUtils = document.getElementById('weather').contentWindow.QueryInterface(Ci.nsIInterfaceRequestor).getInterface(Ci.nsIDOMWindowUtils);
-			domWindowUtils.loadSheet(Services.io.newFileURI(cssFile), domWindowUtils.USER_SHEET);
+			domWindowUtils.loadSheet(Services.io.newFileURI(cssWeather), domWindowUtils.USER_SHEET);
 		};
 
 		document.getElementById('solar').innerHTML = Solar.getSolar(new Date());
@@ -53,7 +59,6 @@ var NewTab = {
 		}
 		
 		//读取配置文件
-		dataFile.appendRelativePath('data.txt');
 		if (!dataFile.exists()) {
 			alert('文件不存在：' + dataFile.path); 
 			return;
@@ -113,7 +118,7 @@ var NewTab = {
 					prefs.setCharPref('backgroundImage', backgroundImage.path);
 				}
 			}
-			document.body.style.backgroundImage = 'url(' + Services.io.newFileURI(backgroundImage) + ')';
+			document.body.style.backgroundImage = 'url(' + Services.io.newFileURI(backgroundImage).spec + ')';
 		}
 	},
 	
@@ -163,13 +168,12 @@ var NewTab = {
 
 			//本地图片
 			//file = Cc['@mozilla.org/file/directory_service;1'].getService(Ci.nsIProperties).get('ProfD', Ci.nsIFile);
-			var file = Services.dirsvc.get('ProfD', Ci.nsIFile);
-			file.appendRelativePath(newTabDirPath);
+			var file = dataFolder.clone();
 			file.appendRelativePath(bingImageDir);
 			file.appendRelativePath(enddate + '-' + name.replace(/(\s|\(.*?\))/g, '') + '.jpg');
 
 			//转为本地路径
-			var filePath = Services.io.newFileURI(file);
+			var filePath = Services.io.newFileURI(file).spec;
 			
 			if (file.exists()) {
 				NewTab.setAndSave(filePath);
@@ -233,9 +237,7 @@ var NewTab = {
 		tr.appendChild(th);
 
 		//图标地址
-		var icoFile = Services.dirsvc.get('ProfD', Ci.nsIFile)
-		icoFile.appendRelativePath(newTabDirPath);
-		var icoURL = 'file:///' + encodeURI(icoFile.path.replace(/\\/g, '/'));
+		var icoURL = 'file:///' + encodeURI(dataFolder.path.replace(/\\/g, '/'));
 		
 		//添加站点
 		for (var i = 0, l = sites.length; i < l; i++) {
@@ -357,9 +359,7 @@ function changeImg() {
 
 //定位文件目录
 function openDir() {
-	dsFile = Services.dirsvc.get('ProfD', Ci.nsIFile);
-	dsFile.appendRelativePath(newTabDirPath);
-	dsFile.reveal();
+	dataFolder.reveal();
 }
 
 //编辑配置
@@ -383,12 +383,8 @@ function edit() {
 	    }
 	}
 
-	dsFile = Services.dirsvc.get('ProfD', Ci.nsIFile);
-	dsFile.appendRelativePath(newTabDirPath);
-	dsFile.appendRelativePath('data.txt');
-
 	var process = Cc['@mozilla.org/process/util;1'].createInstance(Ci.nsIProcess);
-	var args = [dsFile.path];
+	var args = [dataFile.path];
 	process.init(editor);
 	process.runw(false, args, args.length);
 }
