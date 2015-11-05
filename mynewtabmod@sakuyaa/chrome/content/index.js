@@ -102,7 +102,7 @@ var NewTab = {
 		if (useBingImage) {   //获取bing中国主页的背景图片
 			var data = NewTab.loadSetting();
 			if (data.backgroundImage && (Date.now() - data.lastCheckTime) < updateImageTime * 3600 * 1000) {
-				document.body.style.backgroundImage = 'url(' + data.backgroundImage + ')';
+				document.body.style.backgroundImage = 'url("' + data.backgroundImage + '")';
 			} else {
 				NewTab.getBingImage(0);
 			}
@@ -116,10 +116,12 @@ var NewTab = {
 					return;
 				} else {
 					backgroundImage = fp.file;
-					prefs.setCharPref('backgroundImage', backgroundImage.path);
+					var str = Cc['@mozilla.org/supports-string;1'].createInstance(Ci.nsISupportsString);
+					str.data = backgroundImage.path;
+					prefs.setComplexValue('backgroundImage', Ci.nsISupportsString, str);
 				}
 			}
-			document.body.style.backgroundImage = 'url(' + Services.io.newFileURI(backgroundImage).spec + ')';
+			document.body.style.backgroundImage = 'url("' + Services.io.newFileURI(backgroundImage).spec + '")';
 		}
 	},
 	
@@ -137,7 +139,7 @@ var NewTab = {
 	
 	//设置背景图片并保存设置
 	setAndSave: function(ImgPath) {
-		document.body.style.backgroundImage = 'url(' + ImgPath + ')';
+		document.body.style.backgroundImage = 'url("' + ImgPath + '")';
 		var Jsondata = {
 			lastCheckTime: Date.now(),
 			backgroundImage: ImgPath
