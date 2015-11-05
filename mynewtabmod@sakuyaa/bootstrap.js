@@ -6,7 +6,9 @@
 
 //https://developer.mozilla.org/zh-CN/docs/Mozilla/Add-ons/Bootstrapped_extensions
 var {classes: Cc, interfaces: Ci, utils: Cu, results: Cr} = Components;
-Cu.import('resource:///modules/NewTabURL.jsm');
+try {
+	Cu.import('resource:///modules/NewTabURL.jsm');
+} catch (e) {}   //向下兼容至26.0
 Cu.import('resource://gre/modules/Services.jsm');
 
 //https://developer.mozilla.org/zh-CN/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIPrefBranch
