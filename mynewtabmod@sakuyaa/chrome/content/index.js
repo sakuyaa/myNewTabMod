@@ -11,14 +11,14 @@ try {
 	var backgroundImage = prefs.getComplexValue('backgroundImage', Ci.nsILocalFile);   //背景图片地址
 } catch(e) {}
 var bingMaxHistory = prefs.getIntPref('bingMaxHistory');   //最大历史天数，可设置[2, 16]
-var bingImageDir = prefs.getComplexValue('imageDir', Ci.nsISupportsString).data;   //图片存储的文件夹名字
+var bingImageDir = prefs.getComplexValue('imageDir', Ci.nsISupportsString).toString();   //图片存储的文件夹名字
 var isNewTab = prefs.getBoolPref('isNewTab');   //是否新标签页打开导航链接或搜索结果
-var newTabDirPath = prefs.getComplexValue('path', Ci.nsISupportsString).data;   //myNewTabMod文件夹的相对于配置文件的路径
-var title = prefs.getComplexValue('title', Ci.nsISupportsString).data;   //网页标题
+var newTabDirPath = prefs.getComplexValue('path', Ci.nsISupportsString).toString();   //myNewTabMod文件夹的相对于配置文件的路径
+var title = prefs.getComplexValue('title', Ci.nsISupportsString).toString();   //网页标题
 var updateImageTime = prefs.getIntPref('updateImageTime');   //更新bing背景图片的间隔（单位：小时）
 var bingImageSize = prefs.getBoolPref('useBigImage');   //bing图片的尺寸，0为默认的1366x768，1为1920x1080
 var useBingImage = prefs.getBoolPref('useBingImage');   //使用bing的背景图片
-var weatherSrc = prefs.getComplexValue('weatherSrc', Ci.nsISupportsString).data;   //天气代码的URL
+var weatherSrc = prefs.getComplexValue('weatherSrc', Ci.nsISupportsString).toString();   //天气代码的URL
 
 
 var dataFolder = Services.dirsvc.get('ProfD', Ci.nsIFile);
