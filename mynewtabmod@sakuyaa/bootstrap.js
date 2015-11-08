@@ -56,6 +56,9 @@ var myNewTabMod = {
 		this.copyFile('extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\ico', 'myNewTabMod', true);
 		try {
 			for (var [key, value] in Iterator(this.PREFS)) {
+				if (this.prefs.getPrefType(key) != this.prefs.PREF_INVALID) {
+					continue;   //不覆盖原有参数
+				}
 				switch (typeof value) {
 					case 'string':
 						this.prefs.setCharPref(key, value);
@@ -101,5 +104,7 @@ var install = function(data, reason) {
 	myNewTabMod.install();
 };
 var uninstall = function(data, reason) {
-	myNewTabMod.uninstall();
+	if (reason == ADDON_UNINSTALL) {   //升降级不删除参数
+		myNewTabMod.uninstall();
+	}
 };
