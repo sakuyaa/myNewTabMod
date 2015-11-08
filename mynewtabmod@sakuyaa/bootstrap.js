@@ -12,7 +12,7 @@ try {
 Cu.import('resource://gre/modules/Services.jsm');
 
 //https://developer.mozilla.org/zh-CN/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIPrefBranch
-var prefs = Services.prefs.getBranch('extensions.myNewTabMod.');
+var prefs = Services.prefs.getDefaultBranch('extensions.myNewTabMod.');
 
 var myNewTabMod = {
 	copyFile: function(oldFilePath, newFilePath) {
