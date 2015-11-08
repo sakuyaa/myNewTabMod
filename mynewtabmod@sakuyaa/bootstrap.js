@@ -49,11 +49,11 @@ var myNewTabMod = {
 		} catch(e) { }
 	},
 	startup: function() {
-		Services.prefs.getBranch('').setCharPref('browser.startup.homepage', 'chrome://mynewtabmod/content/index.html');
+		Services.prefs.setCharPref('browser.startup.homepage', 'chrome://mynewtabmod/content/index.html');
 		NewTabURL.override('chrome://mynewtabmod/content/index.html');
 	},
 	shutdown: function() {
-		Services.prefs.getBranch('').clearUserPref('browser.startup.homepage');
+		Services.prefs.clearUserPref('browser.startup.homepage');
 		NewTabURL.reset();
 	},
 	install: function() {
