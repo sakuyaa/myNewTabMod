@@ -349,7 +349,8 @@ var NewTab = {
 	}
 };
 
-window.addEventListener('load', function() {
+addEventListener('load', function onLoad() {
+	removeEventListener('load', onLoad, true);
 	NewTab.init();
 }, false);
 
