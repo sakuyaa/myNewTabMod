@@ -26,12 +26,3 @@
 
 ## 尚未解决（能力有限…）
 * 通过扩展选项选择“背景图片地址”时，文件路径包含中文会造成乱码，无法显示背景
-* ~~将整个index.html移出扩展外，再作为iframe插入首页~~  
-	看来不可能实现了:worried:，不然通不过扩展审核
-```javascript
-var frm = document.createElement('iframe');
-iframe.src = 'index.html';
-iframe.style.width = '100%';
-iframe.style.height = '100%';
-document.body.appendChild(frm);
-```
