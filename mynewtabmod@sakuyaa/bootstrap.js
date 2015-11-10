@@ -8,7 +8,9 @@
 const {/*classes: Cc, */interfaces: Ci, utils: Cu/*, results: Cr*/} = Components;
 try {
 	Cu.import('resource:///modules/NewTabURL.jsm');
-} catch (e) {}   //向下兼容至26.0
+} catch (e) {   //向下兼容至26.0
+	console.log('myNewTabMod line#' + e.lineNumber + ' ' + e.name + ' : ' + e.message);
+}
 Cu.import('resource://gre/modules/Services.jsm');
 
 var myNewTabMod = {
@@ -27,8 +29,8 @@ var myNewTabMod = {
 		weatherSrc: 'http://i.tianqi.com/index.php?c=code&id=8&num=3'   //天气代码的URL
 	},
 	addPrefs: function() {
-		try {
-			for (var [key, value] in Iterator(this.PREFS)) {
+		for (var [key, value] in Iterator(this.PREFS)) {
+			try {
 				/*if (this.prefs.getPrefType(key) != this.prefs.PREF_INVALID) {
 					continue;   //不覆盖原有参数
 				}*/
@@ -47,8 +49,10 @@ var myNewTabMod = {
 						this.prefs.setBoolPref(key, value);
 						break;
 				}
+			} catch(e) {
+				console.log('myNewTabMod line#' + e.lineNumber + ' ' + e.name + ' : ' + e.message);
 			}
-		} catch(e) {}
+		}
 	},
 	copyFile: function(oldFilePath, newFilePath) {
 		//https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIFile
@@ -59,7 +63,9 @@ var myNewTabMod = {
 		if (arguments[2]) {   //第三个参数仅仅用于判断是文件夹复制操作
 			try {
 				oldFile.copyTo(newFile, null);
-			} catch (e) { }
+			} catch (e) {
+				console.log('myNewTabMod line#' + e.lineNumber + ' ' + e.name + ' : ' + e.message);
+			}
 		} else if (!newFile.exists() && oldFile.exists()) {   //避免重复安装后覆盖
 			oldFile.copyTo(newFile.parent, null);
 		}
