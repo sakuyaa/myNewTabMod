@@ -1,9 +1,10 @@
+
+'use strict';
+
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 Cu.import('resource://gre/modules/Downloads.jsm');
 Cu.import('resource://gre/modules/PlacesUtils.jsm');
 Cu.import('resource://gre/modules/Services.jsm');
-
-'use strict';
 
 //获取参数
 var prefs = Services.prefs.getBranch('extensions.myNewTabMod.');
@@ -66,7 +67,7 @@ var NewTab = {
 		}
 		try {
 			var fis = Cc['@mozilla.org/network/file-input-stream;1'].createInstance(Ci.nsIFileInputStream);
-			fis.init(dataFile, 0x01, 00004, null);
+			fis.init(dataFile, -1, -1, fis.CLOSE_ON_EOF);
 			var sis = Cc['@mozilla.org/scriptableinputstream;1'].createInstance(Ci.nsIScriptableInputStream);
 			sis.init(fis);
 			var converter = Cc['@mozilla.org/intl/scriptableunicodeconverter'].createInstance(Ci.nsIScriptableUnicodeConverter);
@@ -188,7 +189,7 @@ var NewTab = {
 			t.src = imageUrl;
 			t.onload = function() {
 				try {
-					file.create(file.NORMAL_FILE_TYPE, 0777);
+					file.create(file.NORMAL_FILE_TYPE, 511);
 					Downloads.fetch(Services.io.newURI(imageUrl, null, null), file);
 					/*Cc['@mozilla.org/embedding/browser/nsWebBrowserPersist;1'].createInstance(Ci.nsIWebBrowserPersist)
 						.saveURI(Services.io.newURI(imageUrl, null, null), null, null, null, null, null, file, null);*/
