@@ -402,7 +402,7 @@ document.onkeydown = function(e) {
 	//var currKey = e.keyCode || e.which || e.charCode;
 	//var keyName = String.fromCharCode(currKey);
 	//alert('按键码: ' + currKey + ' 字符: ' + keyName);
-	if (e.which == 81 && e.ctrlKey && document.getElementById('Yooo') == null) {
+	if (NewTab.Yooo && e.which == 81 && e.ctrlKey && document.getElementById('Yooo') == null) {
 		document.getElementById('navtable').appendChild(NewTab.Yooo);
 	}
 };
