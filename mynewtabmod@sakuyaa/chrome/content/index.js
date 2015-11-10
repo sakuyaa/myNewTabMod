@@ -133,6 +133,7 @@ var NewTab = {
 			jsonData = prefs.getCharPref('jsonData');
 			jsonData = JSON.parse(jsonData);
 		} catch(e) {
+			console.log('myNewTabMod line#' + e.lineNumber + ' ' + e.name + ' : ' + e.message);
 			jsonData = {}
 		}
 		return jsonData;
@@ -147,7 +148,9 @@ var NewTab = {
 		};
 		try {
 			prefs.setCharPref('jsonData', JSON.stringify(Jsondata));
-		} catch(e) {}
+		} catch(e) {
+			console.log('myNewTabMod line#' + e.lineNumber + ' ' + e.name + ' : ' + e.message);
+		}
 	},
 	
 	getBingImage: function(idx) {
@@ -320,6 +323,7 @@ var NewTab = {
 		    try {
 		        aFile.initWithPath(obj.exec);
 		    } catch (e) {
+				console.log('myNewTabMod line#' + e.lineNumber + ' ' + e.name + ' : ' + e.message);
 		        return;
 		    }
 		    if (!aFile.exists()) {
@@ -334,7 +338,9 @@ var NewTab = {
 		var uri;
 		try {
 		    uri = Services.io.newURI(obj.url, null, null);
-		} catch (e) { }
+		} catch (e) {
+			console.log('myNewTabMod line#' + e.lineNumber + ' ' + e.name + ' : ' + e.message);
+		}
 		if (!uri) return;
 
 		PlacesUtils.favicons.getFaviconDataForPage(uri, {
@@ -344,7 +350,9 @@ var NewTab = {
     			    img.setAttribute('src', aURI && aURI.spec?
     			        'moz-anno:favicon:' + aURI.spec :
     			        'moz-anno:favicon:' + uri.scheme + '://' + uri.host + '/favicon.ico');
-    			} catch (e) { }
+    			} catch (e) {
+					console.log('myNewTabMod line#' + e.lineNumber + ' ' + e.name + ' : ' + e.message);
+				}
 		    }
 		});
 	}
@@ -374,7 +382,9 @@ function edit() {
 	var editor;
 	try {
 	    editor = Services.prefs.getComplexValue('view_source.editor.path', Ci.nsILocalFile);
-	} catch(e) {}
+	} catch(e) {
+		console.log('myNewTabMod line#' + e.lineNumber + ' ' + e.name + ' : ' + e.message);
+	}
 
 	if (!editor || !editor.exists()) {
 	    alert('请先设置编辑器的路径!!!');
