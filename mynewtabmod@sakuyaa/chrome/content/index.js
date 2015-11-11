@@ -6,44 +6,115 @@ Cu.import('resource://gre/modules/Downloads.jsm');
 Cu.import('resource://gre/modules/PlacesUtils.jsm');
 Cu.import('resource://gre/modules/Services.jsm');
 
-//获取参数
-var prefs = Services.prefs.getBranch('extensions.myNewTabMod.');
-try {
-	var backgroundImage = prefs.getComplexValue('backgroundImage', Ci.nsILocalFile);   //背景图片地址
-} catch(e) {}
-var bingMaxHistory = prefs.getIntPref('bingMaxHistory');   //最大历史天数，可设置[2, 16]
-var bingImageDir = prefs.getComplexValue('imageDir', Ci.nsISupportsString).toString();   //图片存储的文件夹名字
-var isNewTab = prefs.getBoolPref('isNewTab');   //是否新标签页打开导航链接或搜索结果
-var newTabDirPath = prefs.getComplexValue('path', Ci.nsISupportsString).toString();   //myNewTabMod文件夹的相对于配置文件的路径
-var title = prefs.getComplexValue('title', Ci.nsISupportsString).toString();   //网页标题
-var updateImageTime = prefs.getIntPref('updateImageTime');   //更新bing背景图片的间隔（单位：小时）
-var bingImageSize = prefs.getBoolPref('useBigImage');   //bing图片的尺寸，0为默认的1366x768，1为1920x1080
-var useBingImage = prefs.getBoolPref('useBingImage');   //使用bing的背景图片
-var weatherSrc = prefs.getComplexValue('weatherSrc', Ci.nsISupportsString).toString();   //天气代码的URL
+var myNewTabMod = {
+	Yooo: null,   //神秘的代码
+	dataFolder: null,   //扩展数据文件夹
+	dataFile: null,   //导航网址数据文件
+	prefs: Services.prefs.getBranch('extensions.myNewTabMod.'),
+	PREFS: {
+		backgroundImage: '',   //背景图片地址
+		bingMaxHistory: 10,   //最大历史天数，可设置[2, 16]
+		imageDir: 'bingImg',   //图片存储的文件夹名字
+		isNewTab: true,   //是否新标签页打开导航链接或搜索结果
+		path: 'myNewTabMod',   //myNewTabMod文件夹的相对于配置文件的路径
+		title: '我的主页',   //网页标题
+		updateImageTime: 12,   //更新bing背景图片的间隔（单位：小时）
+		useBigImage: true,   //bing图片的尺寸，0为默认的1366x768，1为1920x1080
+		useBingImage: true,   //使用bing的背景图片
+		weatherSrc: 'http://i.tianqi.com/index.php?c=code&id=8&num=3'   //天气代码的URL
+	},
+	
+	//输出错误信息
+	log: function(e) {
+		console.log('myNewTabMod line#' + e.lineNumber + ' ' + e.name + ' : ' + e.message);
+	},
+	//切换|下载背景图
+	changeImg: function() {
+		if (this.PREFS.useBingImage) {
+			this.getBingImage(Math.floor(Math.random() * this.PREFS.bingMaxHistory));
+			return;
+		}
+		var fp = Cc['@mozilla.org/filepicker;1'].createInstance(Ci.nsIFilePicker);
+		fp.init(window, '设置背景图片', fp.modeOpen);
+		fp.appendFilters(fp.filterImages);
+		if (fp.show() == fp.returnCancel || !fp.file) {
+			return;
+		}
+		this.PREFS.backgroundImage = Services.io.newFileURI(fp.file).spec;
+		var str = Cc['@mozilla.org/supports-string;1'].createInstance(Ci.nsISupportsString);
+		str.data = this.PREFS.backgroundImage;
+		this.prefs.setComplexValue('backgroundImage', Ci.nsISupportsString, str);
+		document.body.style.backgroundImage = 'url("' + this.PREFS.backgroundImage + '")';
+	},
+	
+	//定位文件目录
+	openDir: function() {
+		this.dataFolder.reveal();
+	},
 
+	//编辑配置
+	edit: function() {
+		var editor;
+		try {
+			editor = Services.prefs.getComplexValue('view_source.editor.path', Ci.nsILocalFile);
+		} catch(e) {
+			this.log(e);
+		}
 
-var dataFolder = Services.dirsvc.get('ProfD', Ci.nsIFile);
-dataFolder.appendRelativePath(newTabDirPath);
-var dataFile = dataFolder.clone();
-dataFile.appendRelativePath('data.txt');
-var cssFile = dataFolder.clone();
-cssFile.appendRelativePath('style.css');
+		if (!editor || !editor.exists()) {
+			alert('请先设置编辑器的路径!!!');
+			var fp = Cc['@mozilla.org/filepicker;1'].createInstance(Ci.nsIFilePicker);
+			fp.init(window, '设置全局脚本编辑器', fp.modeOpen);
+			fp.appendFilter('执行文件', '*.exe');
+			if (fp.show() == fp.returnCancel || !fp.file) {
+				return;
+			} else {
+				editor = fp.file;
+				var str = Cc['@mozilla.org/supports-string;1'].createInstance(Ci.nsISupportsString);
+				str.data = editor.path;
+				Services.prefs.setComplexValue('view_source.editor.path', Ci.nsISupportsString, str);
+			}
+		}
 
-//插入文件
-var style = document.createElement('link');
-style.rel = 'stylesheet';
-style.type = 'text/css';
-style.href = Services.io.newFileURI(cssFile).spec;
-document.getElementsByTagName('head')[0].appendChild(style);
-
-var NewTab = {
-	localLinkRegExp: /^[a-z]:\\[^ ]+$/i,  //windows路径
-	Yooo: {},   //神秘的代码
-
-	init: function() {
-		document.title = title;
-		document.getElementById('weather').src = weatherSrc;
+		var process = Cc['@mozilla.org/process/util;1'].createInstance(Ci.nsIProcess);
+		var args = [this.dataFile.path];
+		process.init(editor);
+		process.runw(false, args, args.length);
+	},
+	
+	//获取参数
+	getPrefs: function() {
+		this.PREFS.backgroundImage = this.prefs.getComplexValue('backgroundImage', Ci.nsISupportsString).toString();
+		this.PREFS.bingMaxHistory = this.prefs.getIntPref('bingMaxHistory');
+		this.PREFS.imageDir = this.prefs.getComplexValue('imageDir', Ci.nsISupportsString).toString();
+		this.PREFS.isNewTab = this.prefs.getBoolPref('isNewTab');
+		this.PREFS.path = this.prefs.getComplexValue('path', Ci.nsISupportsString).toString();
+		this.PREFS.title = this.prefs.getComplexValue('title', Ci.nsISupportsString).toString();
+		this.PREFS.updateImageTime = this.prefs.getIntPref('updateImageTime');
+		this.PREFS.useBigImage = this.prefs.getBoolPref('useBigImage');
+		this.PREFS.useBingImage = this.prefs.getBoolPref('useBingImage');
+		this.PREFS.weatherSrc = this.prefs.getComplexValue('weatherSrc', Ci.nsISupportsString).toString();
+	},
+	//初始化数据文件
+	initFile: function() {
+		this.dataFolder = Services.dirsvc.get('ProfD', Ci.nsIFile);
+		this.dataFolder.appendRelativePath(this.PREFS.path);
+		this.dataFile = this.dataFolder.clone();
+		this.dataFile.appendRelativePath('data.txt');
 		
+		//插入css文件
+		var cssFile = this.dataFolder.clone();
+		cssFile.appendRelativePath('style.css');
+		var style = document.createElement('link');
+		style.rel = 'stylesheet';
+		style.type = 'text/css';
+		style.href = Services.io.newFileURI(cssFile).spec;
+		document.getElementsByTagName('head')[0].appendChild(style);
+	},
+	//初始化网页
+	initDocument: function() {
+		document.title = this.PREFS.title;
+		document.getElementById('weather').src = this.PREFS.weatherSrc;
 		document.getElementById('weather').onload = function() {   //为天气iframe设置css
 			var cssWeather = Services.dirsvc.get('ProfD', Ci.nsIFile);
 			cssWeather.appendRelativePath('extensions\\mynewtabmod@sakuyaa\\chrome\\skin\\weather.css');
@@ -51,78 +122,98 @@ var NewTab = {
 			var domWindowUtils = document.getElementById('weather').contentWindow.QueryInterface(Ci.nsIInterfaceRequestor).getInterface(Ci.nsIDOMWindowUtils);
 			domWindowUtils.loadSheet(Services.io.newFileURI(cssWeather), domWindowUtils.USER_SHEET);
 		};
-
 		document.getElementById('solar').innerHTML = Solar.getSolar(new Date());
 		document.getElementById('lunar').innerHTML = Lunar.getLunar(new Date());
-		
+	},
+	//初始化导航网址
+	initSite: function() {
 		var table = document.getElementById('navtable');
 		if (table.children.lenth > 0) {
 			return;
 		}
-		
 		//读取配置文件
-		if (!dataFile.exists()) {
-			alert('文件不存在：' + dataFile.path); 
+		if (!this.dataFile.exists()) {
+			alert('文件不存在：' + this.dataFile.path); 
 			return;
 		}
+		var content;
 		try {
 			var fis = Cc['@mozilla.org/network/file-input-stream;1'].createInstance(Ci.nsIFileInputStream);
-			fis.init(dataFile, -1, -1, fis.CLOSE_ON_EOF);
+			fis.init(this.dataFile, -1, -1, fis.CLOSE_ON_EOF);
 			var sis = Cc['@mozilla.org/scriptableinputstream;1'].createInstance(Ci.nsIScriptableInputStream);
 			sis.init(fis);
 			var converter = Cc['@mozilla.org/intl/scriptableunicodeconverter'].createInstance(Ci.nsIScriptableUnicodeConverter);
 			converter.charset = 'UTF-8';
-			var content = converter.ConvertToUnicode(sis.read(sis.available()));
+			content = converter.ConvertToUnicode(sis.read(sis.available()));
 		} catch(e) {
-			alert('不能读取文件：' + dataFile.path);
-			sis.close();
+			alert('不能读取文件：' + this.dataFile.path);
 			return;
+		} finally {
+			sis.close();
 		}
-		sis.close();
 		
 		var siteData = this.parseDataText(content);
-		//console.log(siteData);
-		var tr, type;
-		for(type in siteData) {
+		for(var type in siteData) {
 			if (type == 'Yooo') {   //神秘的代码
 				this.Yooo = this.buildTr(type, siteData[type]);
 				this.Yooo.id = 'Yooo';
 				continue;
 			}
-			tr = this.buildTr(type, siteData[type]);
-			table.appendChild(tr);
+			table.appendChild(this.buildTr(type, siteData[type]));
 		}
 		
-		//当主div不占满网页时使其居中偏上
-		var clientHeight = document.documentElement.clientHeight;
-		var offsetHeight = document.getElementById('main').offsetHeight;
-		if (offsetHeight < clientHeight) {
-			document.getElementById('main').style.marginTop = (clientHeight - offsetHeight) / 4 + 'px';
-		}
+		setTimeout(function() {   //延时以避免主界面offsetHeight高度获取的值偏小
+			//当主div不占满网页时使其居中偏上
+			var clientHeight = document.documentElement.clientHeight;
+			var offsetHeight = document.getElementById('main').offsetHeight;
+			if (offsetHeight < clientHeight) {
+				document.getElementById('main').style.marginTop = (clientHeight - offsetHeight) / 4 + 'px';
+			}
+		}, 100);
 		
-		if (useBingImage) {   //获取bing中国主页的背景图片
-			var data = NewTab.loadSetting();
-			if (data.backgroundImage && (Date.now() - data.lastCheckTime) < updateImageTime * 3600 * 1000) {
+		//神秘的代码
+		document.onkeydown = function(e) {
+			//Firefox only, not IE
+			//var e=e || event;
+			//var currKey = e.keyCode || e.which || e.charCode;
+			//var keyName = String.fromCharCode(currKey);
+			//alert('按键码: ' + currKey + ' 字符: ' + keyName);
+			if (myNewTabMod.Yooo && e.which == 81 && e.ctrlKey && document.getElementById('Yooo') == null) {
+				document.getElementById('navtable').appendChild(myNewTabMod.Yooo);
+			}
+		};
+		document.onkeyup = function(e) {
+			var tr = document.getElementById('Yooo');
+			if (tr != null) {
+				document.getElementById('navtable').removeChild(tr);
+			}
+		};
+	},
+
+	init: function() {
+		this.getPrefs();
+		this.initFile();
+		this.initDocument();
+		this.initSite();
+		
+		if (this.PREFS.useBingImage) {   //获取bing中国主页的背景图片
+			var data = this.loadSetting();
+			if (data.backgroundImage && (Date.now() - data.lastCheckTime) < this.PREFS.updateImageTime * 3600 * 1000) {
 				document.body.style.backgroundImage = 'url("' + data.backgroundImage + '")';
 			} else {
-				NewTab.getBingImage(0);
+				this.getBingImage(0);
 			}
 		} else {
-			if (!backgroundImage || !backgroundImage.exists()) {   //尚未设置背景图片路径
+			var image;
+			try {
+				image = Services.io.getProtocolHandler('file').QueryInterface(Ci.nsIFileProtocolHandler).getFileFromURLSpec(this.PREFS.backgroundImage);
+			} catch(e) {}
+			if (!image || !image.exists()) {   //尚未设置背景图片路径
 				alert('请先设置背景图片的路径!!!');
-				var fp = Cc['@mozilla.org/filepicker;1'].createInstance(Ci.nsIFilePicker);
-				fp.init(window, '设置背景图片', fp.modeOpen);
-				fp.appendFilters(fp.filterImages);
-				if (fp.show() == fp.returnCancel || !fp.file) {
-					return;
-				} else {
-					backgroundImage = fp.file;
-					var str = Cc['@mozilla.org/supports-string;1'].createInstance(Ci.nsISupportsString);
-					str.data = backgroundImage.path;
-					prefs.setComplexValue('backgroundImage', Ci.nsISupportsString, str);
-				}
+				this.changeImg();
+			} else {
+				document.body.style.backgroundImage = 'url("' + this.PREFS.backgroundImage + '")';
 			}
-			document.body.style.backgroundImage = 'url("' + Services.io.newFileURI(backgroundImage).spec + '")';
 		}
 	},
 	
@@ -130,10 +221,10 @@ var NewTab = {
 	loadSetting: function() {
 		var jsonData;
 		try {
-			jsonData = prefs.getCharPref('jsonData');
+			jsonData = this.prefs.getCharPref('jsonData');
 			jsonData = JSON.parse(jsonData);
 		} catch(e) {
-			console.log('myNewTabMod line#' + e.lineNumber + ' ' + e.name + ' : ' + e.message);
+			this.log(e);
 			jsonData = {}
 		}
 		return jsonData;
@@ -147,9 +238,9 @@ var NewTab = {
 			backgroundImage: ImgPath
 		};
 		try {
-			prefs.setCharPref('jsonData', JSON.stringify(Jsondata));
+			this.prefs.setCharPref('jsonData', JSON.stringify(Jsondata));
 		} catch(e) {
-			console.log('myNewTabMod line#' + e.lineNumber + ' ' + e.name + ' : ' + e.message);
+			this.log(e);
 		}
 	},
 	
@@ -166,7 +257,7 @@ var NewTab = {
 			var imageUrl = data.images[0].url;
 
 			//处理图片地址
-			if (bingImageSize) {
+			if (myNewTabMod.PREFS.useBigImage) {
 				imageUrl = imageUrl.replace('1366x768', '1920x1080');
 			}
 			if (!imageUrl.startsWith('http')) {
@@ -174,16 +265,15 @@ var NewTab = {
 			}
 
 			//本地图片
-			//file = Cc['@mozilla.org/file/directory_service;1'].getService(Ci.nsIProperties).get('ProfD', Ci.nsIFile);
-			var file = dataFolder.clone();
-			file.appendRelativePath(bingImageDir);
+			var file = myNewTabMod.dataFolder.clone();
+			file.appendRelativePath(myNewTabMod.PREFS.imageDir);
 			file.appendRelativePath(enddate + '-' + name.replace(/(\s|\(.*?\))/g, '') + '.jpg');
 
 			//转为本地路径
 			var filePath = Services.io.newFileURI(file).spec;
 			
 			if (file.exists()) {
-				NewTab.setAndSave(filePath);
+				myNewTabMod.setAndSave(filePath);
 				return;
 			}
 
@@ -200,7 +290,7 @@ var NewTab = {
 					console.log('Unable to write to the target file, ignoring the error.');
 				}
 				setTimeout(function() {
-					NewTab.setAndSave(filePath);
+					myNewTabMod.setAndSave(filePath);
 				}, 100);
 			}
 		};
@@ -217,7 +307,9 @@ var NewTab = {
 		lines = text.split('\n');
 		for (var i = 0, l = lines.length; i < l; i++) {
 			line = lines[i].trim();
-			if (!line) continue;
+			if (!line) {
+				continue;
+			}
 			arr = line.split(',');
 			if (arr.length == 1) {
 				type = arr[0];
@@ -245,7 +337,7 @@ var NewTab = {
 		tr.appendChild(th);
 
 		//图标地址
-		var icoURL = 'file:///' + encodeURI(dataFolder.path.replace(/\\/g, '/'));
+		var icoURL = 'file:///' + encodeURI(this.dataFolder.path.replace(/\\/g, '/'));
 		
 		//添加站点
 		for (var i = 0, l = sites.length; i < l; i++) {
@@ -263,7 +355,7 @@ var NewTab = {
 				a.setAttribute('localpath', path);
 				a.addEventListener('click', function(e) {
 					var fullpath = e.target.getAttribute('localpath');
-					NewTab.exec(fullpath);
+					myNewTabMod.exec(fullpath);
 				}, false);
 
 				site.exec = path;
@@ -271,7 +363,7 @@ var NewTab = {
 				a.setAttribute('href', site.url);
 			}
 
-			if (isNewTab) {
+			if (this.PREFS.isNewTab) {
 				a.setAttribute('target', '_blank');
 			}
 			
@@ -301,7 +393,7 @@ var NewTab = {
 			urlOrPath = urlOrPath.replace(/\//g, '\\').toLocaleLowerCase();
 			var profileDir = Services.dirsvc.get('ProfD', Ci.nsILocalFile).path;
 			return profileDir + urlOrPath;
-		} else if (this.localLinkRegExp.test(urlOrPath)) {
+		} else if (/^[a-z]:\\[^ ]+$/i.test(urlOrPath)) {   //windows路径
 			return urlOrPath;
 		}
 		return false;
@@ -323,7 +415,7 @@ var NewTab = {
 		    try {
 		        aFile.initWithPath(obj.exec);
 		    } catch (e) {
-				console.log('myNewTabMod line#' + e.lineNumber + ' ' + e.name + ' : ' + e.message);
+				this.log(e);
 		        return;
 		    }
 		    if (!aFile.exists()) {
@@ -339,7 +431,7 @@ var NewTab = {
 		try {
 		    uri = Services.io.newURI(obj.url, null, null);
 		} catch (e) {
-			console.log('myNewTabMod line#' + e.lineNumber + ' ' + e.name + ' : ' + e.message);
+			this.log(e);
 		}
 		if (!uri) return;
 
@@ -351,7 +443,7 @@ var NewTab = {
     			        'moz-anno:favicon:' + aURI.spec :
     			        'moz-anno:favicon:' + uri.scheme + '://' + uri.host + '/favicon.ico');
     			} catch (e) {
-					console.log('myNewTabMod line#' + e.lineNumber + ' ' + e.name + ' : ' + e.message);
+					myNewTabMod.log(e);
 				}
 		    }
 		});
@@ -360,80 +452,5 @@ var NewTab = {
 
 addEventListener('load', function onLoad() {
 	removeEventListener('load', onLoad, true);
-	NewTab.init();
+	myNewTabMod.init();
 }, false);
-
-//切换|下载背景图
-function changeImg() {
-	if (useBingImage) {
-		var n = Math.floor(Math.random() * bingMaxHistory);
-		NewTab.getBingImage(n);
-	}
-}
-
-//定位文件目录
-function openDir() {
-	dataFolder.reveal();
-}
-
-//编辑配置
-function edit() {
-	//get editor
-	var editor;
-	try {
-	    editor = Services.prefs.getComplexValue('view_source.editor.path', Ci.nsILocalFile);
-	} catch(e) {
-		console.log('myNewTabMod line#' + e.lineNumber + ' ' + e.name + ' : ' + e.message);
-	}
-
-	if (!editor || !editor.exists()) {
-	    alert('请先设置编辑器的路径!!!');
-	    var fp = Cc['@mozilla.org/filepicker;1'].createInstance(Ci.nsIFilePicker);
-	    fp.init(window, '设置全局脚本编辑器', fp.modeOpen);
-	    fp.appendFilter('执行文件', '*.exe');
-	    if (fp.show() == fp.returnCancel || !fp.file) {
-	        return;
-	    } else {
-	    	editor = fp.file;
-	        Services.prefs.setCharPref('view_source.editor.path', editor.path);
-	    }
-	}
-
-	var process = Cc['@mozilla.org/process/util;1'].createInstance(Ci.nsIProcess);
-	var args = [dataFile.path];
-	process.init(editor);
-	process.runw(false, args, args.length);
-}
-
-//神秘的代码
-document.onkeydown = function(e) {
-	//Firefox only, not IE
-	//var e=e || event;
-	//var currKey = e.keyCode || e.which || e.charCode;
-	//var keyName = String.fromCharCode(currKey);
-	//alert('按键码: ' + currKey + ' 字符: ' + keyName);
-	if (NewTab.Yooo && e.which == 81 && e.ctrlKey && document.getElementById('Yooo') == null) {
-		document.getElementById('navtable').appendChild(NewTab.Yooo);
-	}
-};
-document.onkeyup = function(e) {
-	var tr = document.getElementById('Yooo');
-	if (tr != null) {
-		document.getElementById('navtable').removeChild(tr);
-	}
-};
-
-//从函数中获取多行注释的字符串
-/*function getMStr(fn) {
-	var fnSource = fn.toString();
-	var ret = {};
-	fnSource = fnSource.replace(/^[^{]+/, '');
-	//console.log(fnSource);
-	var matched;
-	var reg = /var\s+([$\w]+)[\s\S]*?\/\*([\s\S]+?)\*\//g;
-	while (matched = reg.exec(fnSource)) {
-		//console.log(matched);
-		ret[matched[1]] = matched[2];
-	};
-	return ret;
-}*/
