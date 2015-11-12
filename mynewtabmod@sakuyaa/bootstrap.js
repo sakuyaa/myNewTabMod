@@ -106,6 +106,13 @@ var install = function(data, reason) {
 	} catch(e) {
 		path = 'myNewTabMod';
 	}
+	if (path != 'myNewTabMod') {
+		//不知为什么这里用中文会乱码
+		if (Services.prompt.confirm(null, 'myNewTabMod Folder', 'The previous myNewTabMod Folder is: ' + path + ', use it?') == false) {
+			path = 'myNewTabMod';
+			Services.prefs.setCharPref('extensions.myNewTabMod.path', path);
+		}
+	}
 	//将文件复制到目录外，以避免文件修改之后导致扩展签名失败
 	myNewTabMod.copyFile('extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\data.txt', path + '\\data.txt');
 	myNewTabMod.copyFile('extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\style.css', path + '\\style.css');
