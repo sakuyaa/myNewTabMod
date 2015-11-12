@@ -121,7 +121,7 @@ var myNewTabMod = {
 		document.getElementById('weather').onload = function() {   //为天气iframe设置css
 			//https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDOMWindowUtils
 			var domWindowUtils = document.getElementById('weather').contentWindow.QueryInterface(Ci.nsIInterfaceRequestor).getInterface(Ci.nsIDOMWindowUtils);
-			domWindowUtils.loadSheet('chrome://mynewtabmod/skin/weather.css', domWindowUtils.USER_SHEET);
+			domWindowUtils.loadSheet(Services.io.newURI('chrome://mynewtabmod/skin/weather.css', null, null), domWindowUtils.USER_SHEET);
 		};
 		document.getElementById('solar').innerHTML = Solar.getSolar(new Date());
 		document.getElementById('lunar').innerHTML = Lunar.getLunar(new Date());
