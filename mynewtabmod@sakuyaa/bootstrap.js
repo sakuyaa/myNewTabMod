@@ -6,12 +6,11 @@
 
 //https://developer.mozilla.org/zh-CN/docs/Mozilla/Add-ons/Bootstrapped_extensions
 const {/*classes: Cc, */interfaces: Ci, utils: Cu/*, results: Cr*/} = Components;
-try {
-	Cu.import('resource:///modules/NewTabURL.jsm');
-} catch (e) {   //向下兼容至26.0
-	console.log('myNewTabMod line#' + e.lineNumber + ' ' + e.name + ' : ' + e.message);
-}
 Cu.import('resource://gre/modules/Services.jsm');
+const isNewVersion = Services.vc.compare(Services.appinfo.platformVersion, "41.*") >= 0;
+if (isNewVersion) {
+	Cu.import('resource:///modules/NewTabURL.jsm');   //火狐41上使用新标签页API
+}
 
 var myNewTabMod = {
 	//https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIPrefBranch
@@ -74,10 +73,15 @@ var myNewTabMod = {
 
 /*bootstrap entry points*/
 var startup = function(data, reason) {
-	NewTabURL.override('chrome://mynewtabmod/content/index.html');
+	if (isNewVersion) {
+		NewTabURL.override('chrome://mynewtabmod/content/index.html');
+	}
 	switch (reason) {
 		case ADDON_ENABLE:
 		case ADDON_INSTALL:
+			if (!isNewVersion) {
+				Services.prefs.setCharPref('browser.newtab.url', 'chrome://mynewtabmod/content/index.html');
+			}
 			Services.prefs.setCharPref('browser.startup.homepage', 'chrome://mynewtabmod/content/index.html');   //故意不break
 		case APP_STARTUP:
 			myNewTabMod.addPrefs();
@@ -87,8 +91,12 @@ var startup = function(data, reason) {
 var shutdown = function(data, reason) {
 	//https://bugzilla.mozilla.org/show_bug.cgi?id=620541
 	if (reason == ADDON_DISABLE || reason == ADDON_UNINSTALL) {
+		if (isNewVersion) {
+			NewTabURL.reset();
+		} else {
+			Services.prefs.clearUserPref('browser.newtab.url');
+		}
 		Services.prefs.clearUserPref('browser.startup.homepage');
-		NewTabURL.reset();
 	}
 };
 var install = function(data, reason) {
