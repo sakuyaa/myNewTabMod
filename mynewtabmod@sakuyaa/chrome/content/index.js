@@ -84,16 +84,19 @@ var myNewTabMod = {
 	
 	//获取参数
 	getPrefs: function() {
-		this.PREFS.backgroundImage = this.prefs.getComplexValue('backgroundImage', Ci.nsISupportsString).toString();
-		this.PREFS.bingMaxHistory = this.prefs.getIntPref('bingMaxHistory');
-		this.PREFS.imageDir = this.prefs.getComplexValue('imageDir', Ci.nsISupportsString).toString();
-		this.PREFS.isNewTab = this.prefs.getBoolPref('isNewTab');
-		this.PREFS.path = this.prefs.getComplexValue('path', Ci.nsISupportsString).toString();
-		this.PREFS.title = this.prefs.getComplexValue('title', Ci.nsISupportsString).toString();
-		this.PREFS.updateImageTime = this.prefs.getIntPref('updateImageTime');
-		this.PREFS.useBigImage = this.prefs.getBoolPref('useBigImage');
-		this.PREFS.useBingImage = this.prefs.getBoolPref('useBingImage');
-		this.PREFS.weatherSrc = this.prefs.getComplexValue('weatherSrc', Ci.nsISupportsString).toString();
+		for (var key in this.PREFS) {
+			switch (this.prefs.getPrefType(key)) {
+				case this.prefs.PREF_STRING:
+					this.PREFS[key] = this.prefs.getComplexValue(key, Ci.nsISupportsString).toString();
+					break;
+				case this.prefs.PREF_INT:
+					this.PREFS[key] = this.prefs.getIntPref(key);
+					break;
+				case this.prefs.PREF_BOOL:
+					this.PREFS[key] = this.prefs.getBoolPref(key);
+					break;
+			}
+		}
 	},
 	//初始化数据文件
 	initFile: function() {
