@@ -60,7 +60,7 @@ var myNewTabMod = {
 		var newFile = oldFile.clone();
 		oldFile.appendRelativePath(oldFilePath);
 		newFile.appendRelativePath(newFilePath);
-		if (arguments[2]) {   //第三个参数仅仅用于判断是文件夹复制操作
+		if (arguments.length != 2) {   //第三个参数仅仅用于判断是文件夹复制操作
 			try {
 				oldFile.copyTo(newFile, null);
 			} catch (e) {
@@ -92,10 +92,16 @@ var shutdown = function(data, reason) {
 	}
 };
 var install = function(data, reason) {
+	var path;
+	try {
+		path = Services.prefs.getComplexValue('extensions.myNewTabMod.path', Ci.nsISupportsString).toString();
+	} catch(e) {
+		path = 'myNewTabMod';
+	}
 	//将文件复制到目录外，以避免文件修改之后导致扩展签名失败
-	myNewTabMod.copyFile('extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\data.txt', 'myNewTabMod\\data.txt');
-	myNewTabMod.copyFile('extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\style.css', 'myNewTabMod\\style.css');
-	myNewTabMod.copyFile('extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\ico', 'myNewTabMod', true);
+	myNewTabMod.copyFile('extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\data.txt', path + '\\data.txt');
+	myNewTabMod.copyFile('extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\style.css', path + '\\style.css');
+	myNewTabMod.copyFile('extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\ico', path, true);
 };
 var uninstall = function(data, reason) {
 	if (reason == ADDON_UNINSTALL) {   //升降级不删除参数
