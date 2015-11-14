@@ -46,11 +46,11 @@ body {
 	text-shadow: .1em .1em .1em silver;
 }
 /*节日*/
-.festival {
+#solar_festival, #lunar_festival {
 	color: orangered;
 }
 /*法定假日*/
-.holiday {
+#solar_holiday, #lunar_holiday {
 	color: red;
 }
 
