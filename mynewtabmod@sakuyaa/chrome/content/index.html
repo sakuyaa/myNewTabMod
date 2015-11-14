@@ -10,24 +10,25 @@
 		<iframe id="weather" name="weather_inc" width="225" height="80" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
 		<div id="main">
 			<div id="date">
-				<span id="solar"></span>
+				<!--festival和holiday中间各使用一个空格，当festival为空时则会自动合并-->
+				<span id="solar"></span>&nbsp; <span id="solar_festival"></span> <span id="solar_holiday"></span>
 				<br />
-				<span id="lunar"></span>
+				<span id="lunar"></span>&nbsp; <span id="lunar_festival"></span></span> <span id="lunar_holiday"></span>
 			</div>
 			<div id="navs">
 				<div id="navtitle">
 					<span>我的导航</span>
 					<a id="nav_edit" hidefocus="" title="编辑配置文件" onclick="myNewTabMod.edit();" href="javascript:;">
-						<img width="16" height="16" src="img/setting.png"/>编辑
+						<img width="16" height="16" src="img/setting.png" />编辑
 					</a>
 					<a id="nav_openfolder" hidefocus="" title="打开配置文件夹" onclick="myNewTabMod.openDir();" href="javascript:;">
-						<img width="16" height="16" src="img/add.png"/>定位
+						<img width="16" height="16" src="img/add.png" />定位
 					</a>
 					<a id="nav_random" hidefocus="" title="切换或下载背景图片" onclick="myNewTabMod.changeImg();" href="javascript:;">
-						<img width="16" height="16" src="img/change.png"/>切换
+						<img width="16" height="16" src="img/change.png" />切换
 					</a>
 				</div>
-				<table id="navtable"></table>
+				<table id="navtable" />
 			</div>
 		</div>
 		<script type="text/javascript" src="calendar.min.js"></script>

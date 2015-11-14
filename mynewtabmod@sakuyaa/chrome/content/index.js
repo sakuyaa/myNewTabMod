@@ -123,8 +123,14 @@ var myNewTabMod = {
 			var domWindowUtils = document.getElementById('weather').contentWindow.QueryInterface(Ci.nsIInterfaceRequestor).getInterface(Ci.nsIDOMWindowUtils);
 			domWindowUtils.loadSheet(Services.io.newURI('chrome://mynewtabmod/skin/weather.css', null, null), domWindowUtils.USER_SHEET);
 		};
-		document.getElementById('solar').innerHTML = Solar.getSolar(new Date());
-		document.getElementById('lunar').innerHTML = Lunar.getLunar(new Date());
+		var solar = Solar.getSolar(new Date());
+		var lunar = Lunar.getLunar(new Date());
+		document.getElementById('solar').textContent = solar.date;
+		document.getElementById('solar_festival').textContent = solar.festival;
+		document.getElementById('solar_holiday').textContent = solar.holiday;
+		document.getElementById('lunar').textContent = lunar.date;
+		document.getElementById('lunar_festival').textContent = lunar.festival;
+		document.getElementById('lunar_holiday').textContent = lunar.holiday;
 	},
 	//初始化导航网址
 	initSite: function() {
