@@ -289,7 +289,7 @@ var myNewTabMod = {
 			t.src = imageUrl;
 			t.onload = function() {
 				try {
-					file.create(file.NORMAL_FILE_TYPE, 511);
+					file.create(file.NORMAL_FILE_TYPE, parseInt('0777', 8));
 					Downloads.fetch(Services.io.newURI(imageUrl, null, null), file);
 					/*Cc['@mozilla.org/embedding/browser/nsWebBrowserPersist;1'].createInstance(Ci.nsIWebBrowserPersist)
 						.saveURI(Services.io.newURI(imageUrl, null, null), null, null, null, null, null, file, null);*/
