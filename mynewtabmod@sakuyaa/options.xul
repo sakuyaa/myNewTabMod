@@ -32,7 +32,7 @@
 			<radio value="false" label="1366x768" />
 		</radiogroup>
 	</setting>
-	<setting pref="extensions.myNewTabMod.backgroundImage" type="file" title="背景图片地址">
+	<setting pref="extensions.myNewTabMod.backgroundImage" type="file" title="背景图片地址" oninputchanged="this.value='file:///' + encodeURI(this.value.replace(/\\/g, '/'));this.valueToPreference()">
 		不使用Bing壁纸时，使用此图片
 	</setting>
 	<setting pref="extensions.myNewTabMod.updateImageTime" type="integer" title="更新壁纸的间隔（小时）" />
