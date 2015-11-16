@@ -4,8 +4,7 @@
 这个扩展是根据[myNewTab](http://bbs.kafan.cn/thread-1759418-1-1.html)这个扩展修改而成的
 
 ## 主要的不同之处
-1. 壁纸的命名还是采取壁纸的信息，且不自动删除，方便以后查看
-* 实现火狐41上设置为新标签页
+1. 实现火狐41上设置为新标签页
 * 将参数存放在火狐preferences里面
 * 将导航配置、壁纸等可能有改动的文件设置在profile文件夹内，实现扩展签名
 * 扩展重装后不会覆盖配置
@@ -21,8 +20,16 @@
 * 默认的导航网址中有返利链接
 * 在火狐配置文件目录里的扩展数据文件夹中的style.css文件并不会随着扩展更新而更新，请自行从扩展目录的myNewTabMod文件夹中替换
 
-## 扩展详细介绍
-* 待编辑
+## 扩展图文
+* 扩展主界面，左上角的天气可以在附加组件管理器中该扩展选项界面设置其URL
+	国历和农历日期会以不同颜色显示当天的节假日和节气信息
+![](https://raw.githubusercontent.com/sakuyaa/myNewTabMod/master/pic/main.png "主界面")
+* 参数设置  
+![](https://raw.githubusercontent.com/sakuyaa/myNewTabMod/master/pic/config.png "参数设置")
+* 将参数存放在火狐preferences里面  
+![](https://raw.githubusercontent.com/sakuyaa/myNewTabMod/master/pic/prefs.png "首选项")
+* 储存的Bing壁纸  
+![](https://raw.githubusercontent.com/sakuyaa/myNewTabMod/master/pic/bingImg.png "Bing图片")
 
 ## 尚未解决（能力有限…）
 * 通过扩展选项选择“背景图片地址”时，文件路径包含中文会造成乱码，无法显示背景
