@@ -76,16 +76,12 @@ var startup = function(data, reason) {
 	if (isNewVersion) {
 		NewTabURL.override('chrome://mynewtabmod/content/index.html');
 	}
-	switch (reason) {
-		case ADDON_ENABLE:
-		case ADDON_INSTALL:
-			if (!isNewVersion) {
-				Services.prefs.setCharPref('browser.newtab.url', 'chrome://mynewtabmod/content/index.html');
-			}
-			Services.prefs.setCharPref('browser.startup.homepage', 'chrome://mynewtabmod/content/index.html');   //故意不break
-		case APP_STARTUP:
-			myNewTabMod.addPrefs();
-			break;
+	myNewTabMod.addPrefs();
+	if (reason == ADDON_ENABLE || reason == ADDON_INSTALL) {
+		if (!isNewVersion) {
+			Services.prefs.setCharPref('browser.newtab.url', 'chrome://mynewtabmod/content/index.html');
+		}
+		Services.prefs.setCharPref('browser.startup.homepage', 'chrome://mynewtabmod/content/index.html');
 	}
 };
 var shutdown = function(data, reason) {
