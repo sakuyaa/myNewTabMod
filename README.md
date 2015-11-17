@@ -32,4 +32,50 @@
 ![](https://raw.githubusercontent.com/sakuyaa/myNewTabMod/master/pic/bingImg.png "Bing图片")
 
 ## 尚未解决（能力有限…）
-* 通过扩展选项选择“背景图片地址”时，文件路径包含中文会造成乱码，无法显示背景
+* 通过扩展选项选择“背景图片地址”时，文件路径包含中文会造成乱码（已修复，但会造成选择文件后无法直接显示文件路径）
+
+##### 另一种实现方式：
+在`options.xul`中，添加以下代码：
+```xml
+<setting type="control" title="背景图片地址">
+	<button id="setbackgroundimage" label="浏览..." />
+</setting>
+<setting pref="extensions.myNewTabMod.backgroundImage" type="string" title="背景图片地址" id="backgroundimage" />
+```
+在`bootstrap.js`中，添加以下代码：
+```js
+var myNewTabMod = {
+	observer: {
+		observe: function(aSubject, aTopic, aData) {
+			if (aTopic == 'addon-options-displayed' && aData == 'mynewtabmod@sakuyaa') {
+				var path;
+				try {
+					path = Services.prefs.getComplexValue('extensions.myNewTabMod.path', Ci.nsISupportsString).toString();
+				} catch(e) {
+					path = 'myNewTabMod';
+				}
+				aSubject.getElementById('backgroundimage').value = path;
+				aSubject.getElementById('setbackgroundimage').onclick = function() {
+					var fp = Cc['@mozilla.org/filepicker;1'].createInstance(Ci.nsIFilePicker);
+					fp.init(window, '设置背景图片', fp.modeOpen);
+					fp.appendFilters(fp.filterImages);
+					if (fp.show() == fp.returnCancel || !fp.file) {
+						return;
+					}
+					var str = Cc['@mozilla.org/supports-string;1'].createInstance(Ci.nsISupportsString);
+					str.data = Services.io.newFileURI(fp.file).spec;
+					aSubject.getElementById('backgroundimage').value = str.data;
+					myNewTabMod.prefs.setComplexValue('backgroundImage', Ci.nsISupportsString, str);
+				};
+			}
+		}
+	}
+};
+var startup = function(data, reason) {
+	Services.obs.addObserver(myNewTabMod.observer, 'addon-options-displayed', false);
+};
+var shutdown = function(data, reason) {
+	Services.obs.removeObserver(myNewTabMod.observer, 'addon-options-displayed');
+};
+```
+然而，由于无法获取到选项界面的**window**，使得**fp.init(window, '设置背景图片', fp.modeOpen);**这个函数无法执行。
