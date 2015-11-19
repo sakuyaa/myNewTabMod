@@ -10,6 +10,7 @@ var myNewTabMod = {
 	Yooo: null,   //神秘的代码
 	dataFolder: null,   //扩展数据文件夹
 	dataFile: null,   //导航网址数据文件
+	stringBundle: Services.strings.createBundle('chrome://mynewtabmod/locale/global.properties'),   //本地化
 	prefs: Services.prefs.getBranch('extensions.myNewTabMod.'),
 	PREFS: {
 		backgroundImage: '',   //背景图片地址
@@ -35,7 +36,7 @@ var myNewTabMod = {
 			return;
 		}
 		var fp = Cc['@mozilla.org/filepicker;1'].createInstance(Ci.nsIFilePicker);
-		fp.init(window, '设置背景图片', fp.modeOpen);
+		fp.init(window, this.stringBundle.GetStringFromName('title.setBackgroundImg'), fp.modeOpen);
 		fp.appendFilters(fp.filterImages);
 		if (fp.show() == fp.returnCancel || !fp.file) {
 			return;
@@ -62,10 +63,10 @@ var myNewTabMod = {
 		}
 
 		if (!editor || !editor.exists()) {
-			alert('请先设置编辑器的路径!!!');
+			alert(this.stringBundle.GetStringFromName('alert.setEditor'));
 			var fp = Cc['@mozilla.org/filepicker;1'].createInstance(Ci.nsIFilePicker);
-			fp.init(window, '设置全局脚本编辑器', fp.modeOpen);
-			fp.appendFilter('执行文件', '*.exe');
+			fp.init(window, this.stringBundle.GetStringFromName('title.setEditor'), fp.modeOpen);
+			fp.appendFilter(this.stringBundle.GetStringFromName('application'), '*.exe');
 			if (fp.show() == fp.returnCancel || !fp.file) {
 				return;
 			} else {
@@ -84,6 +85,7 @@ var myNewTabMod = {
 	
 	//获取参数
 	getPrefs: function() {
+		this.PREFS.title = this.stringBundle.GetStringFromName('prefs.title');
 		for (var key in this.PREFS) {
 			switch (this.prefs.getPrefType(key)) {
 				case this.prefs.PREF_STRING:
@@ -140,7 +142,7 @@ var myNewTabMod = {
 		}
 		//读取配置文件
 		if (!this.dataFile.exists()) {
-			alert('文件不存在：' + this.dataFile.path); 
+			alert(this.stringBundle.GetStringFromName('alert.fileNotExist') + this.dataFile.path); 
 			return;
 		}
 		var content;
@@ -153,7 +155,7 @@ var myNewTabMod = {
 			converter.charset = 'UTF-8';
 			content = converter.ConvertToUnicode(sis.read(sis.available()));
 		} catch(e) {
-			alert('不能读取文件：' + this.dataFile.path);
+			alert(this.stringBundle.GetStringFromName('alert.cannotRead') + this.dataFile.path);
 			return;
 		} finally {
 			sis.close();
@@ -216,7 +218,7 @@ var myNewTabMod = {
 				image = Services.io.getProtocolHandler('file').QueryInterface(Ci.nsIFileProtocolHandler).getFileFromURLSpec(this.PREFS.backgroundImage);
 			} catch(e) {}
 			if (!image || !image.exists()) {   //尚未设置背景图片路径
-				alert('请先设置背景图片的路径!!!');
+				alert(this.stringBundle.GetStringFromName('alert.setImage'));
 				this.changeImg();
 			} else {
 				document.body.style.backgroundImage = 'url("' + this.PREFS.backgroundImage + '")';
@@ -294,7 +296,7 @@ var myNewTabMod = {
 					/*Cc['@mozilla.org/embedding/browser/nsWebBrowserPersist;1'].createInstance(Ci.nsIWebBrowserPersist)
 						.saveURI(Services.io.newURI(imageUrl, null, null), null, null, null, null, null, file, null);*/
 				} catch (ex if ex instanceof Downloads.Error && ex.becauseTargetFailed) {
-					console.log('Unable to write to the target file, ignoring the error.');
+					console.log(myNewTabMod.stringBundle.GetStringFromName('log.downloadError'));
 				}
 				setTimeout(function() {
 					myNewTabMod.setAndSave(filePath);
@@ -410,7 +412,7 @@ var myNewTabMod = {
 		var file = Cc['@mozilla.org/file/local;1'].createInstance(Ci.nsILocalFile);
 		file.initWithPath(path);
 		if (!file.exists()) {
-		    alert('路径并不存在：' + path);
+		    alert(this.stringBundle.GetStringFromName('alert.fileNotExist') + path);
 		    return;
 		}
 		file.launch();

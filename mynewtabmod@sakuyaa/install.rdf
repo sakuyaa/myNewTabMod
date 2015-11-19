@@ -35,6 +35,15 @@
 			<em:homepageURL>https://sakuyaa.github.io/myNewTabMod/</em:homepageURL>
 		</Description>
 	</em:localized>
+	<em:localized>
+		<Description>
+			<em:locale>zh-TW</em:locale>
+			<em:name>myNewTabMod</em:name>
+			<em:description>修改myNewTab這個擴展，使其可以實現擴展簽名。感謝defpt、ywzhaiqi及卡飯各位大神</em:description>
+			<em:creator>defpt, ywzhaiqi, sakuyaa</em:creator>
+			<em:homepageURL>https://github.com/sakuyaa/myNewTabMod/</em:homepageURL>
+		</Description>
+	</em:localized>
  
 </Description>
 </RDF>

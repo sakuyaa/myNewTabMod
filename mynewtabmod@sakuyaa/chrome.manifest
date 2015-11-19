@@ -1,2 +1,5 @@
 content mynewtabmod chrome/content/
+locale mynewtabmod en-US chrome/locale/en-US/
+locale mynewtabmod zh-CN chrome/locale/zh-CN/
+locale mynewtabmod zh-TW chrome/locale/zh-TW/
 skin mynewtabmod classic/1.0 chrome/skin/

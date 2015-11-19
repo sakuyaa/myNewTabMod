@@ -5,7 +5,7 @@
 'use strict';
 
 //https://developer.mozilla.org/zh-CN/docs/Mozilla/Add-ons/Bootstrapped_extensions
-const {/*classes: Cc, */interfaces: Ci, utils: Cu/*, results: Cr*/} = Components;
+const {classes: Cc, interfaces: Ci, utils: Cu/*, results: Cr*/} = Components;
 Cu.import('resource://gre/modules/Services.jsm');
 const isNewVersion = Services.vc.compare(Services.appinfo.platformVersion, "41.*") >= 0;
 if (isNewVersion) {
@@ -13,6 +13,7 @@ if (isNewVersion) {
 }
 
 var myNewTabMod = {
+	stringBundle: Services.strings.createBundle('chrome://mynewtabmod/locale/global.properties'),   //本地化
 	//https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIPrefBranch
 	prefs: Services.prefs.getDefaultBranch('extensions.myNewTabMod.'),
 	PREFS: {
@@ -28,18 +29,14 @@ var myNewTabMod = {
 		weatherSrc: 'http://i.tianqi.com/index.php?c=code&id=8&num=3'   //天气代码的URL
 	},
 	addPrefs: function() {
+		this.PREFS.title = this.stringBundle.GetStringFromName('prefs.title');
 		for (var [key, value] in Iterator(this.PREFS)) {
 			try {
-				/*if (this.prefs.getPrefType(key) != this.prefs.PREF_INVALID) {
-					continue;   //不覆盖原有参数
-				}*/
 				switch (typeof value) {
 					case 'string':
-						this.prefs.setCharPref(key, value);
-						/*为什么用这个反而会乱码啊啊啊
 						var str = Cc['@mozilla.org/supports-string;1'].createInstance(Ci.nsISupportsString);
 						str.data = value;
-						prefs.setComplexValue(key, Ci.nsISupportsString, str);*/
+						this.prefs.setComplexValue(key, Ci.nsISupportsString, str);
 						break;
 					case 'number':
 						this.prefs.setIntPref(key, value);
@@ -77,45 +74,66 @@ var startup = function(data, reason) {
 		NewTabURL.override('chrome://mynewtabmod/content/index.html');
 	}
 	myNewTabMod.addPrefs();
-	if (reason == ADDON_ENABLE || reason == ADDON_INSTALL) {
-		if (!isNewVersion) {
-			Services.prefs.setCharPref('browser.newtab.url', 'chrome://mynewtabmod/content/index.html');
-		}
-		Services.prefs.setCharPref('browser.startup.homepage', 'chrome://mynewtabmod/content/index.html');
+	switch (reason) {
+		case ADDON_ENABLE:
+			if (!isNewVersion) {
+				Services.prefs.setCharPref('browser.newtab.url', 'chrome://mynewtabmod/content/index.html');
+			}
+			Services.prefs.setCharPref('browser.startup.homepage', 'chrome://mynewtabmod/content/index.html');
+			break;
+		case ADDON_INSTALL:
+			if (!isNewVersion) {
+				Services.prefs.setCharPref('browser.newtab.url', 'chrome://mynewtabmod/content/index.html');
+			}
+			Services.prefs.setCharPref('browser.startup.homepage', 'chrome://mynewtabmod/content/index.html');
+			//故意不break
+		case ADDON_UPGRADE:
+		case ADDON_DOWNGRADE:
+			//以下代码不写在install里，是因为install调用在Registering manifest之前，无法使用stringBundle
+			var path;
+			try {
+				path = Services.prefs.getComplexValue('extensions.myNewTabMod.path', Ci.nsISupportsString).toString();
+			} catch(e) {
+				path = 'myNewTabMod';
+			}
+			if (path != 'myNewTabMod') {
+				if (Services.prompt.confirm(null, myNewTabMod.stringBundle.GetStringFromName('title.folder'),
+					myNewTabMod.stringBundle.formatStringFromName('alert.folder', [path], 1)) == false) {
+					path = 'myNewTabMod';
+					Services.prefs.setCharPref('extensions.myNewTabMod.path', path);
+				}
+			}
+			//将文件复制到目录外，以避免文件修改之后导致扩展签名失败
+			myNewTabMod.copyFile('extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\data.txt', path + '\\data.txt');
+			myNewTabMod.copyFile('extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\style.css', path + '\\style.css');
+			myNewTabMod.copyFile('extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\ico', path, true);
 	}
 };
 var shutdown = function(data, reason) {
-	//https://bugzilla.mozilla.org/show_bug.cgi?id=620541
-	if (reason == ADDON_DISABLE || reason == ADDON_UNINSTALL) {
-		if (isNewVersion) {
-			NewTabURL.reset();
-		} else {
-			Services.prefs.clearUserPref('browser.newtab.url');
-		}
-		Services.prefs.clearUserPref('browser.startup.homepage');
+	switch (reason) {
+		case ADDON_DISABLE:
+		case ADDON_UNINSTALL:
+			//https://bugzilla.mozilla.org/show_bug.cgi?id=620541
+			if (isNewVersion) {
+				NewTabURL.reset();
+			} else {
+				Services.prefs.clearUserPref('browser.newtab.url');
+			}
+			Services.prefs.clearUserPref('browser.startup.homepage');
+			break;
 	}
 };
 var install = function(data, reason) {
-	var path;
-	try {
-		path = Services.prefs.getComplexValue('extensions.myNewTabMod.path', Ci.nsISupportsString).toString();
-	} catch(e) {
-		path = 'myNewTabMod';
-	}
-	if (path != 'myNewTabMod') {
-		//不知为什么这里用中文会乱码
-		if (Services.prompt.confirm(null, 'myNewTabMod Folder', 'The previous myNewTabMod Folder is: ' + path + ', use it?') == false) {
-			path = 'myNewTabMod';
-			Services.prefs.setCharPref('extensions.myNewTabMod.path', path);
-		}
-	}
-	//将文件复制到目录外，以避免文件修改之后导致扩展签名失败
-	myNewTabMod.copyFile('extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\data.txt', path + '\\data.txt');
-	myNewTabMod.copyFile('extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\style.css', path + '\\style.css');
-	myNewTabMod.copyFile('extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\ico', path, true);
 };
 var uninstall = function(data, reason) {
-	if (reason == ADDON_UNINSTALL) {   //升降级不删除参数
-		myNewTabMod.prefs.deleteBranch('');
+	switch (reason) {
+		case ADDON_UNINSTALL:   //升降级不删除参数
+			myNewTabMod.prefs.deleteBranch('');
+			break;
+		case ADDON_UPGRADE:
+		case ADDON_DOWNGRADE:
+			//https://bugzilla.mozilla.org/show_bug.cgi?id=719376
+			Services.strings.flushBundles();
+			break;
 	}
 };
