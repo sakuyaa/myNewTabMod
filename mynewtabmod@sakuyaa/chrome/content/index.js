@@ -7,7 +7,6 @@ Cu.import('resource://gre/modules/PlacesUtils.jsm');
 Cu.import('resource://gre/modules/Services.jsm');
 
 var myNewTabMod = {
-	Yooo: null,   //神秘的代码
 	dataFolder: null,   //扩展数据文件夹
 	dataFile: null,   //导航网址数据文件
 	stringBundle: Services.strings.createBundle('chrome://mynewtabmod/locale/global.properties'),   //本地化
@@ -119,31 +118,32 @@ var myNewTabMod = {
 	//初始化日期
 	initDate: function() {
 		var solar = Solar.getSolar(new Date());
-		var lunar = Lunar.getLunar(new Date());
-		var span1 = document.createElement('span');
-		var span2 = document.createElement('span');
-		var solarFestival = document.createElement('span');
-		var solarHoliday = document.createElement('span');
-		var lunarFestival = document.createElement('span');
-		var lunarHoliday = document.createElement('span');
-		solarFestival.id = 'solar_festival';
-		solarHoliday.id = 'solar_holiday';
-		lunarFestival.id = 'lunar_festival';
-		lunarHoliday.id = 'lunar_holiday';
-		span1.textContent = solar.date;
-		span2.textContent = lunar.date;
-		solarFestival.textContent = ' ' + solar.festival;
-		solarHoliday.textContent = ' ' + solar.holiday;
-		lunarFestival.textContent = ' ' + lunar.festival;
-		lunarHoliday.textContent = ' ' + lunar.holiday;
 		var node = document.getElementById('solar');
-		node.appendChild(span1);
-		node.appendChild(solarFestival);
-		node.appendChild(solarHoliday);
+		var span = document.createElement('span');
+		span.textContent = solar.date;
+		node.appendChild(span);
+		span = document.createElement('span');
+		span.id = 'solar_festival';
+		span.textContent = ' ' + solar.festival;
+		node.appendChild(span);
+		span = document.createElement('span');
+		span.id = 'solar_holiday';
+		span.textContent = ' ' + solar.holiday;
+		node.appendChild(span);
+		
+		var lunar = Lunar.getLunar(new Date());
 		node = document.getElementById('lunar');
-		node.appendChild(span2);
-		node.appendChild(lunarFestival);
-		node.appendChild(lunarHoliday);
+		span = document.createElement('span');
+		span.textContent = lunar.date;
+		node.appendChild(span);
+		span = document.createElement('span');
+		span.id = 'lunar_festival';
+		span.textContent = ' ' + lunar.festival;
+		node.appendChild(span);
+		span = document.createElement('span');
+		span.id = 'lunar_holiday';
+		span.textContent = ' ' + lunar.holiday;
+		node.appendChild(span);
 	},
 	//初始化网页
 	initDocument: function() {
@@ -182,14 +182,17 @@ var myNewTabMod = {
 			sis.close();
 		}
 		
+		var Yooo;
 		var siteData = this.parseDataText(content);
 		for(var type in siteData) {
 			if (type == 'Yooo') {   //神秘的代码
-				this.Yooo = this.buildTr(type, siteData[type]);
-				this.Yooo.id = 'Yooo';
-				continue;
+				Yooo = this.buildTr(type, siteData[type]);
+				Yooo.setAttribute('hidden', 'hidden');
+				Yooo.setAttribute('name', 'Yooo');
+				table.appendChild(Yooo);
+			} else {
+				table.appendChild(this.buildTr(type, siteData[type]));
 			}
-			table.appendChild(this.buildTr(type, siteData[type]));
 		}
 		
 		setTimeout(function() {   //延时以避免主界面offsetHeight高度获取的值偏小
@@ -208,15 +211,18 @@ var myNewTabMod = {
 			//var currKey = e.keyCode || e.which || e.charCode;
 			//var keyName = String.fromCharCode(currKey);
 			//alert('按键码: ' + currKey + ' 字符: ' + keyName);
-			if (myNewTabMod.Yooo && e.which == 81 && e.ctrlKey && document.getElementById('Yooo') == null) {
-				document.getElementById('navtable').appendChild(myNewTabMod.Yooo);
+			if (e.which == 81 && e.ctrlKey) {
+				var yooo = document.getElementsByName('Yooo');
+				for (var i = 0; i < yooo.length; i++) {
+					yooo[i].removeAttribute('hidden');
+				}
 			}
 		};
 		document.onkeyup = function(e) {
-			var tr = document.getElementById('Yooo');
-			if (tr != null) {
-				document.getElementById('navtable').removeChild(tr);
-			}
+			var yooo = document.getElementsByName('Yooo');
+				for (var i = 0; i < yooo.length; i++) {
+					yooo[i].setAttribute('hidden', 'hidden');
+				}
 		};
 	},
 
