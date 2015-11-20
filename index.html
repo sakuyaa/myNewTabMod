@@ -29,11 +29,9 @@
 <a id="主要的不同之处" class="anchor" href="#%E4%B8%BB%E8%A6%81%E7%9A%84%E4%B8%8D%E5%90%8C%E4%B9%8B%E5%A4%84" aria-hidden="true"><span class="octicon octicon-link"></span></a>主要的不同之处</h2>
 
 <ol>
-<li>壁纸的命名还是采取壁纸的信息，且不自动删除，方便以后查看</li>
 <li>实现火狐41上设置为新标签页</li>
 <li>将参数存放在火狐preferences里面</li>
-<li>将导航配置、壁纸等可能有改动的文件设置在profile文件夹内，实现扩展签名（<del>还要看看能不能通过先</del><img class="emoji" title=":flushed:" alt=":flushed:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f633.png" height="20" width="20" align="absmiddle">）<br>
-最新消息：扩展人工审核失败<img class="emoji" title=":sob:" alt=":sob:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f62d.png" height="20" width="20" align="absmiddle">，因为我把一部分代码移出扩展外了，看来还需要大改</li>
+<li>将导航配置、壁纸等可能有改动的文件设置在profile文件夹内，实现扩展签名</li>
 <li>扩展重装后不会覆盖配置</li>
 <li>替换日历算法为我自己编写的算法，从而准确显示父亲节<img class="emoji" title=":man:" alt=":man:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f468.png" height="20" width="20" align="absmiddle">、母亲节<img class="emoji" title=":woman:" alt=":woman:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f469.png" height="20" width="20" align="absmiddle">这样的节日</li>
 <li>神秘的代码<img class="emoji" title=":underage:" alt=":underage:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f51e.png" height="20" width="20" align="absmiddle">
@@ -54,30 +52,82 @@
 </li>
 <li>Bing壁纸的命名还是采取日期+壁纸的信息，不会自动删除，需要注意壁纸会一直累积下去</li>
 <li>默认的导航网址中有返利链接</li>
+<li>在火狐配置文件目录里的扩展数据文件夹中的style.css文件并不会随着扩展更新而更新，请自行从扩展目录的myNewTabMod文件夹中替换</li>
 </ol>
 
 <h2>
-<a id="扩展详细介绍" class="anchor" href="#%E6%89%A9%E5%B1%95%E8%AF%A6%E7%BB%86%E4%BB%8B%E7%BB%8D" aria-hidden="true"><span class="octicon octicon-link"></span></a>扩展详细介绍</h2>
+<a id="扩展图文" class="anchor" href="#%E6%89%A9%E5%B1%95%E5%9B%BE%E6%96%87" aria-hidden="true"><span class="octicon octicon-link"></span></a>扩展图文</h2>
 
 <ul>
-<li>待编辑</li>
+<li>扩展主界面，左上角的天气可以在附加组件管理器中该扩展选项界面设置其URL
+国历和农历日期会以不同颜色显示当天的节假日和节气信息
+<img src="https://raw.githubusercontent.com/sakuyaa/myNewTabMod/master/pic/main.png" alt="" title="主界面">
+</li>
+<li>参数设置<br>
+<img src="https://raw.githubusercontent.com/sakuyaa/myNewTabMod/master/pic/config.png" alt="" title="参数设置">
+</li>
+<li>将参数存放在火狐preferences里面<br>
+<img src="https://raw.githubusercontent.com/sakuyaa/myNewTabMod/master/pic/prefs.png" alt="" title="首选项">
+</li>
+<li>储存的Bing壁纸<br>
+<img src="https://raw.githubusercontent.com/sakuyaa/myNewTabMod/master/pic/bingImg.png" alt="" title="Bing图片">
+</li>
 </ul>
 
 <h2>
-<a id="尚未实现能力有限" class="anchor" href="#%E5%B0%9A%E6%9C%AA%E5%AE%9E%E7%8E%B0%E8%83%BD%E5%8A%9B%E6%9C%89%E9%99%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>尚未实现（能力有限…）</h2>
+<a id="尚未解决能力有限" class="anchor" href="#%E5%B0%9A%E6%9C%AA%E8%A7%A3%E5%86%B3%E8%83%BD%E5%8A%9B%E6%9C%89%E9%99%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>尚未解决（能力有限…）</h2>
 
 <ul>
-<li>通过defaults\preferences设置扩展默认参数（试过了，不知道为什么参数不会自动导入<img class="emoji" title=":broken_heart:" alt=":broken_heart:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f494.png" height="20" width="20" align="absmiddle">）</li>
-<li>
-<del>将整个index.html移出扩展外，再作为iframe插入首页</del><br>
-看来不可能实现了<img class="emoji" title=":worried:" alt=":worried:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f61f.png" height="20" width="20" align="absmiddle">，不然通不过扩展审核</li>
+<li>通过扩展选项选择“背景图片地址”时，文件路径包含中文会造成乱码（已修复，但会造成选择文件后无法直接显示文件路径）</li>
 </ul>
 
-<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> frm <span class="pl-k">=</span> <span class="pl-c1">document</span>.<span class="pl-c1">createElement</span>(<span class="pl-s"><span class="pl-pds">'</span>iframe<span class="pl-pds">'</span></span>);
-iframe.src <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>index.html<span class="pl-pds">'</span></span>;
-iframe.<span class="pl-c1">style</span>.<span class="pl-c1">width</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>100%<span class="pl-pds">'</span></span>;
-iframe.<span class="pl-c1">style</span>.<span class="pl-c1">height</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>100%<span class="pl-pds">'</span></span>;
-<span class="pl-c1">document</span>.<span class="pl-c1">body</span>.<span class="pl-c1">appendChild</span>(frm);</pre></div>
+<h5>
+<a id="另一种实现方式" class="anchor" href="#%E5%8F%A6%E4%B8%80%E7%A7%8D%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>另一种实现方式：</h5>
+
+<p>在<code>options.xul</code>中，添加以下代码：</p>
+
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">setting</span> <span class="pl-e">type</span>=<span class="pl-s"><span class="pl-pds">"</span>control<span class="pl-pds">"</span></span> <span class="pl-e">title</span>=<span class="pl-s"><span class="pl-pds">"</span>背景图片地址<span class="pl-pds">"</span></span>&gt;
+    &lt;<span class="pl-ent">button</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>setbackgroundimage<span class="pl-pds">"</span></span> <span class="pl-e">label</span>=<span class="pl-s"><span class="pl-pds">"</span>浏览...<span class="pl-pds">"</span></span> /&gt;
+&lt;/<span class="pl-ent">setting</span>&gt;
+&lt;<span class="pl-ent">setting</span> <span class="pl-e">pref</span>=<span class="pl-s"><span class="pl-pds">"</span>extensions.myNewTabMod.backgroundImage<span class="pl-pds">"</span></span> <span class="pl-e">type</span>=<span class="pl-s"><span class="pl-pds">"</span>string<span class="pl-pds">"</span></span> <span class="pl-e">title</span>=<span class="pl-s"><span class="pl-pds">"</span>背景图片地址<span class="pl-pds">"</span></span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>backgroundimage<span class="pl-pds">"</span></span> /&gt;</pre></div>
+
+<p>在<code>bootstrap.js</code>中，添加以下代码：</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> myNewTabMod <span class="pl-k">=</span> {
+    observer<span class="pl-k">:</span> {
+        <span class="pl-en">observe</span><span class="pl-k">:</span> <span class="pl-k">function</span>(<span class="pl-smi">aSubject</span>, <span class="pl-smi">aTopic</span>, <span class="pl-smi">aData</span>) {
+            <span class="pl-k">if</span> (aTopic <span class="pl-k">==</span> <span class="pl-s"><span class="pl-pds">'</span>addon-options-displayed<span class="pl-pds">'</span></span> <span class="pl-k">&amp;&amp;</span> aData <span class="pl-k">==</span> <span class="pl-s"><span class="pl-pds">'</span>mynewtabmod@sakuyaa<span class="pl-pds">'</span></span>) {
+                <span class="pl-k">var</span> path;
+                <span class="pl-k">try</span> {
+                    path <span class="pl-k">=</span> Services.prefs.getComplexValue(<span class="pl-s"><span class="pl-pds">'</span>extensions.myNewTabMod.path<span class="pl-pds">'</span></span>, Ci.nsISupportsString).<span class="pl-c1">toString</span>();
+                } <span class="pl-k">catch</span>(e) {
+                    path <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>myNewTabMod<span class="pl-pds">'</span></span>;
+                }
+                aSubject.<span class="pl-c1">getElementById</span>(<span class="pl-s"><span class="pl-pds">'</span>backgroundimage<span class="pl-pds">'</span></span>).<span class="pl-c1">value</span> <span class="pl-k">=</span> path;
+                aSubject.<span class="pl-c1">getElementById</span>(<span class="pl-s"><span class="pl-pds">'</span>setbackgroundimage<span class="pl-pds">'</span></span>).<span class="pl-en">onclick</span> <span class="pl-k">=</span> <span class="pl-k">function</span>() {
+                    <span class="pl-k">var</span> fp <span class="pl-k">=</span> Cc[<span class="pl-s"><span class="pl-pds">'</span>@mozilla.org/filepicker;1<span class="pl-pds">'</span></span>].createInstance(Ci.nsIFilePicker);
+                    fp.init(<span class="pl-c1">window</span>, <span class="pl-s"><span class="pl-pds">'</span>设置背景图片<span class="pl-pds">'</span></span>, fp.modeOpen);
+                    fp.appendFilters(fp.filterImages);
+                    <span class="pl-k">if</span> (fp.show() <span class="pl-k">==</span> fp.returnCancel <span class="pl-k">||</span> <span class="pl-k">!</span>fp.file) {
+                        <span class="pl-k">return</span>;
+                    }
+                    <span class="pl-k">var</span> str <span class="pl-k">=</span> Cc[<span class="pl-s"><span class="pl-pds">'</span>@mozilla.org/supports-string;1<span class="pl-pds">'</span></span>].createInstance(Ci.nsISupportsString);
+                    str.<span class="pl-c1">data</span> <span class="pl-k">=</span> Services.io.newFileURI(fp.file).spec;
+                    aSubject.<span class="pl-c1">getElementById</span>(<span class="pl-s"><span class="pl-pds">'</span>backgroundimage<span class="pl-pds">'</span></span>).<span class="pl-c1">value</span> <span class="pl-k">=</span> str.<span class="pl-c1">data</span>;
+                    myNewTabMod.prefs.setComplexValue(<span class="pl-s"><span class="pl-pds">'</span>backgroundImage<span class="pl-pds">'</span></span>, Ci.nsISupportsString, str);
+                };
+            }
+        }
+    }
+};
+<span class="pl-k">var</span> <span class="pl-en">startup</span> <span class="pl-k">=</span> <span class="pl-k">function</span>(<span class="pl-smi">data</span>, <span class="pl-smi">reason</span>) {
+    Services.obs.addObserver(myNewTabMod.observer, <span class="pl-s"><span class="pl-pds">'</span>addon-options-displayed<span class="pl-pds">'</span></span>, <span class="pl-c1">false</span>);
+};
+<span class="pl-k">var</span> <span class="pl-en">shutdown</span> <span class="pl-k">=</span> <span class="pl-k">function</span>(<span class="pl-smi">data</span>, <span class="pl-smi">reason</span>) {
+    Services.obs.removeObserver(myNewTabMod.observer, <span class="pl-s"><span class="pl-pds">'</span>addon-options-displayed<span class="pl-pds">'</span></span>);
+};</pre></div>
+
+<p>然而，由于无法获取到选项界面的<strong>window</strong>，使得<strong>fp.init(window, '设置背景图片', fp.modeOpen);</strong>这个函数无法执行。</p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/sakuyaa/myNewTabMod">myNewTabMod</a> is maintained by <a href="https://github.com/sakuyaa">sakuyaa</a>.</span>
