@@ -148,6 +148,17 @@ var myNewTabMod = {
 	//初始化网页
 	initDocument: function() {
 		document.title = this.PREFS.title;
+		
+		//本地化
+		var indexBundle = Services.strings.createBundle('chrome://mynewtabmod/locale/index.properties');
+		document.getElementById('my_nav').textContent = indexBundle.GetStringFromName('nav');
+		document.getElementById('nav_edit').setAttribute('title', indexBundle.GetStringFromName('edit.title'));
+		document.getElementById('nav_edit2').textContent = indexBundle.GetStringFromName('edit');
+		document.getElementById('nav_openfolder').setAttribute('title', indexBundle.GetStringFromName('open.title'));
+		document.getElementById('nav_openfolder2').textContent = indexBundle.GetStringFromName('open');
+		document.getElementById('nav_random').setAttribute('title', indexBundle.GetStringFromName('change.title'));
+		document.getElementById('nav_random2').textContent = indexBundle.GetStringFromName('change');
+		
 		document.getElementById('weather').src = this.PREFS.weatherSrc;
 		document.getElementById('weather').onload = function() {   //为天气iframe设置css
 			//https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDOMWindowUtils
