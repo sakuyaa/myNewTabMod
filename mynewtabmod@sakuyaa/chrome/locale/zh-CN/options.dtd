@@ -1,13 +1,13 @@
 <!ENTITY content.backgroundImage "不使用Bing壁纸时，使用此图片。">
 <!ENTITY content.bingMaxHistory "切换壁纸时将会随机选取历史天数之内的壁纸。">
-<!ENTITY content.imageDir "壁纸存储文件夹位于扩展存储文件夹内。">
+<!ENTITY content.imageDir "壁纸存储文件夹位于扩展配置文件夹内。">
 <!ENTITY content.path "该扩展的一些文件将储存于此，这是相对于火狐配置文件夹的路径。">
 
 <!ENTITY title.backgroundImage "背景图片地址">
 <!ENTITY title.bingMaxHistory "Bing壁纸最大历史天数">
 <!ENTITY title.imageDir "壁纸存储文件夹名">
 <!ENTITY title.isNewTab "新标签页打开链接">
-<!ENTITY title.path "扩展存储文件夹名">
+<!ENTITY title.path "扩展配置文件夹名">
 <!ENTITY title.title "主页标题">
 <!ENTITY title.updateImageTime "更新壁纸的间隔（小时）">
 <!ENTITY title.useBigImage "壁纸尺寸">
