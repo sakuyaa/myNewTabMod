@@ -7,7 +7,7 @@
 				<em:targetApplication>
 					<RDF:Description>
 						<em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
-						<em:minVersion>41.*</em:minVersion>
+						<em:minVersion>41.0</em:minVersion>
 						<em:maxVersion>*</em:maxVersion>
 						<em:updateLink>https://raw.githubusercontent.com/sakuyaa/myNewTabMod/master/xpi/mynewtabmod-1.0-fx.xpi</em:updateLink>
 						<em:updateInfoURL>http://sakuyaa.github.io/myNewTabMod/updateinfo/updateinfo1.0.xhtml</em:updateInfoURL>
@@ -19,7 +19,7 @@
 				<em:targetApplication>
 					<RDF:Description>
 						<em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
-						<em:minVersion>41.*</em:minVersion>
+						<em:minVersion>41.0</em:minVersion>
 						<em:maxVersion>*</em:maxVersion>
 						<em:updateLink>https://raw.githubusercontent.com/sakuyaa/myNewTabMod/master/xpi/mynewtabmod-1.1-fx.xpi</em:updateLink>
 						<em:updateInfoURL>http://sakuyaa.github.io/myNewTabMod/updateinfo/updateinfo1.1.xhtml</em:updateInfoURL>
@@ -31,10 +31,22 @@
 				<em:targetApplication>
 					<RDF:Description>
 						<em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
-						<em:minVersion>41.*</em:minVersion>
+						<em:minVersion>41.0</em:minVersion>
 						<em:maxVersion>*</em:maxVersion>
 						<em:updateLink>https://raw.githubusercontent.com/sakuyaa/myNewTabMod/master/xpi/mynewtabmod-1.2-fx.xpi</em:updateLink>
 						<em:updateInfoURL>http://sakuyaa.github.io/myNewTabMod/updateinfo/updateinfo1.2.xhtml</em:updateInfoURL>
+					</RDF:Description>
+				</em:targetApplication>
+			</RDF:Description></RDF:li>
+			<RDF:li><RDF:Description>
+				<em:version>1.3</em:version>
+				<em:targetApplication>
+					<RDF:Description>
+						<em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+						<em:minVersion>26.0</em:minVersion>
+						<em:maxVersion>*</em:maxVersion>
+						<em:updateLink>https://raw.githubusercontent.com/sakuyaa/myNewTabMod/master/xpi/mynewtabmod-1.3-fx.xpi</em:updateLink>
+						<em:updateInfoURL>http://sakuyaa.github.io/myNewTabMod/updateinfo/updateinfo1.3.xhtml</em:updateInfoURL>
 					</RDF:Description>
 				</em:targetApplication>
 			</RDF:Description></RDF:li>
