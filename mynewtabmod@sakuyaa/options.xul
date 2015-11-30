@@ -32,16 +32,16 @@
 			<radio value="false" label="1366x768" />
 		</radiogroup>
 	</setting>
-	<setting pref="extensions.myNewTabMod.backgroundImage" type="file" title="&title.backgroundImage;" onpreferencechanged='
+	<setting pref="extensions.myNewTabMod.backgroundImage" type="file" title="&title.backgroundImage;" onpreferencechanged="
 		this.valueToPreference = function () {
-			let str = Cc["@mozilla.org/supports-string;1"].createInstance(Ci.nsISupportsString);
+			let str = Cc['@mozilla.org/supports-string;1'].createInstance(Ci.nsISupportsString);
 			str.data = this.value;
 			Services.prefs.setComplexValue(this.pref, Ci.nsISupportsString, str);
 		};
 		this.valueFromPreference = function () {
 			this.value = Services.prefs.getComplexValue(this.pref, Ci.nsISupportsString).data;
 		};
-		this.valueFromPreference();'>
+		this.valueFromPreference();">
 		&content.backgroundImage;
 	</setting>
 	<setting pref="extensions.myNewTabMod.updateImageTime" type="integer" title="&title.updateImageTime;" />
