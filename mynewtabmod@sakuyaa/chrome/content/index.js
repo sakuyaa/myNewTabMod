@@ -41,11 +41,11 @@ var myNewTabMod = {
 		if (fp.show() == fp.returnCancel || !fp.file) {
 			return;
 		}
-		this.PREFS.backgroundImage = Services.io.newFileURI(fp.file).spec;
+		this.PREFS.backgroundImage = fp.file.path;
 		var str = Cc['@mozilla.org/supports-string;1'].createInstance(Ci.nsISupportsString);
 		str.data = this.PREFS.backgroundImage;
 		this.prefs.setComplexValue('backgroundImage', Ci.nsISupportsString, str);
-		document.body.style.backgroundImage = 'url("' + this.PREFS.backgroundImage + '")';
+		document.body.style.backgroundImage = 'url("' + Services.io.newFileURI(fp.file).spec + '")';
 	},
 	//定位文件目录
 	openDir: function() {
@@ -240,13 +240,14 @@ var myNewTabMod = {
 		} else {
 			var image;
 			try {
-				image = Services.io.getProtocolHandler('file').QueryInterface(Ci.nsIFileProtocolHandler).getFileFromURLSpec(this.PREFS.backgroundImage);
+				image = Cc['@mozilla.org/file/local;1'].createInstance(Ci.nsILocalFile);
+				image.initWithPath(this.PREFS.backgroundImage);
 			} catch(e) {}
 			if (!image || !image.exists()) {   //尚未设置背景图片路径
 				alert(this.stringBundle.GetStringFromName('alert.setImage'));
 				this.changeImg();
 			} else {
-				document.body.style.backgroundImage = 'url("' + this.PREFS.backgroundImage + '")';
+				document.body.style.backgroundImage = 'url("' + Services.io.newFileURI(image).spec + '")';
 			}
 		}
 	},
