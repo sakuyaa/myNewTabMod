@@ -28,6 +28,7 @@ var myNewTabMod = {
 	log: function(e) {
 		console.log('myNewTabMod line#' + e.lineNumber + ' ' + e.name + ' : ' + e.message);
 	},
+	
 	//切换|下载背景图
 	changeImg: function() {
 		if (this.PREFS.useBingImage) {
@@ -46,12 +47,10 @@ var myNewTabMod = {
 		this.prefs.setComplexValue('backgroundImage', Ci.nsISupportsString, str);
 		document.body.style.backgroundImage = 'url("' + this.PREFS.backgroundImage + '")';
 	},
-	
 	//定位文件目录
 	openDir: function() {
 		this.dataFolder.reveal();
 	},
-
 	//编辑配置
 	edit: function() {
 		var editor;
@@ -158,13 +157,6 @@ var myNewTabMod = {
 		document.getElementById('nav_openfolder2').textContent = indexBundle.GetStringFromName('open');
 		document.getElementById('nav_random').setAttribute('title', indexBundle.GetStringFromName('change.title'));
 		document.getElementById('nav_random2').textContent = indexBundle.GetStringFromName('change');
-		
-		document.getElementById('weather').src = this.PREFS.weatherSrc;
-		document.getElementById('weather').onload = function() {   //为天气iframe设置css
-			//https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDOMWindowUtils
-			var domWindowUtils = document.getElementById('weather').contentWindow.QueryInterface(Ci.nsIInterfaceRequestor).getInterface(Ci.nsIDOMWindowUtils);
-			domWindowUtils.loadSheet(Services.io.newURI('chrome://mynewtabmod/skin/weather.css', null, null), domWindowUtils.USER_SHEET);
-		};
 	},
 	//初始化导航网址
 	initSite: function() {
@@ -236,14 +228,8 @@ var myNewTabMod = {
 				}
 		};
 	},
-
-	init: function() {
-		this.getPrefs();
-		this.initFile();
-		this.initDate();
-		this.initDocument();
-		this.initSite();
-		
+	//初始化背景图片
+	initImage: function() {
 		if (this.PREFS.useBingImage) {   //获取bing中国主页的背景图片
 			var data = this.loadSetting();
 			if (data.backgroundImage && (Date.now() - data.lastCheckTime) < this.PREFS.updateImageTime * 3600 * 1000) {
@@ -263,6 +249,22 @@ var myNewTabMod = {
 				document.body.style.backgroundImage = 'url("' + this.PREFS.backgroundImage + '")';
 			}
 		}
+	},
+
+	init: function() {
+		this.getPrefs();
+		this.initFile();
+		this.initDate();
+		this.initDocument();
+		this.initSite();
+		this.initImage();
+		
+		document.getElementById('weather').onload = function() {   //为天气iframe设置css
+			//https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDOMWindowUtils
+			var domWindowUtils = document.getElementById('weather').contentWindow.QueryInterface(Ci.nsIInterfaceRequestor).getInterface(Ci.nsIDOMWindowUtils);
+			domWindowUtils.loadSheet(Services.io.newURI('chrome://mynewtabmod/skin/weather.css', null, null), domWindowUtils.USER_SHEET);
+		};
+		document.getElementById('weather').src = this.PREFS.weatherSrc;
 	},
 	
 	//加载设置
