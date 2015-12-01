@@ -233,22 +233,29 @@ var myNewTabMod = {
 		if (this.PREFS.useBingImage) {   //获取bing中国主页的背景图片
 			var data = this.loadSetting();
 			if (data.backgroundImage && (Date.now() - data.lastCheckTime) < this.PREFS.updateImageTime * 3600 * 1000) {
-				document.body.style.backgroundImage = 'url("' + data.backgroundImage + '")';
-			} else {
-				this.getBingImage(0);
+				var bingImg;
+				try {
+					//bingImg = Services.io.getProtocolHandler('file').QueryInterface(Ci.nsIFileProtocolHandler).getFileFromURLSpec(data.backgroundImage);
+					bingImg = Services.io.newURI(data.backgroundImage, null, null).QueryInterface(Ci.nsIFileURL).file;
+				} catch(e) {}
+				if (bingImg && bingImg.exists()) {
+					document.body.style.backgroundImage = 'url("' + data.backgroundImage + '")';
+					return;
+				}
 			}
+			this.getBingImage(0);
+			return;
+		}
+		var image;
+		try {
+			image = Cc['@mozilla.org/file/local;1'].createInstance(Ci.nsILocalFile);
+			image.initWithPath(this.PREFS.backgroundImage);
+		} catch(e) {}
+		if (!image || !image.exists()) {   //尚未设置背景图片路径
+			alert(this.stringBundle.GetStringFromName('alert.setImage'));
+			this.changeImg();
 		} else {
-			var image;
-			try {
-				image = Cc['@mozilla.org/file/local;1'].createInstance(Ci.nsILocalFile);
-				image.initWithPath(this.PREFS.backgroundImage);
-			} catch(e) {}
-			if (!image || !image.exists()) {   //尚未设置背景图片路径
-				alert(this.stringBundle.GetStringFromName('alert.setImage'));
-				this.changeImg();
-			} else {
-				document.body.style.backgroundImage = 'url("' + Services.io.newFileURI(image).spec + '")';
-			}
+			document.body.style.backgroundImage = 'url("' + Services.io.newFileURI(image).spec + '")';
 		}
 	},
 
