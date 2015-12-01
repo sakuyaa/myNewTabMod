@@ -42,9 +42,7 @@ var myNewTabMod = {
 			return;
 		}
 		this.PREFS.backgroundImage = fp.file.path;
-		var str = Cc['@mozilla.org/supports-string;1'].createInstance(Ci.nsISupportsString);
-		str.data = this.PREFS.backgroundImage;
-		this.prefs.setComplexValue('backgroundImage', Ci.nsISupportsString, str);
+		this.prefs.setComplexValue('backgroundImage', Ci.nsIFile, fp.file);
 		document.body.style.backgroundImage = 'url("' + Services.io.newFileURI(fp.file).spec + '")';
 	},
 	//定位文件目录
@@ -69,9 +67,7 @@ var myNewTabMod = {
 				return;
 			} else {
 				editor = fp.file;
-				var str = Cc['@mozilla.org/supports-string;1'].createInstance(Ci.nsISupportsString);
-				str.data = editor.path;
-				Services.prefs.setComplexValue('view_source.editor.path', Ci.nsISupportsString, str);
+				Services.prefs.setComplexValue('view_source.editor.path', Ci.nsIFile, editor);
 			}
 		}
 
