@@ -127,9 +127,25 @@ var install = function(data, reason) {
 };
 var uninstall = function(data, reason) {
 	switch (reason) {
-		case ADDON_UNINSTALL:   //升降级不删除参数
-			myNewTabMod.prefs.deleteBranch('');
-			break;
+		case ADDON_UNINSTALL:
+			myNewTabMod.prefs.deleteBranch('');   //升降级不删除参数
+			var path;
+			try {
+				path = Services.prefs.getComplexValue('extensions.myNewTabMod.path', Ci.nsISupportsString).toString();
+			} catch(e) {
+				path = 'myNewTabMod';
+			}
+			if (Services.prompt.confirm(null, myNewTabMod.stringBundle.GetStringFromName('title.delete'),
+				myNewTabMod.stringBundle.formatStringFromName('alert.delete', [path], 1))) {
+				var folder = Services.dirsvc.get('ProfD', Ci.nsIFile);
+				folder.appendRelativePath(path);
+				try {
+					folder.remove(true);
+				} catch(e) {
+					console.log('myNewTabMod line#' + e.lineNumber + ' ' + e.name + ' : ' + e.message);
+				}
+			}
+			//故意不break，使得扩展移除并安装后能刷新stringBundle
 		case ADDON_UPGRADE:
 		case ADDON_DOWNGRADE:
 			//https://bugzilla.mozilla.org/show_bug.cgi?id=719376
