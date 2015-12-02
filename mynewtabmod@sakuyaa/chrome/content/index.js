@@ -231,6 +231,7 @@ var myNewTabMod = {
 			if (data.backgroundImage && (Date.now() - data.lastCheckTime) < this.PREFS.updateImageTime * 3600 * 1000) {
 				var bingImg;
 				try {
+					//https://developer.mozilla.org/en-US/Add-ons/Code_snippets/File_I_O
 					//bingImg = Services.io.getProtocolHandler('file').QueryInterface(Ci.nsIFileProtocolHandler).getFileFromURLSpec(data.backgroundImage);
 					bingImg = Services.io.newURI(data.backgroundImage, null, null).QueryInterface(Ci.nsIFileURL).file;
 				} catch(e) {}
@@ -337,15 +338,14 @@ var myNewTabMod = {
 			t.onload = function() {
 				try {
 					file.create(file.NORMAL_FILE_TYPE, parseInt('0777', 8));
-					Downloads.fetch(Services.io.newURI(imageUrl, null, null), file);
+					Downloads.fetch(Services.io.newURI(imageUrl, null, null), file).then(function() {
+						myNewTabMod.setAndSave(filePath);
+					}, Cu.reportError);
 					/*Cc['@mozilla.org/embedding/browser/nsWebBrowserPersist;1'].createInstance(Ci.nsIWebBrowserPersist)
 						.saveURI(Services.io.newURI(imageUrl, null, null), null, null, null, null, null, file, null);*/
 				} catch (ex if ex instanceof Downloads.Error && ex.becauseTargetFailed) {
 					console.log(myNewTabMod.stringBundle.GetStringFromName('log.downloadError'));
 				}
-				setTimeout(function() {
-					myNewTabMod.setAndSave(filePath);
-				}, 100);
 			}
 		};
 		xhr.send(null);
