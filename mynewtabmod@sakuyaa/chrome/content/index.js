@@ -457,49 +457,49 @@ var myNewTabMod = {
 		var file = Cc['@mozilla.org/file/local;1'].createInstance(Ci.nsILocalFile);
 		file.initWithPath(path);
 		if (!file.exists()) {
-		    alert(this.stringBundle.GetStringFromName('alert.fileNotExist') + path);
-		    return;
+			alert(this.stringBundle.GetStringFromName('alert.fileNotExist') + path);
+			return;
 		}
 		file.launch();
 	},
 	
 	setIcon: function(img, obj) {
 		if (obj.exec) {
-		    var aFile = Cc['@mozilla.org/file/local;1'].createInstance(Ci.nsILocalFile);
-		    try {
-		        aFile.initWithPath(obj.exec);
-		    } catch (e) {
+			var aFile = Cc['@mozilla.org/file/local;1'].createInstance(Ci.nsILocalFile);
+			try {
+				aFile.initWithPath(obj.exec);
+			} catch (e) {
 				this.log(e);
-		        return;
-		    }
-		    if (!aFile.exists()) {
-		        img.setAttribute('disabled', 'true');
-		    } else {
-		        var fileURL = Services.io.getProtocolHandler('file').QueryInterface(Ci.nsIFileProtocolHandler).getURLSpecFromFile(aFile);
-		        img.setAttribute('src', 'moz-icon://' + fileURL + '?size=16');
-		    }
-		    return;
+				return;
+			}
+			if (!aFile.exists()) {
+				img.setAttribute('disabled', 'true');
+			} else {
+				var fileURL = Services.io.getProtocolHandler('file').QueryInterface(Ci.nsIFileProtocolHandler).getURLSpecFromFile(aFile);
+				img.setAttribute('src', 'moz-icon://' + fileURL + '?size=16');
+			}
+			return;
 		}
 
 		var uri;
 		try {
-		    uri = Services.io.newURI(obj.url, null, null);
+			uri = Services.io.newURI(obj.url, null, null);
 		} catch (e) {
 			this.log(e);
 		}
 		if (!uri) return;
 
 		PlacesUtils.favicons.getFaviconDataForPage(uri, {
-		    onComplete: function(aURI, aDataLen, aData, aMimeType) {
-		        try {
-    			    //javascript: URI の host にアクセスするとエラー
-    			    img.setAttribute('src', aURI && aURI.spec?
-    			        'moz-anno:favicon:' + aURI.spec :
-    			        'moz-anno:favicon:' + uri.scheme + '://' + uri.host + '/favicon.ico');
-    			} catch (e) {
+			onComplete: function(aURI, aDataLen, aData, aMimeType) {
+				try {
+					//javascript: URI の host にアクセスするとエラー
+					img.setAttribute('src', aURI && aURI.spec?
+						'moz-anno:favicon:' + aURI.spec :
+						'moz-anno:favicon:' + uri.scheme + '://' + uri.host + '/favicon.ico');
+				} catch (e) {
 					myNewTabMod.log(e);
 				}
-		    }
+			}
 		});
 	}
 };
