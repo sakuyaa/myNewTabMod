@@ -1,0 +1,53 @@
+# myNewTabMod Reference by sakuyaa
+
+这是我在开发过程中所参考的一些资料:smirk:
+
+## [Add-ons](https://developer.mozilla.org/zh-CN/docs/Mozilla/Add-ons)
+1. **Version**
+	* [Version Format](https://developer.mozilla.org/en-US/docs/Toolkit_version_format)
+	* [Extension Versioning, Update and Compatibility](https://developer.mozilla.org/en-US/docs/Extension_Versioning%2C_Update_and_Compatibility)
+* **Preferences**
+	* [Preferences](https://developer.mozilla.org/en-US/Add-ons/Code_snippets/Preferences)
+	* [内嵌选项](https://developer.mozilla.org/zh-CN/docs/Mozilla/Add-ons/Inline_Options)
+* **L10n**
+	* [本地化](https://developer.mozilla.org/zh-CN/docs/Mozilla/Tech/XUL/Tutorial/Localization)
+	* [Localizing an extension](https://developer.mozilla.org/en-US/docs/Mozilla/Localization/Localizing_an_extension)
+	* [Property Files](https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/Tutorial/Property_Files)
+	* [demo](https://github.com/Noitidart/l10n)
+* **Others**
+	* [设置扩展开发环境](https://developer.mozilla.org/zh-CN/docs/Mozilla/Add-ons/Setting_up_extension_development_environment)
+	* [自引导型扩展](https://developer.mozilla.org/zh-CN/docs/Mozilla/Add-ons/Bootstrapped_extensions)
+
+## [JavaScript code modules](https://developer.mozilla.org/zh-CN/docs/Mozilla/JavaScript_code_modules/Using)
+1. **[Downloads.jsm](https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/Downloads.jsm)**
+* **[OSFile.jsm](https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/OSFile.jsm)**
+	* [OS.File for the main thread](https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/OSFile.jsm/OS.File_for_the_main_thread)
+	* [Path manipulation](https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/OSFile.jsm/OS.Path)
+* **[Services.jsm](https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/Services.jsm)**
+	* appinfo
+		* [nsIXULAppInfo](https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIXULAppInfo)
+	* prefs
+		* [nsIPrefBranch](https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIPrefBranch)
+		* [nsIPrefService](https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIPrefService)
+	* prompt
+		* [nsIPromptService](https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIPromptService)
+	* strings
+		* [nsIStringBundleService](https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIStringBundleService)
+	* vc
+		* [nsIVersionComparator](https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIVersionComparator)
+
+## [XPCOM Interface](https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface)
+* [nsIDOMWindowUtils](https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDOMWindowUtils)
+* [nsIFile](https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIFile)
+* [nsIFilePicker](https://developer.mozilla.org/zh-CN/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIFilePicker)
+* [nsILocalFile](https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsILocalFile)
+* [nsIProcess](https://developer.mozilla.org/zh-CN/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIProcess)
+* [nsIStringBundle](https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIStringBundle)
+
+## [JavaScript](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference)
+* [arguments](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Functions/arguments)
+* [Error](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Error)
+* [Promise](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+
+## Others
+* [File I/O](https://developer.mozilla.org/en-US/Add-ons/Code_snippets/File_I_O)
