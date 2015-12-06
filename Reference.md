@@ -23,9 +23,14 @@
 * **[OSFile.jsm](https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/OSFile.jsm)**
 	* [OS.File for the main thread](https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/OSFile.jsm/OS.File_for_the_main_thread)
 	* [Path manipulation](https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/OSFile.jsm/OS.Path)
+* **PlacesUtils.jsm**
+	* favicons
+		* [mozIAsyncFavicons](https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/mozIAsyncFavicons)
+		* [nsIFaviconDataCallback](https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIFaviconDataCallback)
 * **[Services.jsm](https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/Services.jsm)**
 	* appinfo
 		* [nsIXULAppInfo](https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIXULAppInfo)
+		* [nsIXULRuntime](https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIXULRuntime)
 	* prefs
 		* [nsIPrefBranch](https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIPrefBranch)
 		* [nsIPrefService](https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIPrefService)
