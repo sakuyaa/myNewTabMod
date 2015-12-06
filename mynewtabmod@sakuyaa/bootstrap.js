@@ -4,7 +4,6 @@
 
 'use strict';
 
-//https://developer.mozilla.org/zh-CN/docs/Mozilla/Add-ons/Bootstrapped_extensions
 const {classes: Cc, interfaces: Ci, utils: Cu/*, results: Cr*/} = Components;
 Cu.import('resource://gre/modules/Services.jsm');
 const isNewVersion = Services.vc.compare(Services.appinfo.platformVersion, "41.*") >= 0;
@@ -14,7 +13,6 @@ if (isNewVersion) {
 
 var myNewTabMod = {
 	stringBundle: Services.strings.createBundle('chrome://mynewtabmod/locale/global.properties'),   //本地化
-	//https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIPrefBranch
 	prefs: Services.prefs.getDefaultBranch('extensions.myNewTabMod.'),
 	PREFS: {
 		backgroundImage: '',   //背景图片地址
@@ -51,7 +49,6 @@ var myNewTabMod = {
 		}
 	},
 	copyFile: function(oldFilePath, newFilePath) {
-		//https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIFile
 		var oldFile = Services.dirsvc.get('ProfD', Ci.nsIFile);
 		var newFile = oldFile.clone();
 		oldFile.appendRelativePath(oldFilePath);

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html SYSTEM "chrome://mynewtabmod/locale/options.dtd">
-<!--https://developer.mozilla.org/zh-CN/docs/Mozilla/Add-ons/Inline_Options-->
+
 <vbox xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 	<setting pref="extensions.myNewTabMod.useBingImage" type="bool" title="&title.useBingImage;" />
 	<setting pref="extensions.myNewTabMod.isNewTab" type="bool" title="&title.isNewTab;" />
@@ -39,7 +39,7 @@
 			Services.prefs.setComplexValue(this.pref, Ci.nsISupportsString, str);
 		};
 		this.valueFromPreference = function () {
-			this.value = Services.prefs.getComplexValue(this.pref, Ci.nsISupportsString).data;
+			this.value = Services.prefs.getComplexValue(this.pref, Ci.nsISupportsString).toString();
 		};
 		this.valueFromPreference();">
 		&content.backgroundImage;
