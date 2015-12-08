@@ -5,6 +5,7 @@
 'use strict';
 
 const {classes: Cc, interfaces: Ci, utils: Cu/*, results: Cr*/} = Components;
+Cu.import('resource://gre/modules/osfile.jsm')
 Cu.import('resource://gre/modules/Services.jsm');
 const isNewVersion = Services.vc.compare(Services.appinfo.platformVersion, "41.*") >= 0;
 if (isNewVersion) {
@@ -48,19 +49,36 @@ var myNewTabMod = {
 			}
 		}
 	},
-	copyFile: function(oldFilePath, newFilePath) {
-		var oldFile = Services.dirsvc.get('ProfD', Ci.nsIFile);
-		var newFile = oldFile.clone();
-		oldFile.appendRelativePath(oldFilePath);
-		newFile.appendRelativePath(newFilePath);
-		if (arguments.length != 2) {   //第三个参数仅仅用于判断是文件夹复制操作
+	copyFile: function(oldFilePath, path, newFilePath) {
+		var oldFile = OS.Path.join(OS.Constants.Path.profileDir, 'extensions', 'mynewtabmod@sakuyaa', 'myNewTabMod', oldFilePath);
+		if(newFilePath) {
 			try {
-				oldFile.copyTo(newFile, null);
-			} catch (e) {
+				OS.File.copy(oldFile, OS.Path.join(OS.Constants.Path.profileDir, path, newFilePath), {noOverwrite: true});
+			} catch(e) {
 				console.log('myNewTabMod line#' + e.lineNumber + ' ' + e.name + ' : ' + e.message);
 			}
-		} else if (!newFile.exists() && oldFile.exists()) {   //避免重复安装后覆盖
-			oldFile.copyTo(newFile.parent, null);
+		} else {   //文件夹复制操作
+			var newFileFolder = OS.Path.join(OS.Constants.Path.profileDir, path, oldFilePath);
+			try {
+				OS.File.makeDir(newFileFolder);
+			} catch(e) {
+				console.log('myNewTabMod line#' + e.lineNumber + ' ' + e.name + ' : ' + e.message);
+			}
+			let iterator = new OS.File.DirectoryIterator(oldFile);
+			iterator.forEach(function onEntry(entry) {
+				try {
+					OS.File.copy(entry.path, OS.Path.join(newFileFolder, OS.Path.basename(entry.path)), {noOverwrite: true});
+				} catch(e) {
+					console.log('myNewTabMod line#' + e.lineNumber + ' ' + e.name + ' : ' + e.message);
+				}
+			}).then(
+				function onSuccess() {
+					iterator.close();
+				},
+				function onFailure(reason) {
+					iterator.close();
+				}
+			);
 		}
 	}
 };
@@ -101,9 +119,14 @@ var startup = function(data, reason) {
 				}
 			}
 			//将文件复制到目录外，以避免文件修改之后导致扩展签名失败
-			myNewTabMod.copyFile('extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\data.txt', path + '\\data.txt');
-			myNewTabMod.copyFile('extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\style.css', path + '\\style.css');
-			myNewTabMod.copyFile('extensions\\mynewtabmod@sakuyaa\\myNewTabMod\\ico', path, true);
+			try {
+				OS.File.makeDir(OS.Path.join(OS.Constants.Path.profileDir, path));
+			} catch(e) {
+				console.log('myNewTabMod line#' + e.lineNumber + ' ' + e.name + ' : ' + e.message);
+			}
+			myNewTabMod.copyFile('ico', path, false);
+			myNewTabMod.copyFile('data.txt', path, 'data.txt');
+			myNewTabMod.copyFile('style.css', path, 'style.css');
 	}
 };
 var shutdown = function(data, reason) {
@@ -134,13 +157,9 @@ var uninstall = function(data, reason) {
 			}
 			if (Services.prompt.confirm(null, myNewTabMod.stringBundle.GetStringFromName('title.delete'),
 				myNewTabMod.stringBundle.formatStringFromName('alert.delete', [path], 1))) {
-				var folder = Services.dirsvc.get('ProfD', Ci.nsIFile);
-				folder.appendRelativePath(path);
-				try {
-					folder.remove(true);
-				} catch(e) {
+				OS.File.removeDir(OS.Path.join(OS.Constants.Path.profileDir, path)).catch(function(e) {
 					console.log('myNewTabMod line#' + e.lineNumber + ' ' + e.name + ' : ' + e.message);
-				}
+				});
 			}
 			//故意不break，使得扩展移除并安装后能刷新stringBundle
 		case ADDON_UPGRADE:
