@@ -8,6 +8,7 @@ Cu.import('resource://gre/modules/PlacesUtils.jsm');
 Cu.import('resource://gre/modules/Services.jsm');
 
 var myNewTabMod = {
+	bingIndex: 0,   //Bing图片历史天数
 	dataFolder: null,   //扩展数据文件夹
 	dataFile: null,   //导航网址数据文件
 	stringBundle: Services.strings.createBundle('chrome://mynewtabmod/locale/global.properties'),   //本地化
@@ -33,7 +34,8 @@ var myNewTabMod = {
 	//切换|下载背景图
 	changeImg: function() {
 		if (this.PREFS.useBingImage) {
-			this.getBingImage(Math.floor(Math.random() * this.PREFS.bingMaxHistory));
+			this.bingIndex %= this.PREFS.bingMaxHistory;
+			this.getBingImage(this.bingIndex++);   //循环获取
 			return;
 		}
 		var fp = Cc['@mozilla.org/filepicker;1'].createInstance(Ci.nsIFilePicker);
@@ -222,11 +224,11 @@ var myNewTabMod = {
 					if (aExists) {
 						document.body.style.backgroundImage = 'url("' + data.backgroundImage + '")';
 					} else {
-						myNewTabMod.getBingImage(0);
+						myNewTabMod.getBingImage(myNewTabMod.bingIndex++);
 					}
 				}).catch(this.log);
 			} else {
-				this.getBingImage(0);
+				this.getBingImage(this.bingIndex++);
 			}
 		} else {   //使用本地图片
 			OS.File.exists(this.PREFS.backgroundImage).then(function(aExists) {
