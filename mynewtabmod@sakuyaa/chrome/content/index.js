@@ -34,19 +34,22 @@ var myNewTabMod = {
 	//切换|下载背景图
 	changeImg: function() {
 		if (this.PREFS.useBingImage) {
-			this.bingIndex %= this.PREFS.bingMaxHistory;
-			this.getBingImage(this.bingIndex++);   //循环获取
+			this.getBingImage(this.bingIndex++ % this.PREFS.bingMaxHistory);   //循环获取
 			return;
 		}
 		var fp = Cc['@mozilla.org/filepicker;1'].createInstance(Ci.nsIFilePicker);
 		fp.init(window, this.stringBundle.GetStringFromName('title.setBackgroundImg'), fp.modeOpen);
 		fp.appendFilters(fp.filterImages);
-		if (fp.show() == fp.returnCancel || !fp.file) {
-			return;
-		}
-		this.PREFS.backgroundImage = fp.file.path;
-		this.prefs.setComplexValue('backgroundImage', Ci.nsIFile, fp.file);
-		document.body.style.backgroundImage = 'url("' + fp.fileURL.spec + '")';
+		var fpCallback = {
+			done: function fpCallback_done(aResult) {
+				if (aResult !== fp.returnCancel) {
+					myNewTabMod.PREFS.backgroundImage = fp.file.path;
+					myNewTabMod.prefs.setComplexValue('backgroundImage', Ci.nsIFile, fp.file);
+					document.body.style.backgroundImage = 'url("' + fp.fileURL.spec + '")';
+				}
+			}
+		};
+		fp.open(fpCallback);   //Requires Gecko 17.0
 	},
 	//定位文件目录
 	openDir: function() {
@@ -60,27 +63,34 @@ var myNewTabMod = {
 	},
 	//编辑配置
 	edit: function() {
-		var editor;
-		try {
-			editor = Services.prefs.getComplexValue('view_source.editor.path', Ci.nsILocalFile);
-		} catch(e) {
-			this.log(e);
-		}
-		if (!editor || !editor.exists()) {
-			alert(this.stringBundle.GetStringFromName('alert.setEditor'));
-			var fp = Cc['@mozilla.org/filepicker;1'].createInstance(Ci.nsIFilePicker);
-			fp.init(window, this.stringBundle.GetStringFromName('title.setEditor'), fp.modeOpen);
-			fp.appendFilters(fp.filterApps);
-			if (fp.show() == fp.returnCancel || !fp.file) {
-				return;
-			} else {
-				editor = fp.file;
-				Services.prefs.setComplexValue('view_source.editor.path', Ci.nsIFile, editor);
-			}
-		}
-		var process = Cc['@mozilla.org/process/util;1'].createInstance(Ci.nsIProcess);
-		process.init(editor);
-		process.runw(false, [this.dataFile], 1);
+		var editor = Services.prefs.getComplexValue('view_source.editor.path', Ci.nsISupportsString).toString();
+		new Promise(function(resolve, reject) {
+			OS.File.exists(editor).then(function(aExists) {
+				if (aExists) {
+					var file = Cc['@mozilla.org/file/local;1'].createInstance(Ci.nsILocalFile);
+					file.initWithPath(editor);
+					resolve(file);
+				} else {
+					alert(myNewTabMod.stringBundle.GetStringFromName('alert.setEditor'));
+					var fp = Cc['@mozilla.org/filepicker;1'].createInstance(Ci.nsIFilePicker);
+					fp.init(window, myNewTabMod.stringBundle.GetStringFromName('title.setEditor'), fp.modeOpen);
+					fp.appendFilters(fp.filterApps);
+					var fpCallback = {
+						done: function fpCallback_done(aResult) {
+							if (aResult !== fp.returnCancel) {
+								Services.prefs.setComplexValue('view_source.editor.path', Ci.nsIFile, fp.file);
+								resolve(fp.file);
+							}
+						}
+					};
+					fp.open(fpCallback);   //Requires Gecko 17.0
+				}
+			});
+		}).then(function(file) {
+			var process = Cc['@mozilla.org/process/util;1'].createInstance(Ci.nsIProcess);
+			process.init(file);
+			process.runw(false, [myNewTabMod.dataFile], 1);
+		}, myNewTabMod.log);
 	},
 	
 	//获取参数
