@@ -78,56 +78,8 @@
 <a id="尚未解决能力有限" class="anchor" href="#%E5%B0%9A%E6%9C%AA%E8%A7%A3%E5%86%B3%E8%83%BD%E5%8A%9B%E6%9C%89%E9%99%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>尚未解决（能力有限…）</h2>
 
 <ul>
-<li>通过扩展选项选择“背景图片地址”时，文件路径包含中文会造成乱码（已修复，但会造成选择文件后无法直接显示文件路径）</li>
+<li>由于使用了css3 transform移动来使主界面居中（这样才能保证每行的宽度不超过最大宽度时，导航宽度会自动适应），导致导航右边框消失。同时，当拖动导航网址时，链接并不会出现在鼠标上，而是鼠标右侧。</li>
 </ul>
-
-<h5>
-<a id="另一种实现方式" class="anchor" href="#%E5%8F%A6%E4%B8%80%E7%A7%8D%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>另一种实现方式：</h5>
-
-<p>在<code>options.xul</code>中，添加以下代码：</p>
-
-<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">setting</span> <span class="pl-e">type</span>=<span class="pl-s"><span class="pl-pds">"</span>control<span class="pl-pds">"</span></span> <span class="pl-e">title</span>=<span class="pl-s"><span class="pl-pds">"</span>背景图片地址<span class="pl-pds">"</span></span>&gt;
-    &lt;<span class="pl-ent">button</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>setbackgroundimage<span class="pl-pds">"</span></span> <span class="pl-e">label</span>=<span class="pl-s"><span class="pl-pds">"</span>浏览...<span class="pl-pds">"</span></span> /&gt;
-&lt;/<span class="pl-ent">setting</span>&gt;
-&lt;<span class="pl-ent">setting</span> <span class="pl-e">pref</span>=<span class="pl-s"><span class="pl-pds">"</span>extensions.myNewTabMod.backgroundImage<span class="pl-pds">"</span></span> <span class="pl-e">type</span>=<span class="pl-s"><span class="pl-pds">"</span>string<span class="pl-pds">"</span></span> <span class="pl-e">title</span>=<span class="pl-s"><span class="pl-pds">"</span>背景图片地址<span class="pl-pds">"</span></span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>backgroundimage<span class="pl-pds">"</span></span> /&gt;</pre></div>
-
-<p>在<code>bootstrap.js</code>中，添加以下代码：</p>
-
-<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> myNewTabMod <span class="pl-k">=</span> {
-    observer<span class="pl-k">:</span> {
-        <span class="pl-en">observe</span><span class="pl-k">:</span> <span class="pl-k">function</span>(<span class="pl-smi">aSubject</span>, <span class="pl-smi">aTopic</span>, <span class="pl-smi">aData</span>) {
-            <span class="pl-k">if</span> (aTopic <span class="pl-k">==</span> <span class="pl-s"><span class="pl-pds">'</span>addon-options-displayed<span class="pl-pds">'</span></span> <span class="pl-k">&amp;&amp;</span> aData <span class="pl-k">==</span> <span class="pl-s"><span class="pl-pds">'</span>mynewtabmod@sakuyaa<span class="pl-pds">'</span></span>) {
-                <span class="pl-k">var</span> path;
-                <span class="pl-k">try</span> {
-                    path <span class="pl-k">=</span> Services.prefs.getComplexValue(<span class="pl-s"><span class="pl-pds">'</span>extensions.myNewTabMod.path<span class="pl-pds">'</span></span>, Ci.nsISupportsString).<span class="pl-c1">toString</span>();
-                } <span class="pl-k">catch</span>(e) {
-                    path <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>myNewTabMod<span class="pl-pds">'</span></span>;
-                }
-                aSubject.<span class="pl-c1">getElementById</span>(<span class="pl-s"><span class="pl-pds">'</span>backgroundimage<span class="pl-pds">'</span></span>).<span class="pl-c1">value</span> <span class="pl-k">=</span> path;
-                aSubject.<span class="pl-c1">getElementById</span>(<span class="pl-s"><span class="pl-pds">'</span>setbackgroundimage<span class="pl-pds">'</span></span>).<span class="pl-en">onclick</span> <span class="pl-k">=</span> <span class="pl-k">function</span>() {
-                    <span class="pl-k">var</span> fp <span class="pl-k">=</span> Cc[<span class="pl-s"><span class="pl-pds">'</span>@mozilla.org/filepicker;1<span class="pl-pds">'</span></span>].createInstance(Ci.nsIFilePicker);
-                    fp.init(<span class="pl-c1">window</span>, <span class="pl-s"><span class="pl-pds">'</span>设置背景图片<span class="pl-pds">'</span></span>, fp.modeOpen);
-                    fp.appendFilters(fp.filterImages);
-                    <span class="pl-k">if</span> (fp.show() <span class="pl-k">==</span> fp.returnCancel <span class="pl-k">||</span> <span class="pl-k">!</span>fp.file) {
-                        <span class="pl-k">return</span>;
-                    }
-                    <span class="pl-k">var</span> str <span class="pl-k">=</span> Cc[<span class="pl-s"><span class="pl-pds">'</span>@mozilla.org/supports-string;1<span class="pl-pds">'</span></span>].createInstance(Ci.nsISupportsString);
-                    str.<span class="pl-c1">data</span> <span class="pl-k">=</span> Services.io.newFileURI(fp.file).spec;
-                    aSubject.<span class="pl-c1">getElementById</span>(<span class="pl-s"><span class="pl-pds">'</span>backgroundimage<span class="pl-pds">'</span></span>).<span class="pl-c1">value</span> <span class="pl-k">=</span> str.<span class="pl-c1">data</span>;
-                    myNewTabMod.prefs.setComplexValue(<span class="pl-s"><span class="pl-pds">'</span>backgroundImage<span class="pl-pds">'</span></span>, Ci.nsISupportsString, str);
-                };
-            }
-        }
-    }
-};
-<span class="pl-k">var</span> <span class="pl-en">startup</span> <span class="pl-k">=</span> <span class="pl-k">function</span>(<span class="pl-smi">data</span>, <span class="pl-smi">reason</span>) {
-    Services.obs.addObserver(myNewTabMod.observer, <span class="pl-s"><span class="pl-pds">'</span>addon-options-displayed<span class="pl-pds">'</span></span>, <span class="pl-c1">false</span>);
-};
-<span class="pl-k">var</span> <span class="pl-en">shutdown</span> <span class="pl-k">=</span> <span class="pl-k">function</span>(<span class="pl-smi">data</span>, <span class="pl-smi">reason</span>) {
-    Services.obs.removeObserver(myNewTabMod.observer, <span class="pl-s"><span class="pl-pds">'</span>addon-options-displayed<span class="pl-pds">'</span></span>);
-};</pre></div>
-
-<p>然而，由于无法获取到选项界面的<strong>window</strong>，使得<strong>fp.init(window, '设置背景图片', fp.modeOpen);</strong>这个函数无法执行。</p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/sakuyaa/myNewTabMod">myNewTabMod</a> is maintained by <a href="https://github.com/sakuyaa">sakuyaa</a>.</span>
