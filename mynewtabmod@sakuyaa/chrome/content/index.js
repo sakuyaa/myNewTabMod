@@ -461,7 +461,7 @@ var myNewTabMod = {
 			}
 		}
 		try {
-			return OS.Path.toFileURI(OS.Path.normalize(urlOrPath));
+			return OS.Path.normalize(urlOrPath);
 		} catch(e) {
 			this.log(e);
 			return false;
