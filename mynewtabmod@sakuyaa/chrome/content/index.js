@@ -409,10 +409,9 @@ var myNewTabMod = {
 				site.exec = path;
 			} else {
 				a.setAttribute('href', site.url);
-			}
-			
-			if (this.PREFS.isNewTab) {
-				a.setAttribute('target', '_blank');
+				if (this.PREFS.isNewTab) {
+					a.setAttribute('target', '_blank');
+				}
 			}
 			
 			//设置图片的属性
