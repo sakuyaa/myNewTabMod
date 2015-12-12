@@ -491,6 +491,7 @@ var myNewTabMod = {
 					img.setAttribute('disabled', 'true');
 				}
 			}).catch(this.log);
+			return;
 		}
 		
 		var uri;
