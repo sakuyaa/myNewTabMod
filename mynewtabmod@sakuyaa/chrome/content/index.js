@@ -241,7 +241,7 @@ var myNewTabMod = {
 			if (data.backgroundImage && (Date.now() - data.lastCheckTime) < this.PREFS.updateImageTime * 3600 * 1000) {
 				OS.File.exists(data.backgroundImage).then(function(aExists) {
 					if (aExists) {
-						document.body.style.backgroundImage = 'url("' + data.backgroundImage + '")';
+						document.body.style.backgroundImage = 'url("' + OS.Path.toFileURI(data.backgroundImage) + '")';
 					} else {
 						myNewTabMod.getBingImage(myNewTabMod.bingIndex++);
 					}
@@ -278,13 +278,15 @@ var myNewTabMod = {
 	
 	//设置背景图片并保存设置
 	setAndSave: function(ImgPath) {
-		document.body.style.backgroundImage = 'url("' + ImgPath + '")';
+		document.body.style.backgroundImage = 'url("' + OS.Path.toFileURI(ImgPath) + '")';
 		var Jsondata = {
 			lastCheckTime: Date.now(),
 			backgroundImage: ImgPath
 		};
 		try {
-			this.prefs.setCharPref('jsonData', JSON.stringify(Jsondata));
+			var str = Cc['@mozilla.org/supports-string;1'].createInstance(Ci.nsISupportsString);
+			str.data = JSON.stringify(Jsondata);
+			this.prefs.setComplexValue('jsonData', Ci.nsISupportsString, str);
 		} catch(e) {
 			this.log(e);
 		}
@@ -330,7 +332,7 @@ var myNewTabMod = {
 				return;
 			}
 			if (file.exists()) {
-				myNewTabMod.setAndSave(OS.Path.toFileURI(filePath));
+				myNewTabMod.setAndSave(filePath);
 				return;
 			}
 			
@@ -340,7 +342,7 @@ var myNewTabMod = {
 			t.onload = function() {
 				file.create(file.NORMAL_FILE_TYPE, parseInt('0777', 8));
 				Downloads.fetch(Services.io.newURI(imageUrl, null, null), file).then(function() {   //Requires Gecko 26.0
-					myNewTabMod.setAndSave(OS.Path.toFileURI(filePath));
+					myNewTabMod.setAndSave(filePath);
 				}, myNewTabMod.log);
 			};
 		}, myNewTabMod.log);
