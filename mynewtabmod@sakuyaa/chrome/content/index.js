@@ -14,6 +14,7 @@ var myNewTabMod = {
 	stringBundle: Services.strings.createBundle('chrome://mynewtabmod/locale/global.properties'),   //本地化
 	prefs: Services.prefs.getBranch('extensions.myNewTabMod.'),
 	PREFS: {
+		jsonData: '',
 		backgroundImage: '',   //背景图片地址
 		bingMaxHistory: 10,   //最大历史天数，可设置[2, 16]
 		imageDir: 'bingImg',   //图片存储的文件夹名字
@@ -231,7 +232,12 @@ var myNewTabMod = {
 	//初始化背景图片
 	initImage: function() {
 		if (this.PREFS.useBingImage) {   //获取bing中国主页的背景图片
-			var data = this.loadSetting();
+			var data = {};
+			try {
+				data = JSON.parse(this.PREFS.jsonData);
+			} catch(e) {
+				this.log(e);
+			}
 			if (data.backgroundImage && (Date.now() - data.lastCheckTime) < this.PREFS.updateImageTime * 3600 * 1000) {
 				OS.File.exists(data.backgroundImage).then(function(aExists) {
 					if (aExists) {
@@ -268,19 +274,6 @@ var myNewTabMod = {
 			domWindowUtils.loadSheet(Services.io.newURI('chrome://mynewtabmod/skin/weather.css', null, null), domWindowUtils.USER_SHEET);
 		};
 		document.getElementById('weather').src = this.PREFS.weatherSrc;
-	},
-	
-	//加载设置
-	loadSetting: function() {
-		var jsonData;
-		try {
-			jsonData = this.prefs.getCharPref('jsonData');
-			jsonData = JSON.parse(jsonData);
-		} catch(e) {
-			this.log(e);
-			jsonData = {}
-		}
-		return jsonData;
 	},
 	
 	//设置背景图片并保存设置
