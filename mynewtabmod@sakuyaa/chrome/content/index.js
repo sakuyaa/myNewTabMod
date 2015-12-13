@@ -97,6 +97,9 @@ var myNewTabMod = {
 	getPrefs: function() {
 		this.PREFS.title = this.stringBundle.GetStringFromName('prefs.title');
 		for (var key in this.PREFS) {
+			if (!this.prefs.prefHasUserValue(key)) {   //使用默认参数
+				continue;
+			}
 			switch (this.prefs.getPrefType(key)) {
 				case this.prefs.PREF_STRING:
 					this.PREFS[key] = this.prefs.getComplexValue(key, Ci.nsISupportsString).toString();
