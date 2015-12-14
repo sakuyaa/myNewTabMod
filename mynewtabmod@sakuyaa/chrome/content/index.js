@@ -35,7 +35,13 @@ var myNewTabMod = {
 	//切换|下载背景图
 	changeImg: function() {
 		if (this.PREFS.useBingImage) {
-			this.getBingImage(this.bingIndex++ % this.PREFS.bingMaxHistory);   //循环获取
+			if (this.PREFS.jsonData.backgroundImage &&
+				(Date.now() - this.PREFS.jsonData.lastCheckTime) < this.PREFS.updateImageTime * 3600 * 1000) {
+				this.getBingImage();
+			} else {
+				this.bingIndex = 0;   //超过时间重新从最新的开始获取
+				this.getBingImage();
+			}
 			return;
 		}
 		var fp = Cc['@mozilla.org/filepicker;1'].createInstance(Ci.nsIFilePicker);
@@ -112,6 +118,12 @@ var myNewTabMod = {
 					this.PREFS[key] = this.prefs.getBoolPref(key);
 					break;
 			}
+		}
+		try {
+			this.PREFS.jsonData = JSON.parse(this.PREFS.jsonData);
+		} catch(e) {
+			this.log(e);
+			this.PREFS.jsonData = {};
 		}
 	},
 	//初始化数据文件
@@ -232,22 +244,18 @@ var myNewTabMod = {
 	//初始化背景图片
 	initImage: function() {
 		if (this.PREFS.useBingImage) {   //获取bing中国主页的背景图片
-			var data = {};
-			try {
-				data = JSON.parse(this.PREFS.jsonData);
-			} catch(e) {
-				this.log(e);
-			}
-			if (data.backgroundImage && (Date.now() - data.lastCheckTime) < this.PREFS.updateImageTime * 3600 * 1000) {
-				OS.File.exists(data.backgroundImage).then(function(aExists) {
+			if (this.PREFS.jsonData.backgroundImage &&
+				(Date.now() - this.PREFS.jsonData.lastCheckTime) < this.PREFS.updateImageTime * 3600 * 1000) {
+				OS.File.exists(this.PREFS.jsonData.backgroundImage).then(function(aExists) {
 					if (aExists) {
-						document.body.style.backgroundImage = 'url("' + OS.Path.toFileURI(data.backgroundImage) + '")';
+						document.body.style.backgroundImage = 'url("' + OS.Path.toFileURI(myNewTabMod.PREFS.jsonData.backgroundImage) + '")';
+						myNewTabMod.bingIndex++;
 					} else {
-						myNewTabMod.getBingImage(myNewTabMod.bingIndex++);
+						myNewTabMod.getBingImage();
 					}
 				}).catch(this.log);
 			} else {
-				this.getBingImage(this.bingIndex++);
+				this.getBingImage();
 			}
 		} else {   //使用本地图片
 			OS.File.exists(this.PREFS.backgroundImage).then(function(aExists) {
@@ -279,22 +287,23 @@ var myNewTabMod = {
 	//设置背景图片并保存设置
 	setAndSave: function(ImgPath) {
 		document.body.style.backgroundImage = 'url("' + OS.Path.toFileURI(ImgPath) + '")';
-		var Jsondata = {
+		this.PREFS.jsonData = {
 			lastCheckTime: Date.now(),
 			backgroundImage: ImgPath
 		};
 		try {
 			var str = Cc['@mozilla.org/supports-string;1'].createInstance(Ci.nsISupportsString);
-			str.data = JSON.stringify(Jsondata);
+			str.data = JSON.stringify(this.PREFS.jsonData);
 			this.prefs.setComplexValue('jsonData', Ci.nsISupportsString, str);
 		} catch(e) {
 			this.log(e);
 		}
 	},
 	
-	getBingImage: function(idx) {
+	getBingImage: function() {
 		new Promise(function(resolve, reject) {
-			var url = 'http://cn.bing.com/HPImageArchive.aspx?format=js&idx=' + idx + '&n=1&nc=';
+			var url = 'http://cn.bing.com/HPImageArchive.aspx?format=js&idx=' +
+			myNewTabMod.bingIndex++ % myNewTabMod.PREFS.bingMaxHistory + '&n=1&nc=';
 			//var url = 'http://www.bing.com/HPImageArchive.aspx?format=js&idx=' + idx + '&n=1&nc=' + Date.now() + '&pid=hp&scope=web';
 			var xhr = new XMLHttpRequest();
 			xhr.open('GET', url, true);
