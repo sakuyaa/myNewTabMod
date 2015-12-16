@@ -1,4 +1,8 @@
-
+/**************************************************
+* 	myNewTabMod by sakuyaa.
+*	
+*	https://github.com/sakuyaa/
+**************************************************/
 'use strict';
 
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
