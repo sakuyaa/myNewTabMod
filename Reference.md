@@ -9,6 +9,7 @@
 * **Preferences**
 	* [Preferences](https://developer.mozilla.org/en-US/Add-ons/Code_snippets/Preferences)
 	* [内嵌选项](https://developer.mozilla.org/docs/Mozilla/Add-ons/Inline_Options)
+	* [setting.xml](http://mxr.mozilla.org/mozilla-central/source/toolkit/mozapps/extensions/content/setting.xml)
 * **L10n**
 	* [本地化](https://developer.mozilla.org/docs/Mozilla/Tech/XUL/Tutorial/Localization)
 	* [Localizing an extension](https://developer.mozilla.org/docs/Mozilla/Localization/Localizing_an_extension)
@@ -55,6 +56,7 @@
 * [arguments](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Functions/arguments)
 * [Error](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Error)
 * [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+* [解构赋值](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)
 
 ## Others
 * [File I/O](https://developer.mozilla.org/en-US/Add-ons/Code_snippets/File_I_O)
