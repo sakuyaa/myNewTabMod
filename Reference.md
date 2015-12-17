@@ -18,6 +18,7 @@
 * **Others**
 	* [设置扩展开发环境](https://developer.mozilla.org/docs/Mozilla/Add-ons/Setting_up_extension_development_environment)
 	* [自引导型扩展](https://developer.mozilla.org/docs/Mozilla/Add-ons/Bootstrapped_extensions)
+	* [File I/O](https://developer.mozilla.org/en-US/Add-ons/Code_snippets/File_I_O)
 
 ## [JavaScript code modules](https://developer.mozilla.org/docs/Mozilla/JavaScript_code_modules/Using)
 1. **[Downloads.jsm](https://developer.mozilla.org/docs/Mozilla/JavaScript_code_modules/Downloads.jsm)**
@@ -53,10 +54,19 @@
 * [nsIStringBundle](https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIStringBundle)
 
 ## [JavaScript](https://developer.mozilla.org/docs/Web/JavaScript/Reference)
-* [arguments](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Functions/arguments)
-* [Error](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Error)
-* [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)
-* [解构赋值](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)
+1. **[全局对象](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects)**
+	* [Error](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Error)
+	* [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+	* [正则表达式](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RegExp)
+* **[语句](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements)**
+	* [for...in](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/for...in)
+	* [for...of](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/for...of)
+* **[运算符](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators)**
+	* [解构赋值](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)
+* **[函数](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Functions)**
+	* [arguments](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Functions/arguments)
+	* [箭头函数](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Functions/Arrow_functions)
+* **附加参考**
+	* [严格模式](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Strict_mode)
 
 ## Others
-* [File I/O](https://developer.mozilla.org/en-US/Add-ons/Code_snippets/File_I_O)
