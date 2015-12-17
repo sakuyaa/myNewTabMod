@@ -6,9 +6,9 @@
 'use strict';
 
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
+const {PlacesUtils} = Cu.import('resource://gre/modules/PlacesUtils.jsm');
 Cu.import('resource://gre/modules/Downloads.jsm');
 Cu.import('resource://gre/modules/osfile.jsm')
-Cu.import('resource://gre/modules/PlacesUtils.jsm');
 Cu.import('resource://gre/modules/Services.jsm');
 
 var myNewTabMod = {
@@ -52,10 +52,10 @@ var myNewTabMod = {
 		fp.init(window, this.stringBundle.GetStringFromName('title.setBackgroundImg'), fp.modeOpen);
 		fp.appendFilters(fp.filterImages);
 		var fpCallback = {
-			done: function fpCallback_done(aResult) {
+			done: aResult => {
 				if (aResult !== fp.returnCancel) {
-					myNewTabMod.PREFS.backgroundImage = fp.file.path;
-					myNewTabMod.prefs.setComplexValue('backgroundImage', Ci.nsIFile, fp.file);
+					this.PREFS.backgroundImage = fp.file.path;
+					this.prefs.setComplexValue('backgroundImage', Ci.nsIFile, fp.file);
 					document.body.style.backgroundImage = 'url("' + fp.fileURL.spec + '")';
 				}
 			}
@@ -75,19 +75,19 @@ var myNewTabMod = {
 	//编辑配置
 	edit: function() {
 		var editor = Services.prefs.getComplexValue('view_source.editor.path', Ci.nsISupportsString).toString();
-		new Promise(function(resolve, reject) {
-			OS.File.exists(editor).then(function(aExists) {
+		new Promise((resolve, reject) => {
+			OS.File.exists(editor).then(aExists => {
 				if (aExists) {
 					var file = Cc['@mozilla.org/file/local;1'].createInstance(Ci.nsILocalFile);
 					file.initWithPath(editor);
 					resolve(file);
 				} else {
-					alert(myNewTabMod.stringBundle.GetStringFromName('alert.setEditor'));
+					alert(this.stringBundle.GetStringFromName('alert.setEditor'));
 					var fp = Cc['@mozilla.org/filepicker;1'].createInstance(Ci.nsIFilePicker);
-					fp.init(window, myNewTabMod.stringBundle.GetStringFromName('title.setEditor'), fp.modeOpen);
+					fp.init(window, this.stringBundle.GetStringFromName('title.setEditor'), fp.modeOpen);
 					fp.appendFilters(fp.filterApps);
 					var fpCallback = {
-						done: function fpCallback_done(aResult) {
+						done: aResult => {
 							if (aResult !== fp.returnCancel) {
 								Services.prefs.setComplexValue('view_source.editor.path', Ci.nsIFile, fp.file);
 								resolve(fp.file);
@@ -97,11 +97,11 @@ var myNewTabMod = {
 					fp.open(fpCallback);   //Requires Gecko 17.0
 				}
 			});
-		}).then(function(file) {
+		}).then(file => {
 			var process = Cc['@mozilla.org/process/util;1'].createInstance(Ci.nsIProcess);
 			process.init(file);
-			process.runw(false, [myNewTabMod.dataFile], 1);
-		}, myNewTabMod.log);
+			process.runw(false, [this.dataFile], 1);
+		}, this.log);
 	},
 	
 	//获取参数
@@ -193,17 +193,17 @@ var myNewTabMod = {
 			return;
 		}
 		OS.File.read(this.dataFile).then(
-			function onSuccess(array) {
+			array => {
 				var Yooo;
-				var siteData = myNewTabMod.parseDataText(new TextDecoder().decode(array));
+				var siteData = this.parseDataText(new TextDecoder().decode(array));
 				for(var type in siteData) {
 					if (type == 'Yooo') {   //神秘的代码
-						Yooo = myNewTabMod.buildTr(type, siteData[type]);
+						Yooo = this.buildTr(type, siteData[type]);
 						Yooo.setAttribute('hidden', 'hidden');
 						Yooo.setAttribute('name', 'Yooo');
 						table.appendChild(Yooo);
 					} else {
-						table.appendChild(myNewTabMod.buildTr(type, siteData[type]));
+						table.appendChild(this.buildTr(type, siteData[type]));
 					}
 				}
 				setTimeout(function() {
@@ -223,24 +223,22 @@ var myNewTabMod = {
 					//var keyName = String.fromCharCode(currKey);
 					//alert('按键码: ' + currKey + ' 字符: ' + keyName);
 					if (e.which == 81 && e.ctrlKey) {
-						var yooo = document.getElementsByName('Yooo');
-						for (var i = 0; i < yooo.length; i++) {
-							yooo[i].removeAttribute('hidden');
+						for (var yooo of document.getElementsByName('Yooo')) {
+							yooo.removeAttribute('hidden');
 						}
 					}
 				};
 				document.onkeyup = function(e) {
-					var yooo = document.getElementsByName('Yooo');
-						for (var i = 0; i < yooo.length; i++) {
-							yooo[i].setAttribute('hidden', 'hidden');
-						}
+					for (var yooo of document.getElementsByName('Yooo')) {
+						yooo.setAttribute('hidden', 'hidden');
+					}
 				};
 			},
-			function(aRejectReason) {
+			aRejectReason => {
 				if (aRejectReason instanceof OS.File.Error && aRejectReason.becauseNoSuchFile) {
-					alert(myNewTabMod.stringBundle.GetStringFromName('alert.fileNotExist') + myNewTabMod.dataFile); 
+					alert(this.stringBundle.GetStringFromName('alert.fileNotExist') + this.dataFile); 
 				} else {
-					alert(myNewTabMod.stringBundle.GetStringFromName('alert.cannotRead') + myNewTabMod.dataFile);
+					alert(this.stringBundle.GetStringFromName('alert.cannotRead') + this.dataFile);
 				}
 			}
 		);
@@ -250,24 +248,24 @@ var myNewTabMod = {
 		if (this.PREFS.useBingImage) {   //获取bing中国主页的背景图片
 			if (this.PREFS.jsonData.backgroundImage &&
 				(Date.now() - this.PREFS.jsonData.lastCheckTime) < this.PREFS.updateImageTime * 3600 * 1000) {
-				OS.File.exists(this.PREFS.jsonData.backgroundImage).then(function(aExists) {
+				OS.File.exists(this.PREFS.jsonData.backgroundImage).then(aExists => {
 					if (aExists) {
-						document.body.style.backgroundImage = 'url("' + OS.Path.toFileURI(myNewTabMod.PREFS.jsonData.backgroundImage) + '")';
-						myNewTabMod.bingIndex++;
+						document.body.style.backgroundImage = 'url("' + OS.Path.toFileURI(this.PREFS.jsonData.backgroundImage) + '")';
+						this.bingIndex++;
 					} else {
-						myNewTabMod.getBingImage();
+						this.getBingImage();
 					}
 				}).catch(this.log);
 			} else {
 				this.getBingImage();
 			}
 		} else {   //使用本地图片
-			OS.File.exists(this.PREFS.backgroundImage).then(function(aExists) {
+			OS.File.exists(this.PREFS.backgroundImage).then(aExists => {
 				if (aExists) {
-					document.body.style.backgroundImage = 'url("' + OS.Path.toFileURI(myNewTabMod.PREFS.backgroundImage) + '")';
+					document.body.style.backgroundImage = 'url("' + OS.Path.toFileURI(this.PREFS.backgroundImage) + '")';
 				} else {
-					alert(myNewTabMod.stringBundle.GetStringFromName('alert.setImage'));
-					myNewTabMod.changeImg();
+					alert(this.stringBundle.GetStringFromName('alert.setImage'));
+					this.changeImg();
 				}
 			}).catch(this.log);
 		}
@@ -305,9 +303,9 @@ var myNewTabMod = {
 	},
 	
 	getBingImage: function() {
-		new Promise(function(resolve, reject) {
+		new Promise((resolve, reject) => {
 			var url = 'http://cn.bing.com/HPImageArchive.aspx?format=js&idx=' +
-			myNewTabMod.bingIndex++ % myNewTabMod.PREFS.bingMaxHistory + '&n=1&nc=';
+			this.bingIndex++ % this.PREFS.bingMaxHistory + '&n=1&nc=';
 			//var url = 'http://www.bing.com/HPImageArchive.aspx?format=js&idx=' + idx + '&n=1&nc=' + Date.now() + '&pid=hp&scope=web';
 			var xhr = new XMLHttpRequest();
 			xhr.open('GET', url, true);
@@ -322,13 +320,13 @@ var myNewTabMod = {
 				reject(new Error("Network Error"));
 			};
 			xhr.send(null);
-		}).then(function(data) {
+		}).then(data => {
 			var name = data.images[0].copyright;
 			var enddate = parseInt(data.images[0].enddate);
 			var imageUrl = data.images[0].url;
 			
 			//处理图片地址
-			if (myNewTabMod.PREFS.useBigImage) {
+			if (this.PREFS.useBigImage) {
 				imageUrl = imageUrl.replace('1366x768', '1920x1080');
 			}
 			if (!imageUrl.startsWith('http')) {
@@ -336,41 +334,35 @@ var myNewTabMod = {
 			}
 			
 			//本地图片
-			var filePath = OS.Path.join(myNewTabMod.dataFolder, myNewTabMod.PREFS.imageDir, enddate + '-' + name.replace(/(\s|\(.*?\))/g, '') + '.jpg');
+			var filePath = OS.Path.join(this.dataFolder, this.PREFS.imageDir, enddate + '-' + name.replace(/(\s|\(.*?\))/g, '') + '.jpg');
 			var file = Cc['@mozilla.org/file/local;1'].createInstance(Ci.nsILocalFile);
 			try {
 				file.initWithPath(filePath);
 			} catch(e) {
-				myNewTabMod.log(e);
+				this.log(e);
 				return;
 			}
 			if (file.exists()) {
-				myNewTabMod.setAndSave(filePath);
+				this.setAndSave(filePath);
 				return;
 			}
 			
 			//下载图片
 			var t = new Image();
 			t.src = imageUrl;
-			t.onload = function() {
+			t.onload = () => {
 				file.create(file.NORMAL_FILE_TYPE, parseInt('0777', 8));
 				Downloads.fetch(Services.io.newURI(imageUrl, null, null), file).then(function() {   //Requires Gecko 26.0
-					myNewTabMod.setAndSave(filePath);
-				}, myNewTabMod.log);
+					this.setAndSave(filePath);
+				}, this.log);
 			};
-		}, myNewTabMod.log);
+		}, this.log);
 	},
 	
 	parseDataText: function (text) {
-		var data = [],
-			lines, line, arr, type;
-		
-		//处理下，逗号修正为英文逗号
-		text = text.replace(/，/g, ',');
-		
-		lines = text.split('\n');
-		for (var i = 0, l = lines.length; i < l; i++) {
-			line = lines[i].trim();
+		var data = [], arr, type;
+		for (var line of text.replace(/，/g, ',').split('\n')) {   //处理下，逗号修正为英文逗号
+			line = line.trim();
 			if (!line) {
 				continue;
 			}
@@ -393,7 +385,7 @@ var myNewTabMod = {
 		var tr = document.createElement('tr'),
 			th = document.createElement('th'),
 			span = document.createElement('span'),
-			site, td, a, img, textNode, path;
+			td, a, img, textNode, path;
 		
 		//添加分类
 		span.textContent = type;
@@ -401,9 +393,7 @@ var myNewTabMod = {
 		tr.appendChild(th);
 		
 		//添加站点
-		for (var i = 0; i < sites.length; i++) {
-			site = sites[i];
-			
+		for (var site of sites) {
 			td = document.createElement('td');
 			a = document.createElement('a');
 			img = document.createElement('img');
@@ -414,8 +404,8 @@ var myNewTabMod = {
 			if (path) {
 				a.setAttribute('href', 'javascript:;');
 				a.setAttribute('localpath', path);
-				a.addEventListener('click', function(e) {
-					myNewTabMod.exec(e.target.getAttribute('localpath'));
+				a.addEventListener('click', e => {
+					this.exec(e.target.getAttribute('localpath'));
 				}, false);
 				site.exec = path;
 			} else {
@@ -431,9 +421,8 @@ var myNewTabMod = {
 			if (site.imgSrc) {
 				if (site.imgSrc.charAt(0) == '/') {
 					var icoPath = this.dataFolder;
-					var pathList = site.imgSrc.substring(1).split('/');
-					for (var j in pathList) {
-						icoPath = OS.Path.join(icoPath, pathList[j]);
+					for (var pathList of site.imgSrc.substring(1).split('/')) {
+						icoPath = OS.Path.join(icoPath, pathList);
 					}
 					try {
 						img.src = OS.Path.toFileURI(OS.Path.normalize(icoPath));
@@ -461,10 +450,10 @@ var myNewTabMod = {
 		}
 		if (Services.appinfo.OS == 'WINNT') {   //Win系统
 			if (urlOrPath.charAt(0) == '/' || urlOrPath.charAt(0) == '\\') {   //相对扩展数据文件夹
-				var pathList = urlOrPath.substring(1).split(urlOrPath.charAt(0));   //根据第一个字符进行分隔
+				var path = urlOrPath.substring(1).split(urlOrPath.charAt(0));   //根据第一个字符进行分隔
 				urlOrPath = this.dataFolder;
-				for (var i in pathList) {
-					urlOrPath = OS.Path.join(urlOrPath, pathList[i]);
+				for (var pathList of path) {
+					urlOrPath = OS.Path.join(urlOrPath, pathList);
 				}
 			} else if (/^[a-z]:\\.+$/i.test(urlOrPath) == false) {   //不匹配windows路径
 				return false;
@@ -495,7 +484,7 @@ var myNewTabMod = {
 	
 	setIcon: function(img, obj) {
 		if (obj.exec) {
-			OS.File.exists(obj.exec).then(function(aExists) {
+			OS.File.exists(obj.exec).then(aExists => {
 				if (aExists) {
 					img.setAttribute('src', 'moz-icon://' + OS.Path.toFileURI(obj.exec) + '?size=16');
 				} else {
@@ -514,14 +503,14 @@ var myNewTabMod = {
 		if (!uri) return;
 		
 		PlacesUtils.favicons.getFaviconURLForPage(uri, {
-			onComplete: function(aURI, aDataLen, aData, aMimeType) {
+			onComplete: (aURI, aDataLen, aData, aMimeType) => {
 				try {
 					//javascript: URI の host にアクセスするとエラー
 					img.setAttribute('src', aURI && aURI.spec?
 						'moz-anno:favicon:' + aURI.spec :
 						'moz-anno:favicon:' + uri.scheme + '://' + uri.host + '/favicon.ico');
 				} catch (e) {
-					myNewTabMod.log(e);
+					this.log(e);
 				}
 			}
 		});
