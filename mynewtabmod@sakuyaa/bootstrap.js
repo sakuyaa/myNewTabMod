@@ -8,8 +8,9 @@
 const {classes: Cc, interfaces: Ci, utils: Cu/*, results: Cr*/} = Components;
 Cu.import('resource://gre/modules/osfile.jsm')
 Cu.import('resource://gre/modules/Services.jsm');
-const isNewVersion = Services.vc.compare(Services.appinfo.platformVersion, '41') >= 0;
-if (isNewVersion) {
+const isOldVersion = Services.vc.compare(Services.appinfo.platformVersion, '41') < 0;
+const isNewVersion = Services.vc.compare(Services.appinfo.platformVersion, '44') >= 0;
+if (!isOldVersion && !isNewVersion) {
 	Cu.import('resource:///modules/NewTabURL.jsm');   //火狐41上使用新标签页API
 }
 
@@ -81,24 +82,39 @@ var myNewTabMod = {
 				}
 			);
 		}
+	},
+	setNewTabURL: function(reset) {
+		if (isNewVersion) {
+			if(reset) {
+				Cc['@mozilla.org/browser/aboutnewtab-service;1'].getService(Ci.nsIAboutNewTabService).resetNewTabURL();
+			} else {
+				Cc['@mozilla.org/browser/aboutnewtab-service;1'].getService(Ci.nsIAboutNewTabService).newTabURL = 'chrome://mynewtabmod/content/index.html';
+			}
+		} else {
+			if(reset) {
+				NewTabURL.reset();
+			} else {
+				NewTabURL.override('chrome://mynewtabmod/content/index.html');
+			}
+		}
 	}
 };
 
 /*bootstrap entry points*/
 var startup = function(data, reason) {
-	if (isNewVersion) {
-		NewTabURL.override('chrome://mynewtabmod/content/index.html');
+	if (!isOldVersion) {
+		myNewTabMod.setNewTabURL();
 	}
 	myNewTabMod.addPrefs();
 	switch (reason) {
 		case ADDON_ENABLE:
-			if (!isNewVersion) {
+			if (isOldVersion) {
 				Services.prefs.setCharPref('browser.newtab.url', 'chrome://mynewtabmod/content/index.html');
 			}
 			Services.prefs.setCharPref('browser.startup.homepage', 'chrome://mynewtabmod/content/index.html');
 			break;
 		case ADDON_INSTALL:
-			if (!isNewVersion) {
+			if (isOldVersion) {
 				Services.prefs.setCharPref('browser.newtab.url', 'chrome://mynewtabmod/content/index.html');
 			}
 			Services.prefs.setCharPref('browser.startup.homepage', 'chrome://mynewtabmod/content/index.html');
@@ -135,10 +151,10 @@ var shutdown = function(data, reason) {
 		case ADDON_DISABLE:
 		case ADDON_UNINSTALL:
 			//https://bugzilla.mozilla.org/show_bug.cgi?id=620541
-			if (isNewVersion) {
-				NewTabURL.reset();
-			} else {
+			if (isOldVersion) {
 				Services.prefs.clearUserPref('browser.newtab.url');
+			} else {
+				myNewTabMod.setNewTabURL(true);
 			}
 			Services.prefs.clearUserPref('browser.startup.homepage');
 			break;
