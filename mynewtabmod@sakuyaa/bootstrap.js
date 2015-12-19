@@ -8,7 +8,7 @@
 const {classes: Cc, interfaces: Ci, utils: Cu/*, results: Cr*/} = Components;
 Cu.import('resource://gre/modules/osfile.jsm')
 Cu.import('resource://gre/modules/Services.jsm');
-const isNewVersion = Services.vc.compare(Services.appinfo.platformVersion, "41.*") >= 0;
+const isNewVersion = Services.vc.compare(Services.appinfo.platformVersion, '41') >= 0;
 if (isNewVersion) {
 	Cu.import('resource:///modules/NewTabURL.jsm');   //火狐41上使用新标签页API
 }
