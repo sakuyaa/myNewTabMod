@@ -5,9 +5,10 @@
 **************************************************/
 'use strict';
 
-const {classes: Cc, interfaces: Ci, utils: Cu/*, results: Cr*/} = Components;
+const {classes: Cc, interfaces: Ci, manager: Cm, utils: Cu/*, results: Cr*/} = Components;
 Cu.import('resource://gre/modules/osfile.jsm')
 Cu.import('resource://gre/modules/Services.jsm');
+Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 const isOldVersion = Services.vc.compare(Services.appinfo.platformVersion, '41') < 0;
 const isNewVersion = Services.vc.compare(Services.appinfo.platformVersion, '44') >= 0;
 if (!isOldVersion && !isNewVersion) {
@@ -88,20 +89,57 @@ var myNewTabMod = {
 			if(reset) {
 				Cc['@mozilla.org/browser/aboutnewtab-service;1'].getService(Ci.nsIAboutNewTabService).resetNewTabURL();
 			} else {
-				Cc['@mozilla.org/browser/aboutnewtab-service;1'].getService(Ci.nsIAboutNewTabService).newTabURL = 'chrome://mynewtabmod/content/index.html';
+				Cc['@mozilla.org/browser/aboutnewtab-service;1'].getService(Ci.nsIAboutNewTabService).newTabURL = 'about:mynewtabmod';
 			}
 		} else {
 			if(reset) {
 				NewTabURL.reset();
 			} else {
-				NewTabURL.override('chrome://mynewtabmod/content/index.html');
+				NewTabURL.override('about:mynewtabmod');
 			}
 		}
 	}
 };
 
+function AboutModule() {}
+AboutModule.prototype = Object.freeze({
+	page: 'chrome://mynewtabmod/content/index.html',
+	classDescription: 'about:mynewtabmod about page',
+	contractID: '@mozilla.org/network/protocol/about;1?what=mynewtabmod',
+	classID: Components.ID('d2d4f4d6-389f-4bb2-9905-c6ae30c84a58'),   //https://www.famkruithof.net/uuid/uuidgen
+	QueryInterface: XPCOMUtils.generateQI([Ci.nsIAboutModule]),
+	
+	getURIFlags: function(aURI) {
+		return Ci.nsIAboutModule.ALLOW_SCRIPT;
+	},
+	newChannel: function(aURI) {
+		let channel = Services.io.newChannel(this.page, null, null);
+		channel.originalURI = aURI;
+		return channel;
+	}
+});
+Cm.QueryInterface(Ci.nsIComponentRegistrar);
+function Factory(component) {
+	this.createInstance = function(outer, iid) {
+		if (outer) {
+			throw Cr.NS_ERROR_NO_AGGREGATION;
+		}
+		return new component();
+	};
+	this.register = function() {
+		Cm.registerFactory(component.prototype.classID, component.prototype.classDescription, component.prototype.contractID, this);
+	};
+	this.unregister = function() {
+		Cm.unregisterFactory(component.prototype.classID, this);
+	}
+	Object.freeze(this);
+	this.register();
+}
+var factory;
+
 /*bootstrap entry points*/
 var startup = function(data, reason) {
+	factory = new Factory(AboutModule);
 	if (!isOldVersion) {
 		myNewTabMod.setNewTabURL();
 	}
@@ -109,15 +147,15 @@ var startup = function(data, reason) {
 	switch (reason) {
 		case ADDON_ENABLE:
 			if (isOldVersion) {
-				Services.prefs.setCharPref('browser.newtab.url', 'chrome://mynewtabmod/content/index.html');
+				Services.prefs.setCharPref('browser.newtab.url', 'about:mynewtabmod');
 			}
-			Services.prefs.setCharPref('browser.startup.homepage', 'chrome://mynewtabmod/content/index.html');
+			Services.prefs.setCharPref('browser.startup.homepage', 'about:mynewtabmod');
 			break;
 		case ADDON_INSTALL:
 			if (isOldVersion) {
-				Services.prefs.setCharPref('browser.newtab.url', 'chrome://mynewtabmod/content/index.html');
+				Services.prefs.setCharPref('browser.newtab.url', 'about:mynewtabmod');
 			}
-			Services.prefs.setCharPref('browser.startup.homepage', 'chrome://mynewtabmod/content/index.html');
+			Services.prefs.setCharPref('browser.startup.homepage', 'about:mynewtabmod');
 			//故意不break
 		case ADDON_UPGRADE:
 		case ADDON_DOWNGRADE:
@@ -157,6 +195,10 @@ var shutdown = function(data, reason) {
 				myNewTabMod.setNewTabURL(true);
 			}
 			Services.prefs.clearUserPref('browser.startup.homepage');
+			//故意不break
+		case ADDON_UPGRADE:
+		case ADDON_DOWNGRADE :
+			factory.unregister();
 			break;
 	}
 };
