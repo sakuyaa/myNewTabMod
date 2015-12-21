@@ -19,6 +19,7 @@
 	* [设置扩展开发环境](https://developer.mozilla.org/docs/Mozilla/Add-ons/Setting_up_extension_development_environment)
 	* [自引导型扩展](https://developer.mozilla.org/docs/Mozilla/Add-ons/Bootstrapped_extensions)
 	* [File I/O](https://developer.mozilla.org/en-US/Add-ons/Code_snippets/File_I_O)
+	* [Custom about: URLs](https://developer.mozilla.org/docs/Custom_about:_URLs)
 
 ## [JavaScript code modules](https://developer.mozilla.org/docs/Mozilla/JavaScript_code_modules/Using)
 1. **[Downloads.jsm](https://developer.mozilla.org/docs/Mozilla/JavaScript_code_modules/Downloads.jsm)**
@@ -44,8 +45,10 @@
 		* [nsIStringBundleService](https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIStringBundleService)
 	* vc
 		* [nsIVersionComparator](https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIVersionComparator)
+* **[XPCOMUtils.jsm](https://developer.mozilla.org/docs/Mozilla/JavaScript_code_modules/XPCOMUtils.jsm)**
 
 ## [XPCOM Interface](https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface)
+* [nsIAboutModule](https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIAboutModule)
 * [nsIDOMWindowUtils](https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDOMWindowUtils)
 * [nsIFile](https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIFile)
 * [nsIFilePicker](https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIFilePicker)
