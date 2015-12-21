@@ -33,7 +33,24 @@ var myNewTabMod = {
 	
 	//输出错误信息
 	log: function(e) {
-		console.log('myNewTabMod line#' + e.lineNumber + ' ' + e.name + ' : ' + e.message);
+		if (e.lineNumber) {
+			console.log('myNewTabMod line#' + e.lineNumber + ': ' + e);
+		} else {
+			console.log('myNewTabMod: ' + e);
+		}
+	},
+	
+	//显示桌面通知
+	notify: function(title, content) {
+		if (Notification.permission === 'granted') {
+			new Notification(title, {body: content});
+		} else if (Notification.permission !== 'denied') {
+			Notification.requestPermission(permission => {
+				if (permission === 'granted') {
+					new Notification(title, {body: content});
+				}
+			});
+		}
 	},
 	
 	//切换|下载背景图
@@ -49,7 +66,7 @@ var myNewTabMod = {
 			return;
 		}
 		var fp = Cc['@mozilla.org/filepicker;1'].createInstance(Ci.nsIFilePicker);
-		fp.init(window, this.stringBundle.GetStringFromName('title.setBackgroundImg'), fp.modeOpen);
+		fp.init(window, this.stringBundle.GetStringFromName('title.setImage'), fp.modeOpen);
 		fp.appendFilters(fp.filterImages);
 		var fpCallback = {
 			done: aResult => {
@@ -69,6 +86,7 @@ var myNewTabMod = {
 			folder.initWithPath(this.dataFolder);
 			folder.reveal();
 		} catch(e) {
+			this.notify(this.stringBundle.GetStringFromName('notify.pathError'), this.dataFolder);
 			this.log(e);
 		}
 	},
@@ -236,9 +254,9 @@ var myNewTabMod = {
 			},
 			aRejectReason => {
 				if (aRejectReason instanceof OS.File.Error && aRejectReason.becauseNoSuchFile) {
-					alert(this.stringBundle.GetStringFromName('alert.fileNotExist') + this.dataFile); 
+					this.notify(this.stringBundle.GetStringFromName('notify.fileNotExist') + this.dataFile, aRejectReason);
 				} else {
-					alert(this.stringBundle.GetStringFromName('alert.cannotRead') + this.dataFile);
+					this.notify(this.stringBundle.GetStringFromName('notify.cannotRead') + this.dataFile, aRejectReason);
 				}
 			}
 		);
@@ -317,7 +335,7 @@ var myNewTabMod = {
 				}
 			};
 			xhr.onerror = function() {
-				reject(new Error("Network Error"));
+				reject(new Error(this.stringBundle.GetStringFromName('notify.networkError')));
 			};
 			xhr.send(null);
 		}).then(data => {
@@ -339,6 +357,7 @@ var myNewTabMod = {
 			try {
 				file.initWithPath(filePath);
 			} catch(e) {
+				this.notify(this.stringBundle.GetStringFromName('notify.pathError'), filePath);
 				this.log(e);
 				return;
 			}
@@ -354,9 +373,13 @@ var myNewTabMod = {
 				file.create(file.NORMAL_FILE_TYPE, parseInt('0777', 8));
 				Downloads.fetch(Services.io.newURI(imageUrl, null, null), file).then(() => {   //Requires Gecko 26.0
 					this.setAndSave(filePath);
-				}, this.log);
+				}, aDownloadError => {
+					this.notify(this.stringBundle.GetStringFromName('notify.downloadError') + imageUrl, aDownloadError);
+				});
 			};
-		}, this.log);
+		}, aReject => {
+			this.notify(aReject);
+		});
 	},
 	
 	parseDataText: function (text) {
@@ -472,11 +495,12 @@ var myNewTabMod = {
 		try {
 			file.initWithPath(path);
 		} catch(e) {
+			this.notify(this.stringBundle.GetStringFromName('notify.pathError'), path);
 			this.log(e);
 			return;
 		}
 		if (!file.exists()) {
-			alert(this.stringBundle.GetStringFromName('alert.fileNotExist') + path);
+			this.notify(this.stringBundle.GetStringFromName('notify.fileNotExist'), path);
 			return;
 		}
 		file.launch();
