@@ -9,7 +9,7 @@
 * **Preferences**
 	* [Preferences](https://developer.mozilla.org/en-US/Add-ons/Code_snippets/Preferences)
 	* [内嵌选项](https://developer.mozilla.org/docs/Mozilla/Add-ons/Inline_Options)
-	* [setting.xml](http://mxr.mozilla.org/mozilla-central/source/toolkit/mozapps/extensions/content/setting.xml)
+	* [setting.xml](https://mxr.mozilla.org/mozilla-central/source/toolkit/mozapps/extensions/content/setting.xml)
 * **L10n**
 	* [本地化](https://developer.mozilla.org/docs/Mozilla/Tech/XUL/Tutorial/Localization)
 	* [Localizing an extension](https://developer.mozilla.org/docs/Mozilla/Localization/Localizing_an_extension)
@@ -72,4 +72,7 @@
 * **附加参考**
 	* [严格模式](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Strict_mode)
 
-## Others
+## [Web API 接口](https://developer.mozilla.org/docs/Web/API)
+* [Notification](https://developer.mozilla.org/docs/Web/API/notification)
+* [TextDecoder](https://developer.mozilla.org/docs/Web/API/TextDecoder)
+* [XMLHttpRequest](https://developer.mozilla.org/docs/Web/API/XMLHttpRequest)
