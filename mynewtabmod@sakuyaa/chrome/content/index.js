@@ -352,7 +352,7 @@ var myNewTabMod = {
 			t.src = imageUrl;
 			t.onload = () => {
 				file.create(file.NORMAL_FILE_TYPE, parseInt('0777', 8));
-				Downloads.fetch(Services.io.newURI(imageUrl, null, null), file).then(function() {   //Requires Gecko 26.0
+				Downloads.fetch(Services.io.newURI(imageUrl, null, null), file).then(() => {   //Requires Gecko 26.0
 					this.setAndSave(filePath);
 				}, this.log);
 			};
