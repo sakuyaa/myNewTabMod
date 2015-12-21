@@ -30,8 +30,20 @@ var myNewTabMod = {
 		useBingImage: true,   //使用bing的背景图片
 		weatherSrc: 'http://i.tianqi.com/index.php?c=code&id=8&num=3'   //天气代码的URL
 	},
+	
+	log: function(e) {
+		if (e.lineNumber) {
+			console.log('myNewTabMod bootstrap line#' + e.lineNumber + ': ' + e);
+		} else {
+			console.log('myNewTabMod bootstrap: ' + e);
+		}
+	},
 	addPrefs: function() {
-		this.PREFS.title = this.stringBundle.GetStringFromName('prefs.title');
+		try {
+			this.PREFS.title = this.stringBundle.GetStringFromName('prefs.title');
+		} catch(e) {
+			this.log(e);
+		}
 		for (var [key, value] in Iterator(this.PREFS)) {
 			try {
 				switch (typeof value) {
@@ -48,7 +60,7 @@ var myNewTabMod = {
 						break;
 				}
 			} catch(e) {
-				console.log('myNewTabMod line#' + e.lineNumber + ' ' + e.name + ' : ' + e.message);
+				this.log(e);
 			}
 		}
 	},
@@ -58,30 +70,28 @@ var myNewTabMod = {
 			try {
 				OS.File.copy(oldFile, OS.Path.join(OS.Constants.Path.profileDir, path, newFilePath), {noOverwrite: true});
 			} catch(e) {
-				console.log('myNewTabMod line#' + e.lineNumber + ' ' + e.name + ' : ' + e.message);
+				this.log(e);
 			}
 		} else {   //文件夹复制操作
 			var newFileFolder = OS.Path.join(OS.Constants.Path.profileDir, path, oldFilePath);
 			try {
 				OS.File.makeDir(newFileFolder);
 			} catch(e) {
-				console.log('myNewTabMod line#' + e.lineNumber + ' ' + e.name + ' : ' + e.message);
+				this.log(e);
 			}
 			let iterator = new OS.File.DirectoryIterator(oldFile);
-			iterator.forEach(function onEntry(entry) {
+			iterator.forEach(entry => {
 				try {
 					OS.File.copy(entry.path, OS.Path.join(newFileFolder, OS.Path.basename(entry.path)), {noOverwrite: true});
 				} catch(e) {
-					console.log('myNewTabMod line#' + e.lineNumber + ' ' + e.name + ' : ' + e.message);
+					this.log(e);
 				}
-			}).then(
-				function onSuccess() {
-					iterator.close();
-				},
-				function onFailure(reason) {
-					iterator.close();
-				}
-			);
+			}).then(() => {
+				iterator.close();
+			}, reason => {
+				iterator.close();
+				this.log(reason);
+			});
 		}
 	},
 	setNewTabURL: function(reset) {
@@ -139,7 +149,11 @@ var factory;
 
 /*bootstrap entry points*/
 var startup = function(data, reason) {
-	factory = new Factory(AboutModule);
+	try {
+		factory = new Factory(AboutModule);
+	} catch(e) {
+		myNewTabMod.log(e);
+	}
 	if (!isOldVersion) {
 		myNewTabMod.setNewTabURL();
 	}
@@ -167,9 +181,14 @@ var startup = function(data, reason) {
 				path = 'myNewTabMod';
 			}
 			if (path != 'myNewTabMod') {
-				if (Services.prompt.confirm(null, myNewTabMod.stringBundle.GetStringFromName('title.folder'),
-					myNewTabMod.stringBundle.formatStringFromName('alert.folder', [path], 1)) == false) {
-					path = 'myNewTabMod';
+				try {
+					if (Services.prompt.confirm(null, myNewTabMod.stringBundle.GetStringFromName('title.folder'),
+						myNewTabMod.stringBundle.formatStringFromName('alert.folder', [path], 1)) == false) {
+						path = 'myNewTabMod';
+					}
+				} catch(e) {
+					myNewTabMod.log(e);
+				} finally {
 					Services.prefs.setCharPref('extensions.myNewTabMod.path', path);
 				}
 			}
@@ -177,7 +196,7 @@ var startup = function(data, reason) {
 			try {
 				OS.File.makeDir(OS.Path.join(OS.Constants.Path.profileDir, path));
 			} catch(e) {
-				console.log('myNewTabMod line#' + e.lineNumber + ' ' + e.name + ' : ' + e.message);
+				myNewTabMod.log(e);
 			}
 			myNewTabMod.copyFile('ico', path, false);
 			myNewTabMod.copyFile('data.txt', path, 'data.txt');
@@ -198,7 +217,11 @@ var shutdown = function(data, reason) {
 			//故意不break
 		case ADDON_UPGRADE:
 		case ADDON_DOWNGRADE :
-			factory.unregister();
+			try {
+				factory.unregister();
+			} catch(e) {
+				myNewTabMod.log(e);
+			}
 			break;
 	}
 };
@@ -214,11 +237,15 @@ var uninstall = function(data, reason) {
 			} catch(e) {
 				path = 'myNewTabMod';
 			}
-			if (Services.prompt.confirm(null, myNewTabMod.stringBundle.GetStringFromName('title.delete'),
-				myNewTabMod.stringBundle.formatStringFromName('alert.delete', [path], 1))) {
-				OS.File.removeDir(OS.Path.join(OS.Constants.Path.profileDir, path)).catch(function(e) {
-					console.log('myNewTabMod line#' + e.lineNumber + ' ' + e.name + ' : ' + e.message);
-				});
+			try {
+				if (Services.prompt.confirm(null, myNewTabMod.stringBundle.GetStringFromName('title.delete'),
+					myNewTabMod.stringBundle.formatStringFromName('alert.delete', [path], 1))) {
+					OS.File.removeDir(OS.Path.join(OS.Constants.Path.profileDir, path)).catch(e => {
+						myNewTabMod.log(e);
+					});
+				}
+			} catch(e) {
+				myNewTabMod.log(e);
 			}
 			//故意不break，使得扩展移除并安装后能刷新stringBundle
 		case ADDON_UPGRADE:
