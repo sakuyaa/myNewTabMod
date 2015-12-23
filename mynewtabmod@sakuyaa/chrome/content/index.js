@@ -42,6 +42,9 @@ var myNewTabMod = {
 	
 	//显示桌面通知
 	notify: function(title, content) {
+		if (!Notification) {
+			return;
+		}
 		if (Notification.permission === 'granted') {
 			new Notification(title, {body: content});
 		} else if (Notification.permission !== 'denied') {
@@ -93,7 +96,7 @@ var myNewTabMod = {
 	//编辑配置
 	edit: function() {
 		var editor = Services.prefs.getComplexValue('view_source.editor.path', Ci.nsISupportsString).toString();
-		new Promise((resolve, reject) => {
+		new Promise((resolve, reject) => {   //Requires Gecko 29.0
 			OS.File.exists(editor).then(aExists => {
 				if (aExists) {
 					var file = Cc['@mozilla.org/file/local;1'].createInstance(Ci.nsILocalFile);
@@ -297,11 +300,16 @@ var myNewTabMod = {
 		this.initSite();
 		this.initImage();
 		
-		document.getElementById('weather').onload = function() {   //为天气iframe设置css
-			var domWindowUtils = document.getElementById('weather').contentWindow.QueryInterface(Ci.nsIInterfaceRequestor).getInterface(Ci.nsIDOMWindowUtils);
+		var weather = document.getElementById('weather');
+		new Promise((resolve, reject) => {
+			weather.onload = function() {
+				resolve();
+			};
+			weather.src = this.PREFS.weatherSrc;
+		}).then(function() {   //为天气iframe设置css
+			var domWindowUtils = weather.contentWindow.QueryInterface(Ci.nsIInterfaceRequestor).getInterface(Ci.nsIDOMWindowUtils);
 			domWindowUtils.loadSheet(Services.io.newURI('chrome://mynewtabmod/skin/weather.css', null, null), domWindowUtils.USER_SHEET);
-		};
-		document.getElementById('weather').src = this.PREFS.weatherSrc;
+		});
 	},
 	
 	//设置背景图片并保存设置
