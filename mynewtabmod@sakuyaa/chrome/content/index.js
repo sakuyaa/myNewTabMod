@@ -305,7 +305,9 @@ var myNewTabMod = {
 			weather.onload = function() {
 				resolve();
 			};
-			weather.src = this.PREFS.weatherSrc;
+			setTimeout(() => {
+				weather.src = this.PREFS.weatherSrc;
+			}, 100);
 		}).then(function() {   //为天气iframe设置css
 			var domWindowUtils = weather.contentWindow.QueryInterface(Ci.nsIInterfaceRequestor).getInterface(Ci.nsIDOMWindowUtils);
 			domWindowUtils.loadSheet(Services.io.newURI('chrome://mynewtabmod/skin/weather.css', null, null), domWindowUtils.USER_SHEET);
