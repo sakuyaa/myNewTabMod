@@ -8,7 +8,7 @@
 const {classes: Cc, interfaces: Ci, manager: Cm, utils: Cu/*, results: Cr*/} = Components;
 Cu.import('resource://gre/modules/osfile.jsm')
 Cu.import('resource://gre/modules/Services.jsm');
-Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+Cu.import('resource://gre/modules/XPCOMUtils.jsm');
 const isOldVersion = Services.vc.compare(Services.appinfo.platformVersion, '41') < 0;
 const isNewVersion = Services.vc.compare(Services.appinfo.platformVersion, '44') >= 0;
 if (!isOldVersion && !isNewVersion) {
