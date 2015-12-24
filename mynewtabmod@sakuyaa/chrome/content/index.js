@@ -117,6 +117,8 @@ var myNewTabMod = {
 							if (aResult !== fp.returnCancel) {
 								Services.prefs.setComplexValue('view_source.editor.path', Ci.nsIFile, fp.file);
 								resolve(fp.file);
+							} else {
+								reject('returnCancel');
 							}
 						}
 					};
@@ -349,7 +351,7 @@ var myNewTabMod = {
 					reject(new Error(xhr.statusText));
 				}
 			};
-			xhr.onerror = function() {
+			xhr.onerror = () => {
 				reject(new Error(this.stringBundle.GetStringFromName('notify.networkError')));
 			};
 			xhr.send(null);
