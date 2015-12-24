@@ -42,18 +42,23 @@ var myNewTabMod = {
 	
 	//显示桌面通知
 	notify: function(title, content) {
-		if (!Notification) {
-			return;
-		}
-		if (Notification.permission === 'granted') {
-			new Notification(title, {body: content});
-		} else if (Notification.permission !== 'denied') {
+		new Promise((resolve, reject) => {   //Requires Gecko 29.0
+			if (!Notification || Notification.permission === 'denied') {
+				reject();
+			}
+			if (Notification.permission === 'granted') {
+				resolve();
+			}
 			Notification.requestPermission(permission => {
 				if (permission === 'granted') {
-					new Notification(title, {body: content});
+					resolve();
+				} else {
+					reject();
 				}
 			});
-		}
+		}).then(() => {
+			new Notification(title, {body: content, icon: 'chrome://mynewtabmod/skin/sakuyaa.png'});
+		});
 	},
 	
 	//切换|下载背景图
