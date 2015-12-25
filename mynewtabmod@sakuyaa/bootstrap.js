@@ -166,13 +166,12 @@ var startup = function(data, reason) {
 			Services.prefs.setCharPref('browser.startup.homepage', 'about:mynewtabmod');
 			break;
 		case ADDON_INSTALL:
+		case ADDON_UPGRADE:
+		case ADDON_DOWNGRADE:
 			if (isOldVersion) {
 				Services.prefs.setCharPref('browser.newtab.url', 'about:mynewtabmod');
 			}
 			Services.prefs.setCharPref('browser.startup.homepage', 'about:mynewtabmod');
-			//故意不break
-		case ADDON_UPGRADE:
-		case ADDON_DOWNGRADE:
 			//以下代码不写在install里，是因为install调用在Registering manifest之前，无法使用stringBundle
 			var path;
 			try {
