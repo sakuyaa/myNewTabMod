@@ -274,19 +274,18 @@ var myNewTabMod = {
 	//初始化背景图片
 	initImage: function() {
 		if (this.PREFS.useBingImage) {   //获取bing中国主页的背景图片
-			if (this.PREFS.jsonData.backgroundImage &&
-				(Date.now() - this.PREFS.jsonData.lastCheckTime) < this.PREFS.updateImageTime * 3600 * 1000) {
-				OS.File.exists(this.PREFS.jsonData.backgroundImage).then(aExists => {
-					if (aExists) {
-						document.body.style.backgroundImage = 'url("' + OS.Path.toFileURI(this.PREFS.jsonData.backgroundImage) + '")';
+			OS.File.exists(this.PREFS.jsonData.backgroundImage).then(aExists => {
+				if (aExists) {
+					document.body.style.backgroundImage = 'url("' + OS.Path.toFileURI(this.PREFS.jsonData.backgroundImage) + '")';
+					if ((Date.now() - this.PREFS.jsonData.lastCheckTime) < this.PREFS.updateImageTime * 3600 * 1000) {
 						this.bingIndex++;
 					} else {
 						this.getBingImage();
 					}
-				}).catch(this.log);
-			} else {
-				this.getBingImage();
-			}
+				} else {
+					this.getBingImage();
+				}
+			}).catch(this.log);
 		} else {   //使用本地图片
 			OS.File.exists(this.PREFS.backgroundImage).then(aExists => {
 				if (aExists) {
