@@ -138,15 +138,15 @@ var myNewTabMod = {
 				continue;
 			}
 			switch (this.prefs.getPrefType(key)) {
-				case this.prefs.PREF_STRING:
-					this.PREFS[key] = this.prefs.getComplexValue(key, Ci.nsISupportsString).toString();
-					break;
-				case this.prefs.PREF_INT:
-					this.PREFS[key] = this.prefs.getIntPref(key);
-					break;
-				case this.prefs.PREF_BOOL:
-					this.PREFS[key] = this.prefs.getBoolPref(key);
-					break;
+			case this.prefs.PREF_STRING:
+				this.PREFS[key] = this.prefs.getComplexValue(key, Ci.nsISupportsString).toString();
+				break;
+			case this.prefs.PREF_INT:
+				this.PREFS[key] = this.prefs.getIntPref(key);
+				break;
+			case this.prefs.PREF_BOOL:
+				this.PREFS[key] = this.prefs.getBoolPref(key);
+				break;
 			}
 		}
 		try {
