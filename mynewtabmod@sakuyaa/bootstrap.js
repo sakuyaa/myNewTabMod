@@ -25,7 +25,6 @@ var myNewTabMod = {
 		isNewTab: true,   //是否新标签页打开导航链接或搜索结果
 		path: 'myNewTabMod',   //myNewTabMod文件夹的相对于配置文件的路径
 		title: '我的主页',   //网页标题
-		updateImageTime: 12,   //更新bing背景图片的间隔（单位：小时）
 		useBigImage: true,   //bing图片的尺寸，0为默认的1366x768，1为1920x1080
 		useBingImage: true,   //使用bing的背景图片
 		weatherSrc: 'http://i.tianqi.com/index.php?c=code&id=8&num=3'   //天气代码的URL

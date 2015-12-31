@@ -9,7 +9,6 @@
 <!ENTITY title.isNewTab "新标签页打开链接">
 <!ENTITY title.path "扩展数据文件夹名">
 <!ENTITY title.title "主页标题">
-<!ENTITY title.updateImageTime "更新壁纸的间隔（小时）">
 <!ENTITY title.useBigImage "壁纸尺寸">
 <!ENTITY title.useBingImage "使用Bing壁纸">
 <!ENTITY title.weatherSrc "天气代码URL">

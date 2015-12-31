@@ -44,7 +44,6 @@
 		this.valueFromPreference();">
 		&content.backgroundImage;
 	</setting>
-	<setting pref="extensions.myNewTabMod.updateImageTime" type="integer" title="&title.updateImageTime;" />
 	<setting pref="extensions.myNewTabMod.title" type="string" title="&title.title;" />
 	<setting pref="extensions.myNewTabMod.path" type="string" title="&title.path;">&content.path;</setting>
 	<setting pref="extensions.myNewTabMod.imageDir" type="string" title="&title.imageDir;">&content.imageDir;</setting>

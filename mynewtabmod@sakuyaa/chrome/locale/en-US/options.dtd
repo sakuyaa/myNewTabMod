@@ -9,7 +9,6 @@
 <!ENTITY title.isNewTab "Open in new tab">
 <!ENTITY title.path "Data folder">
 <!ENTITY title.title "NewTab Title">
-<!ENTITY title.updateImageTime "Interval of changing Bing Image">
 <!ENTITY title.useBigImage "Image dimensions">
 <!ENTITY title.useBingImage "Use Bing Image">
 <!ENTITY title.weatherSrc "Weather URL">
