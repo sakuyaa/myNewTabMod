@@ -25,7 +25,6 @@ var myNewTabMod = {
 		isNewTab: true,   //是否新标签页打开导航链接或搜索结果
 		path: 'myNewTabMod',   //myNewTabMod文件夹的相对于配置文件的路径
 		title: '我的主页',   //网页标题
-		updateImageTime: 12,   //更新bing背景图片的间隔（单位：小时）
 		useBigImage: true,   //bing图片的尺寸，0为默认的1366x768，1为1920x1080
 		useBingImage: true,   //使用bing的背景图片
 		weatherSrc: 'http://i.tianqi.com/index.php?c=code&id=8&num=3'   //天气代码的URL
@@ -64,13 +63,12 @@ var myNewTabMod = {
 	//切换|下载背景图
 	changeImg: function() {
 		if (this.PREFS.useBingImage) {
-			if (this.PREFS.jsonData.backgroundImage &&
-				(Date.now() - this.PREFS.jsonData.lastCheckTime) < this.PREFS.updateImageTime * 3600 * 1000) {
-				this.getBingImage();
-			} else {
-				this.bingIndex = 0;   //超过时间重新从最新的开始获取
-				this.getBingImage();
+			var today = new Date();
+			today.setHours(0, 0, 0);   //毫秒就不管了
+			if (this.PREFS.jsonData.lastCheckTime && new Date(this.PREFS.jsonData.lastCheckTime) < today) {
+				this.bingIndex = 0;   //过0点重新获取
 			}
+			this.getBingImage();
 			return;
 		}
 		var fp = Cc['@mozilla.org/filepicker;1'].createInstance(Ci.nsIFilePicker);
@@ -277,10 +275,12 @@ var myNewTabMod = {
 			OS.File.exists(this.PREFS.jsonData.backgroundImage).then(aExists => {
 				if (aExists) {
 					document.body.style.backgroundImage = 'url("' + OS.Path.toFileURI(this.PREFS.jsonData.backgroundImage) + '")';
-					if ((Date.now() - this.PREFS.jsonData.lastCheckTime) < this.PREFS.updateImageTime * 3600 * 1000) {
+					var today = new Date();
+					today.setHours(0, 0, 0);   //毫秒就不管了
+					if (this.PREFS.jsonData.lastCheckTime && new Date(this.PREFS.jsonData.lastCheckTime) < today) {
+						this.getBingImage();   //过0点重新获取
+					} else{
 						this.bingIndex++;
-					} else {
-						this.getBingImage();
 					}
 				} else {
 					this.getBingImage();
