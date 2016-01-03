@@ -224,7 +224,6 @@ var install = function(data, reason) {
 var uninstall = function(data, reason) {
 	switch (reason) {
 	case ADDON_UNINSTALL:
-		myNewTabMod.prefs.deleteBranch('');   //升降级不删除参数
 		var path;
 		try {
 			path = Services.prefs.getComplexValue('extensions.myNewTabMod.path', Ci.nsISupportsString).toString();
@@ -241,6 +240,7 @@ var uninstall = function(data, reason) {
 		} catch(e) {
 			myNewTabMod.log(e);
 		}
+		myNewTabMod.prefs.deleteBranch('');   //升降级不删除参数
 		//故意不break，使得扩展移除并安装后能刷新stringBundle
 	case ADDON_UPGRADE:
 	case ADDON_DOWNGRADE:
