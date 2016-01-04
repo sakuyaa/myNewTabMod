@@ -8,6 +8,8 @@
 <!ENTITY title.imageDir "Bing Image folder">
 <!ENTITY title.isNewTab "Open in new tab">
 <!ENTITY title.path "Data folder">
+<!ENTITY title.setHomePage "Set as homepage">
+<!ENTITY title.setNewTab "Set as newtab">
 <!ENTITY title.title "NewTab Title">
 <!ENTITY title.useBigImage "Image dimensions">
 <!ENTITY title.useBingImage "Use Bing Image">

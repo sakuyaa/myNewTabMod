@@ -6,7 +6,7 @@
 'use strict';
 
 const {classes: Cc, interfaces: Ci, manager: Cm, utils: Cu/*, results: Cr*/} = Components;
-Cu.import('resource://gre/modules/osfile.jsm')
+Cu.import('resource://gre/modules/osfile.jsm');
 Cu.import('resource://gre/modules/Services.jsm');
 Cu.import('resource://gre/modules/XPCOMUtils.jsm');
 const isOldVersion = Services.vc.compare(Services.appinfo.platformVersion, '41') < 0;
@@ -19,6 +19,8 @@ var myNewTabMod = {
 	stringBundle: Services.strings.createBundle('chrome://mynewtabmod/locale/global.properties'),   //本地化
 	prefs: Services.prefs.getDefaultBranch('extensions.myNewTabMod.'),
 	PREFS: {
+		setHomePage: true,   //设置为主页
+		setNewTab: true,   //设置为新标签页
 		backgroundImage: '',   //背景图片地址
 		bingMaxHistory: 10,   //最大历史天数，可设置[2, 16]
 		imageDir: 'bingImg',   //图片存储的文件夹名字
@@ -93,19 +95,49 @@ var myNewTabMod = {
 			});
 		}
 	},
-	setNewTabURL: function(reset) {
-		if (isNewVersion) {
-			if(reset) {
+	
+	//设置主页和新标签页
+	setHomePage: function(reset) {
+		//reset为undefined，随setHomePage参数改变而设置；reset为true或false时，仅当setHomePage参数为true时设置
+		var url = this.prefs.prefHasUserValue('setHomePage') ? null : 'about:mynewtabmod';
+		if (url && !reset) {
+			Services.prefs.setCharPref('browser.startup.homepage', url);
+		} else if (url && reset || !url && reset == undefined) {
+			Services.prefs.clearUserPref('browser.startup.homepage');
+		}
+	},
+	setNewTab: function(reset) {
+		var url = this.prefs.prefHasUserValue('setNewTab') ? null : 'about:mynewtabmod';
+		if (url && !reset) {
+			if (isNewVersion) {
+				Cc['@mozilla.org/browser/aboutnewtab-service;1'].getService(Ci.nsIAboutNewTabService).newTabURL = url;
+			} else {
+				isOldVersion ? Services.prefs.setCharPref('browser.newtab.url', url) : NewTabURL.override(url);
+			}
+		} else if (url && reset || !url && reset == undefined) {
+			if (isNewVersion) {
 				Cc['@mozilla.org/browser/aboutnewtab-service;1'].getService(Ci.nsIAboutNewTabService).resetNewTabURL();
 			} else {
-				Cc['@mozilla.org/browser/aboutnewtab-service;1'].getService(Ci.nsIAboutNewTabService).newTabURL = 'about:mynewtabmod';
+				isOldVersion ? Services.prefs.clearUserPref('browser.newtab.url') : NewTabURL.reset();
 			}
-		} else {
-			if(reset) {
-				NewTabURL.reset();
-			} else {
-				NewTabURL.override('about:mynewtabmod');
-			}
+		}
+	},
+	
+	//参数的改变
+	register: function() {
+		this.prefs.addObserver('', this, false);
+	},
+	unregister: function() {
+		this.prefs.removeObserver('', this);
+	},
+	observe: function(aSubject, aTopic, aData) {
+		switch (aData) {
+		case 'setHomePage':
+			this.setHomePage();
+			break;
+		case 'setNewTab':
+			this.setNewTab();
+			break;
 		}
 	}
 };
@@ -140,7 +172,7 @@ function Factory(component) {
 	};
 	this.unregister = function() {
 		Cm.unregisterFactory(component.prototype.classID, this);
-	}
+	};
 	Object.freeze(this);
 	this.register();
 }
@@ -153,10 +185,9 @@ var startup = function(data, reason) {
 	} catch(e) {
 		myNewTabMod.log(e);
 	}
-	if (!isOldVersion) {
-		myNewTabMod.setNewTabURL();
-	}
 	myNewTabMod.addPrefs();
+	myNewTabMod.register();
+	myNewTabMod.setNewTab(false);
 	switch (reason) {
 	case ADDON_INSTALL:
 	case ADDON_UPGRADE:
@@ -191,10 +222,7 @@ var startup = function(data, reason) {
 		myNewTabMod.copyFile('style.css', path, 'style.css');
 		//故意不break
 	case ADDON_ENABLE:
-		if (isOldVersion) {
-			Services.prefs.setCharPref('browser.newtab.url', 'about:mynewtabmod');
-		}
-		Services.prefs.setCharPref('browser.startup.homepage', 'about:mynewtabmod');
+		myNewTabMod.setHomePage(false);
 	}
 };
 var shutdown = function(data, reason) {
@@ -202,12 +230,8 @@ var shutdown = function(data, reason) {
 	case ADDON_DISABLE:
 	case ADDON_UNINSTALL:
 		//https://bugzilla.mozilla.org/show_bug.cgi?id=620541
-		if (isOldVersion) {
-			Services.prefs.clearUserPref('browser.newtab.url');
-		} else {
-			myNewTabMod.setNewTabURL(true);
-		}
-		Services.prefs.clearUserPref('browser.startup.homepage');
+		myNewTabMod.setHomePage(true);
+		myNewTabMod.setNewTab(true);
 		//故意不break
 	case ADDON_UPGRADE:
 	case ADDON_DOWNGRADE :
@@ -216,6 +240,7 @@ var shutdown = function(data, reason) {
 		} catch(e) {
 			myNewTabMod.log(e);
 		}
+		myNewTabMod.unregister();
 		break;
 	}
 };

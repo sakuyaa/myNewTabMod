@@ -8,6 +8,8 @@
 <!ENTITY title.imageDir "壁紙存儲文件夾名">
 <!ENTITY title.isNewTab "新標籤頁打開連結">
 <!ENTITY title.path "擴展資料文件夾名">
+<!ENTITY title.setHomePage "設置為主頁">
+<!ENTITY title.setNewTab "設置為新標籤頁">
 <!ENTITY title.title "主頁標題">
 <!ENTITY title.useBigImage "壁紙尺寸">
 <!ENTITY title.useBingImage "使用Bing壁紙">
