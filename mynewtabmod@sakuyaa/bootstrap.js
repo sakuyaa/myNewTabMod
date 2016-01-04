@@ -131,13 +131,15 @@ var myNewTabMod = {
 		this.prefs.removeObserver('', this);
 	},
 	observe: function(aSubject, aTopic, aData) {
-		switch (aData) {
-		case 'setHomePage':
-			this.setHomePage();
-			break;
-		case 'setNewTab':
-			this.setNewTab();
-			break;
+		if (aTopic == 'nsPref:changed') {
+			switch (aData) {
+			case 'setHomePage':
+				this.setHomePage();
+				break;
+			case 'setNewTab':
+				this.setNewTab();
+				break;
+			}
 		}
 	}
 };
