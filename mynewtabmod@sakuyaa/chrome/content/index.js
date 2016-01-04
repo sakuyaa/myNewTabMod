@@ -8,7 +8,7 @@
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 const {PlacesUtils} = Cu.import('resource://gre/modules/PlacesUtils.jsm');
 Cu.import('resource://gre/modules/Downloads.jsm');
-Cu.import('resource://gre/modules/osfile.jsm')
+Cu.import('resource://gre/modules/osfile.jsm');
 Cu.import('resource://gre/modules/Services.jsm');
 
 var myNewTabMod = {
@@ -279,7 +279,7 @@ var myNewTabMod = {
 					today.setHours(0, 0, 0);   //毫秒就不管了
 					if (this.PREFS.jsonData.lastCheckTime && new Date(this.PREFS.jsonData.lastCheckTime) < today) {
 						this.getBingImage();   //过0点重新获取
-					} else{
+					} else {
 						this.bingIndex++;
 					}
 				} else {
@@ -338,8 +338,7 @@ var myNewTabMod = {
 	
 	getBingImage: function() {
 		new Promise((resolve, reject) => {
-			var url = 'http://cn.bing.com/HPImageArchive.aspx?format=js&idx=' +
-			this.bingIndex++ % this.PREFS.bingMaxHistory + '&n=1&nc=';
+			var url = 'http://cn.bing.com/HPImageArchive.aspx?format=js&n=1&idx=' + this.bingIndex++ % this.PREFS.bingMaxHistory;
 			//var url = 'http://www.bing.com/HPImageArchive.aspx?format=js&idx=' + idx + '&n=1&nc=' + Date.now() + '&pid=hp&scope=web';
 			var xhr = new XMLHttpRequest();
 			xhr.open('GET', url, true);

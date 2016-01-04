@@ -67,7 +67,7 @@ var myNewTabMod = {
 	},
 	copyFile: function(oldFilePath, path, newFilePath) {
 		var oldFile = OS.Path.join(OS.Constants.Path.profileDir, 'extensions', 'mynewtabmod@sakuyaa', 'myNewTabMod', oldFilePath);
-		if(newFilePath) {
+		if (newFilePath) {
 			try {
 				OS.File.copy(oldFile, OS.Path.join(OS.Constants.Path.profileDir, path, newFilePath), {noOverwrite: true});
 			} catch(e) {
