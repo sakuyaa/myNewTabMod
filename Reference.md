@@ -53,6 +53,7 @@
 * [nsIFile](https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIFile)
 * [nsIFilePicker](https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIFilePicker)
 * [nsILocalFile](https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsILocalFile)
+* [nsIObserver](https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIObserver)
 * [nsIProcess](https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIProcess)
 * [nsIStringBundle](https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIStringBundle)
 
