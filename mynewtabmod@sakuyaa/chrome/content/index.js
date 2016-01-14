@@ -355,6 +355,11 @@ var myNewTabMod = {
 			xhr.send(null);
 		}).then(data => {
 			var name = data.images[0].copyright;
+			name = name.replace(/(\s|\(.*?\))/g, '')
+				.replace(/(\\|\/|\*|\|)/g, '')   //Win文件名不能包含下列字符
+				.replace(/(:)/g, '：')
+				.replace(/(\?)/g, '？')
+				.replace(/("|<|>)/g, '\'');
 			var enddate = parseInt(data.images[0].enddate);
 			var imageUrl = data.images[0].url;
 			
@@ -367,7 +372,7 @@ var myNewTabMod = {
 			}
 			
 			//本地图片
-			var filePath = OS.Path.join(this.dataFolder, this.PREFS.imageDir, enddate + '-' + name.replace(/(\s|\(.*?\))/g, '') + '.jpg');
+			var filePath = OS.Path.join(this.dataFolder, this.PREFS.imageDir, enddate + '-' + name + '.jpg');
 			var file = Cc['@mozilla.org/file/local;1'].createInstance(Ci.nsILocalFile);
 			try {
 				file.initWithPath(filePath);
