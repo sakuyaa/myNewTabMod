@@ -338,7 +338,7 @@ var myNewTabMod = {
 	
 	getBingImage: function() {
 		new Promise((resolve, reject) => {
-			var url = 'http://cn.bing.com/HPImageArchive.aspx?format=js&n=1&idx=' + this.bingIndex++ % this.PREFS.bingMaxHistory;
+			var url = 'http://cn.bing.com/HPImageArchive.aspx?format=js&n=1&mkt=zh-CN&idx=' + this.bingIndex++ % this.PREFS.bingMaxHistory;
 			//var url = 'http://www.bing.com/HPImageArchive.aspx?format=js&idx=' + idx + '&n=1&nc=' + Date.now() + '&pid=hp&scope=web';
 			var xhr = new XMLHttpRequest();
 			xhr.open('GET', url, true);
