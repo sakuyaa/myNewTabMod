@@ -156,26 +156,6 @@ var myNewTabMod = {
 			this.PREFS.jsonData = {};
 		}
 	},
-	//新标签页事件
-	tabOpen: function(event) {
-		var gBrowser =  Cc['@mozilla.org/appshell/window-mediator;1'].getService(Ci.nsIWindowMediator).getMostRecentWindow('navigator:browser').gBrowser;
-		setTimeout(() => {   //不延迟的话currentURI仍为about:blank
-			if (gBrowser.getBrowserForTab(event.target).currentURI.spec == 'about:mynewtabmod') {
-				for (var index = 0; index < gBrowser.browsers.length; index++) {
-					if (index == event.target._tPos) {   //跳过当前打开的标签页
-						continue;
-					}
-					if (gBrowser.getBrowserAtIndex(index).currentURI.spec == 'about:mynewtabmod') {   //使用已有标签页
-						gBrowser.removeTab(event.target);
-						setTimeout(() => {   //延迟选中标签页
-							gBrowser.selectedTab = gBrowser.tabContainer.childNodes[index];
-						}, 10);
-						return;
-					}
-				}
-			}
-		}, 10);
-	},
 	//初始化数据文件
 	initFile: function() {
 		this.dataFolder = OS.Path.join(OS.Constants.Path.profileDir, this.PREFS.path);
@@ -320,9 +300,16 @@ var myNewTabMod = {
 	
 	init: function() {
 		this.getPrefs();
-		Cc['@mozilla.org/appshell/window-mediator;1'].getService(Ci.nsIWindowMediator).getMostRecentWindow('navigator:browser').gBrowser.tabContainer.addEventListener("TabOpen", this.tabOpen, false);
-	},
-	initPage: function() {
+		
+		var chromeWin = Cc['@mozilla.org/appshell/window-mediator;1'].getService(Ci.nsIWindowMediator).getMostRecentWindow('navigator:browser');
+		chromeWin.BrowserOpenNewTabOrWindow = event => {   //http://bbs.kafan.cn/thread-2040917-1-1.html
+			if (event.shiftKey) {
+				chromeWin.OpenBrowserWindow();
+			} else {
+				chromeWin.switchToTabHavingURI('about:mynewtabmod', true);
+			}
+		}
+		
 		this.initFile();
 		this.initDate();
 		this.initDocument();
@@ -584,8 +571,7 @@ var myNewTabMod = {
 	}
 };
 
-myNewTabMod.init();
 addEventListener('load', function onLoad() {
 	removeEventListener('load', onLoad, true);
-	myNewTabMod.initPage();
+	myNewTabMod.init();
 }, false);
