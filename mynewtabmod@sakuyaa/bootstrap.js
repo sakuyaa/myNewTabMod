@@ -26,6 +26,7 @@ var myNewTabMod = {
 		imageDir: 'bingImg',   //图片存储的文件夹名字
 		isNewTab: true,   //是否新标签页打开导航链接或搜索结果
 		path: 'myNewTabMod',   //myNewTabMod文件夹的相对于配置文件的路径
+		reuseNewTab: true,   //重用新标签页
 		title: '我的主页',   //网页标题
 		useBigImage: true,   //bing图片的尺寸，0为默认的1366x768，1为1920x1080
 		useBingImage: true,   //使用bing的背景图片

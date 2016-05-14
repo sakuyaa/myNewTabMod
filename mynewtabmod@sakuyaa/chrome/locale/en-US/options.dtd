@@ -2,12 +2,14 @@
 <!ENTITY content.bingMaxHistory "Random select Bing Image during this period.">
 <!ENTITY content.imageDir "The folder which stores Bing Image, located in the data folder above.">
 <!ENTITY content.path "The folder contains some extension data, located in the firefox profile.">
+<!ENTITY content.reuseNewTab "Setting disable will not take effect until browser restart.">
 
 <!ENTITY title.backgroundImage "Background Image">
 <!ENTITY title.bingMaxHistory "Days of Bing Image history">
 <!ENTITY title.imageDir "Bing Image folder">
 <!ENTITY title.isNewTab "Open in new tab">
 <!ENTITY title.path "Data folder">
+<!ENTITY title.reuseNewTab "Reuse newtab page">
 <!ENTITY title.setHomePage "Set as homepage">
 <!ENTITY title.setNewTab "Set as newtab">
 <!ENTITY title.title "NewTab Title">

@@ -2,12 +2,14 @@
 <!ENTITY content.bingMaxHistory "切換壁紙時將會隨機選取歷史天數之內的壁紙。">
 <!ENTITY content.imageDir "壁紙存儲文件夾位於擴展資料文件夾內。">
 <!ENTITY content.path "該擴展的一些檔案將儲存於此，這是相對於火狐設定文件夾的路徑。">
+<!ENTITY content.reuseNewTab "關閉此選項需要重啟瀏覽器才能生效。">
 
 <!ENTITY title.backgroundImage "背景圖片位址">
 <!ENTITY title.bingMaxHistory "Bing壁紙最大歷史天數">
 <!ENTITY title.imageDir "壁紙存儲文件夾名">
 <!ENTITY title.isNewTab "新標籤頁打開連結">
 <!ENTITY title.path "擴展資料文件夾名">
+<!ENTITY title.reuseNewTab "重用新標籤頁">
 <!ENTITY title.setHomePage "設置為主頁">
 <!ENTITY title.setNewTab "設置為新標籤頁">
 <!ENTITY title.title "主頁標題">

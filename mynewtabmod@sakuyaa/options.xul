@@ -4,6 +4,7 @@
 <vbox xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 	<setting pref="extensions.myNewTabMod.setHomePage" type="bool" title="&title.setHomePage;" />
 	<setting pref="extensions.myNewTabMod.setNewTab" type="bool" title="&title.setNewTab;" />
+	<setting pref="extensions.myNewTabMod.reuseNewTab" type="bool" title="&title.reuseNewTab;">&content.reuseNewTab;</setting>
 	<setting pref="extensions.myNewTabMod.useBingImage" type="bool" title="&title.useBingImage;" />
 	<setting pref="extensions.myNewTabMod.isNewTab" type="bool" title="&title.isNewTab;" />
 	<setting pref="extensions.myNewTabMod.bingMaxHistory" type="menulist" title="&title.bingMaxHistory;">

@@ -2,12 +2,14 @@
 <!ENTITY content.bingMaxHistory "切换壁纸时将会随机选取历史天数之内的壁纸。">
 <!ENTITY content.imageDir "壁纸存储文件夹位于扩展数据文件夹内。">
 <!ENTITY content.path "该扩展的一些文件将储存于此，这是相对于火狐配置文件夹的路径。">
+<!ENTITY content.reuseNewTab "关闭此选项需要重启浏览器才能生效。">
 
 <!ENTITY title.backgroundImage "背景图片地址">
 <!ENTITY title.bingMaxHistory "Bing壁纸最大历史天数">
 <!ENTITY title.imageDir "壁纸存储文件夹名">
 <!ENTITY title.isNewTab "新标签页打开链接">
 <!ENTITY title.path "扩展数据文件夹名">
+<!ENTITY title.reuseNewTab "重用新标签页">
 <!ENTITY title.setHomePage "设置为主页">
 <!ENTITY title.setNewTab "设置为新标签页">
 <!ENTITY title.title "主页标题">
