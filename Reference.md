@@ -20,6 +20,7 @@
 	* [自引导型扩展](https://developer.mozilla.org/docs/Mozilla/Add-ons/Bootstrapped_extensions)
 	* [File I/O](https://developer.mozilla.org/en-US/Add-ons/Code_snippets/File_I_O)
 	* [Custom about: URLs](https://developer.mozilla.org/docs/Custom_about:_URLs)
+	* [browser.js](http://mxr.mozilla.org/mozilla-central/source/browser/base/content/browser.js)
 
 ## [JavaScript code modules](https://developer.mozilla.org/docs/Mozilla/JavaScript_code_modules/Using)
 1. **[Downloads.jsm](https://developer.mozilla.org/docs/Mozilla/JavaScript_code_modules/Downloads.jsm)**
@@ -56,6 +57,12 @@
 * [nsIObserver](https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIObserver)
 * [nsIProcess](https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIProcess)
 * [nsIStringBundle](https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIStringBundle)
+* [nsIWindowMediator](https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIWindowMediator)
+
+## [XUL](https://developer.mozilla.org/docs/Mozilla/Tech/XUL)
+* [browser](https://developer.mozilla.org/docs/Mozilla/Tech/XUL/browser)
+* [tab](https://developer.mozilla.org/docs/Mozilla/Tech/XUL/tab)
+* [tabbrowse](https://developer.mozilla.org/docs/Mozilla/Tech/XUL/tabbrowser)
 
 ## [JavaScript](https://developer.mozilla.org/docs/Web/JavaScript/Reference)
 1. **[全局对象](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects)**
