@@ -72,6 +72,7 @@ body {
 /*导航链接*/
 #navs a {
 	color: white;
+	outline: none;   /*不显示虚框*/
 	text-decoration: none;
 }
 
