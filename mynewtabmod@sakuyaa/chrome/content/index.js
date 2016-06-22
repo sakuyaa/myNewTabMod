@@ -19,6 +19,7 @@ var myNewTabMod = {
 	prefs: Services.prefs.getBranch('extensions.myNewTabMod.'),
 	PREFS: {
 		jsonData: '',
+		setNewTab: true,   //设置为新标签页
 		backgroundImage: '',   //背景图片地址
 		bingMaxHistory: 10,   //最大历史天数，可设置[2, 16]
 		imageDir: 'bingImg',   //图片存储的文件夹名字
@@ -302,7 +303,7 @@ var myNewTabMod = {
 	init: function() {
 		this.getPrefs();
 		
-		if (this.PREFS.reuseNewTab) {
+		if (this.PREFS.setNewTab && this.PREFS.reuseNewTab) {
 			var chromeWin = Cc['@mozilla.org/appshell/window-mediator;1'].getService(Ci.nsIWindowMediator).getMostRecentWindow('navigator:browser');
 			chromeWin.BrowserOpenNewTabOrWindow = event => {   //http://bbs.kafan.cn/thread-2040917-1-1.html
 				if (event.shiftKey) {
