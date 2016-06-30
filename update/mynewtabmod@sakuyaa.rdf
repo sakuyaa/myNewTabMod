@@ -11,7 +11,7 @@
 							<em:minVersion>29.0</em:minVersion>
 							<em:maxVersion>*</em:maxVersion>
 							<em:updateLink>https://raw.githubusercontent.com/sakuyaa/myNewTabMod/master/xpi/mynewtabmod-lastest.xpi</em:updateLink>
-							<em:updateInfoURL>http://sakuyaa.github.io/myNewTabMod/updateinfo/updateinfo1.7.xhtml</em:updateInfoURL>
+							<em:updateInfoURL>http://sakuyaa.github.io/myNewTabMod/updateinfo/updateinfo1.7.1.xhtml</em:updateInfoURL>
 						</RDF:Description>
 					</em:targetApplication>
 				</RDF:Description>
