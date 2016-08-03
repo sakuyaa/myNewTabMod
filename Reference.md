@@ -37,6 +37,8 @@
 	* appinfo
 		* [nsIXULAppInfo](https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIXULAppInfo)
 		* [nsIXULRuntime](https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIXULRuntime)
+	* io
+		* [nsIIOService](https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIIOService)
 	* prefs
 		* [nsIPrefBranch](https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIPrefBranch)
 		* [nsIPrefService](https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIPrefService)
