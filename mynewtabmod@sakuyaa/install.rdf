@@ -7,7 +7,7 @@
 	<em:version>1.7.1</em:version>
 	<em:iconURL>chrome://mynewtabmod/skin/sakuyaa.png</em:iconURL>
 	<em:unpack>true</em:unpack>
-	<!--em:multiprocessCompatible>true</em:multiprocessCompatible-->
+	<em:multiprocessCompatible>true</em:multiprocessCompatible>
 	<em:type>2</em:type>
 	<em:bootstrap>true</em:bootstrap>
 	<em:updateURL>https://raw.githubusercontent.com/sakuyaa/myNewTabMod/master/update/mynewtabmod@sakuyaa.rdf</em:updateURL>
