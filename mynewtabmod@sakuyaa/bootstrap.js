@@ -157,7 +157,14 @@ AboutModule.prototype = Object.freeze({
 		return Ci.nsIAboutModule.ALLOW_SCRIPT;
 	},
 	newChannel: function(aURI) {
-		let channel = Services.io.newChannel(this.page, null, null);
+		var channel;
+		if (Services.vc.compare(Services.appinfo.platformVersion, '48') >= 0) {
+			channel = Services.io.newChannel2(this.page, null, null, null,
+				Services.scriptSecurityManager.getSystemPrincipal(), null,
+				Ci.nsILoadInfo.SEC_NORMAL, Ci.nsIContentPolicy.TYPE_OTHER);
+        } else {
+			channel = Services.io.newChannel(this.page, null, null);   //Obsolete since Gecko 48
+        }
 		channel.originalURI = aURI;
 		return channel;
 	}
