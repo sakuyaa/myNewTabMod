@@ -9,9 +9,12 @@ const {classes: Cc, interfaces: Ci, manager: Cm, utils: Cu/*, results: Cr*/} = C
 Cu.import('resource://gre/modules/osfile.jsm');
 Cu.import('resource://gre/modules/Services.jsm');
 Cu.import('resource://gre/modules/XPCOMUtils.jsm');
-const isOldVersion = Services.vc.compare(Services.appinfo.platformVersion, '41') < 0;
-const isNewVersion = Services.vc.compare(Services.appinfo.platformVersion, '44') >= 0;
-if (!isOldVersion && !isNewVersion) {
+
+//版本判断
+const is41Up = Services.vc.compare(Services.appinfo.platformVersion, '41') >= 0;
+const is44Up = Services.vc.compare(Services.appinfo.platformVersion, '44') >= 0;
+const is48Up = Services.vc.compare(Services.appinfo.platformVersion, '48') >= 0;
+if (is41Up && !is44Up) {
 	Cu.import('resource:///modules/NewTabURL.jsm');   //火狐41上使用新标签页API
 }
 
@@ -110,16 +113,16 @@ var myNewTabMod = {
 	setNewTab: function(reset) {
 		var url = this.prefs.prefHasUserValue('setNewTab') ? null : 'about:mynewtabmod';
 		if (url && !reset) {
-			if (isNewVersion) {
+			if (is44Up) {
 				Cc['@mozilla.org/browser/aboutnewtab-service;1'].getService(Ci.nsIAboutNewTabService).newTabURL = url;
 			} else {
-				isOldVersion ? Services.prefs.setCharPref('browser.newtab.url', url) : NewTabURL.override(url);
+				is41Up ? NewTabURL.override(url) : Services.prefs.setCharPref('browser.newtab.url', url);
 			}
 		} else if (url && reset || !url && reset == undefined) {
-			if (isNewVersion) {
+			if (is44Up) {
 				Cc['@mozilla.org/browser/aboutnewtab-service;1'].getService(Ci.nsIAboutNewTabService).resetNewTabURL();
 			} else {
-				isOldVersion ? Services.prefs.clearUserPref('browser.newtab.url') : NewTabURL.reset();
+				is41Up ? NewTabURL.reset() : Services.prefs.clearUserPref('browser.newtab.url');
 			}
 		}
 	},
@@ -158,7 +161,7 @@ AboutModule.prototype = Object.freeze({
 	},
 	newChannel: function(aURI) {
 		var channel;
-		if (Services.vc.compare(Services.appinfo.platformVersion, '48') >= 0) {
+		if (is48Up) {
 			channel = Services.io.newChannel2(this.page, null, null, null,
 				Services.scriptSecurityManager.getSystemPrincipal(), null,
 				Ci.nsILoadInfo.SEC_NORMAL, Ci.nsIContentPolicy.TYPE_OTHER);
