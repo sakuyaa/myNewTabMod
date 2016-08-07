@@ -9,7 +9,7 @@
 * **Preferences**
 	* [Preferences](https://developer.mozilla.org/en-US/Add-ons/Code_snippets/Preferences)
 	* [内嵌选项](https://developer.mozilla.org/docs/Mozilla/Add-ons/Inline_Options)
-	* [setting.xml](https://mxr.mozilla.org/mozilla-central/source/toolkit/mozapps/extensions/content/setting.xml)
+	* [setting.xml](https://dxr.mozilla.org/mozilla-central/source/toolkit/mozapps/extensions/content/setting.xml)
 * **L10n**
 	* [本地化](https://developer.mozilla.org/docs/Mozilla/Tech/XUL/Tutorial/Localization)
 	* [Localizing an extension](https://developer.mozilla.org/docs/Mozilla/Localization/Localizing_an_extension)
@@ -21,7 +21,7 @@
 	* [File I/O](https://developer.mozilla.org/en-US/Add-ons/Code_snippets/File_I_O)
 	* [Custom about: URLs](https://developer.mozilla.org/docs/Custom_about:_URLs)
 	* [e10s chrome脚本](https://developer.mozilla.org/en-US/Firefox/Multiprocess_Firefox/Limitations_of_chrome_scripts#nsIAboutModule)
-	* [browser.js](http://mxr.mozilla.org/mozilla-central/source/browser/base/content/browser.js)
+	* [browser.js](https://dxr.mozilla.org/mozilla-central/source/browser/base/content/browser.js)
 
 ## [JavaScript code modules](https://developer.mozilla.org/docs/Mozilla/JavaScript_code_modules/Using)
 1. **[Downloads.jsm](https://developer.mozilla.org/docs/Mozilla/JavaScript_code_modules/Downloads.jsm)**
