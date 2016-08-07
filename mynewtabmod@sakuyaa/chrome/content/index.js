@@ -10,6 +10,7 @@ const {PlacesUtils} = Cu.import('resource://gre/modules/PlacesUtils.jsm');
 Cu.import('resource://gre/modules/Downloads.jsm');
 Cu.import('resource://gre/modules/osfile.jsm');
 Cu.import('resource://gre/modules/Services.jsm');
+const is47Up = Services.vc.compare(Services.appinfo.platformVersion, '47') >= 0;
 
 var myNewTabMod = {
 	bingIndex: 0,   //Bing图片历史天数
@@ -48,13 +49,23 @@ var myNewTabMod = {
 			if (Notification.permission === 'granted') {
 				resolve();
 			}
-			Notification.requestPermission(permission => {
-				if (permission === 'granted') {
-					resolve();
-				} else {
-					reject();
-				}
-			});
+			if (is47Up) {
+				Notification.requestPermission().then(permission => {   //Requires Gecko 47.0
+					if (permission === 'granted') {
+						resolve();
+					} else {
+						reject();
+					}
+				});
+			} else {
+				Notification.requestPermission(permission => {   //Deprecated since Gecko 46
+					if (permission === 'granted') {
+						resolve();
+					} else {
+						reject();
+					}
+				});
+			}
 		}).then(() => {
 			new Notification(title, {body: content, icon: 'chrome://mynewtabmod/skin/sakuyaa.png'});
 		});
