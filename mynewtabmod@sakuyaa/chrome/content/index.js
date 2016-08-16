@@ -243,17 +243,24 @@ var myNewTabMod = {
 						table.appendChild(this.buildTr(type, siteData[type]));
 					}
 				}
-				setTimeout(function() {
+				setTimeout(() => {
 					//当主div不占满网页时使其居中偏上
 					var clientHeight = document.documentElement.clientHeight;
 					var offsetHeight = document.getElementById('main').offsetHeight;
 					if (offsetHeight < clientHeight) {
 						document.getElementById('main').style.marginTop = (clientHeight - offsetHeight) / 4 + 'px';
 					}
+					addEventListener('resize', () => {   //窗口大小改变时相应调整
+						var clientHeight = document.documentElement.clientHeight;
+						var offsetHeight = document.getElementById('main').offsetHeight;
+						if (offsetHeight < clientHeight) {
+							document.getElementById('main').style.marginTop = (clientHeight - offsetHeight) / 4 + 'px';
+						}
+					}, false);
 				}, 100);   //延时以避免主界面offsetHeight高度获取的值偏小
 				
 				//神秘的代码
-				document.onkeydown = function(e) {
+				document.onkeydown = e => {
 					//Firefox only, not IE
 					//var e=e || event;
 					//var currKey = e.keyCode || e.which || e.charCode;
@@ -265,7 +272,7 @@ var myNewTabMod = {
 						}
 					}
 				};
-				document.onkeyup = function(e) {
+				document.onkeyup = e => {
 					for (var yooo of document.getElementsByName('Yooo')) {
 						yooo.setAttribute('hidden', 'hidden');
 					}
@@ -331,13 +338,13 @@ var myNewTabMod = {
 		
 		var weather = document.getElementById('weather');
 		new Promise((resolve, reject) => {
-			weather.onload = function() {
+			weather.onload = () => {
 				resolve();
 			};
 			setTimeout(() => {
 				weather.src = this.PREFS.weatherSrc;
 			}, 100);
-		}).then(function() {   //为天气iframe设置css
+		}).then(() => {   //为天气iframe设置css
 			var domWindowUtils = weather.contentWindow.QueryInterface(Ci.nsIInterfaceRequestor).getInterface(Ci.nsIDOMWindowUtils);
 			domWindowUtils.loadSheet(Services.io.newURI('chrome://mynewtabmod/skin/weather.css', null, null), domWindowUtils.USER_SHEET);
 		});
@@ -365,7 +372,7 @@ var myNewTabMod = {
 			//var url = 'http://www.bing.com/HPImageArchive.aspx?format=js&idx=' + idx + '&n=1&nc=' + Date.now() + '&pid=hp&scope=web';
 			var xhr = new XMLHttpRequest();
 			xhr.open('GET', url, true);
-			xhr.onload = function() {
+			xhr.onload = () => {
 				if (xhr.status == 200) {
 					resolve(JSON.parse(xhr.responseText));
 				} else {
