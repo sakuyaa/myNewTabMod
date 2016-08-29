@@ -325,6 +325,10 @@ var myNewTabMod = {
 				chromeWin.OpenBrowserWindow();
 			} else if (this.prefs.getBoolPref('setNewTab') && this.prefs.getBoolPref('reuseNewTab')) {   //重新判断参数
 				chromeWin.switchToTabHavingURI('about:mynewtabmod', true);
+				chromeWin.gBrowser.selectedTab.style.fontSize = '150%';
+				setTimeout(() => {
+					chromeWin.gBrowser.selectedTab.style.fontSize = '100%';
+				}, 100);
 			} else {
 				chromeWin.BrowserOpenTab();
 			}
