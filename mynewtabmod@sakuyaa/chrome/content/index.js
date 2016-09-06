@@ -116,8 +116,7 @@ var myNewTabMod = {
 					var file = Cc['@mozilla.org/file/local;1'].createInstance(Ci.nsILocalFile);
 					file.initWithPath(editor);
 					resolve(file);
-				} else {
-					alert(this.stringBundle.GetStringFromName('alert.setEditor'));
+				} else if (confirm(this.stringBundle.GetStringFromName('confirm.editor')) == false) {
 					var fp = Cc['@mozilla.org/filepicker;1'].createInstance(Ci.nsIFilePicker);
 					fp.init(window, this.stringBundle.GetStringFromName('title.setEditor'), fp.modeOpen);
 					fp.appendFilters(fp.filterApps);
@@ -127,18 +126,35 @@ var myNewTabMod = {
 								Services.prefs.setComplexValue('view_source.editor.path', Ci.nsIFile, fp.file);
 								resolve(fp.file);
 							} else {
-								reject('returnCancel');
+								reject();   //使用代码草稿纸
 							}
 						}
 					};
 					fp.open(fpCallback);   //Requires Gecko 17.0
+				} else {
+					reject();   //使用代码草稿纸
 				}
 			});
 		}).then(file => {
 			var process = Cc['@mozilla.org/process/util;1'].createInstance(Ci.nsIProcess);
 			process.init(file);
 			process.runw(false, [this.dataFile], 1);
-		}, this.log);
+		}, () => {
+			var spWin = Services.wm.getMostRecentWindow('navigator:browser').Scratchpad.openScratchpad();
+			spWin.addEventListener('load', function spOnLoad() {
+				spWin.removeEventListener('load', spOnLoad, false);
+				var sp = spWin.Scratchpad;
+				sp.addObserver({
+					onReady: function() {
+						sp.removeObserver(this);
+						sp.importFromFile.call(sp, OS.Path.toFileURI(myNewTabMod.dataFile));
+						setTimeout(() => {   //延时出现文件路径
+							sp.setFilename(myNewTabMod.dataFile);
+						}, 100);
+					}
+				});
+			}, false);
+		});
 	},
 	
 	//获取参数
