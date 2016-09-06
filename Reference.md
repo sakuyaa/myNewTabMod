@@ -49,6 +49,8 @@
 		* [nsIStringBundleService](https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIStringBundleService)
 	* vc
 		* [nsIVersionComparator](https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIVersionComparator)
+	* wm
+		* [nsIWindowMediator](https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIWindowMediator)
 * **[XPCOMUtils.jsm](https://developer.mozilla.org/docs/Mozilla/JavaScript_code_modules/XPCOMUtils.jsm)**
 
 ## [XPCOM Interface](https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface)
@@ -60,7 +62,6 @@
 * [nsIObserver](https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIObserver)
 * [nsIProcess](https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIProcess)
 * [nsIStringBundle](https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIStringBundle)
-* [nsIWindowMediator](https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIWindowMediator)
 
 ## [XUL](https://developer.mozilla.org/docs/Mozilla/Tech/XUL)
 * [browser](https://developer.mozilla.org/docs/Mozilla/Tech/XUL/browser)
