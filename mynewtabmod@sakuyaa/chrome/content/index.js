@@ -319,7 +319,7 @@ var myNewTabMod = {
 	init: function() {
 		this.getPrefs();
 		
-		var chromeWin = Cc['@mozilla.org/appshell/window-mediator;1'].getService(Ci.nsIWindowMediator).getMostRecentWindow('navigator:browser');
+		var chromeWin = Services.wm.getMostRecentWindow('navigator:browser');
 		chromeWin.BrowserOpenNewTabOrWindow = event => {   //http://bbs.kafan.cn/thread-2040917-1-1.html
 			if (event.shiftKey) {
 				chromeWin.OpenBrowserWindow();
@@ -596,6 +596,6 @@ var myNewTabMod = {
 };
 
 addEventListener('load', function onLoad() {
-	removeEventListener('load', onLoad, true);
+	removeEventListener('load', onLoad, false);
 	myNewTabMod.init();
 }, false);
