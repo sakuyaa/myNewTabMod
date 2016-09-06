@@ -266,14 +266,16 @@ var myNewTabMod = {
 					if (offsetHeight < clientHeight) {
 						document.getElementById('main').style.marginTop = (clientHeight - offsetHeight) / 4 + 'px';
 					}
-					addEventListener('resize', () => {   //窗口大小改变时相应调整
-						var clientHeight = document.documentElement.clientHeight;
-						var offsetHeight = document.getElementById('main').offsetHeight;
-						if (offsetHeight < clientHeight) {
-							document.getElementById('main').style.marginTop = (clientHeight - offsetHeight) / 4 + 'px';
-						}
-					}, false);
 				}, 100);   //延时以避免主界面offsetHeight高度获取的值偏小
+				document.getElementById('navs').style.marginLeft = (document.documentElement.clientWidth - document.getElementById('navs').offsetWidth) / 2 + 'px';
+				addEventListener('resize', () => {   //窗口大小改变时相应调整
+					var clientHeight = document.documentElement.clientHeight;
+					var offsetHeight = document.getElementById('main').offsetHeight;
+					if (offsetHeight < clientHeight) {
+						document.getElementById('main').style.marginTop = (clientHeight - offsetHeight) / 4 + 'px';
+					}
+					document.getElementById('navs').style.marginLeft = (document.documentElement.clientWidth - document.getElementById('navs').offsetWidth) / 2 + 'px';
+				}, false);
 				
 				//神秘的代码
 				document.onkeydown = e => {
