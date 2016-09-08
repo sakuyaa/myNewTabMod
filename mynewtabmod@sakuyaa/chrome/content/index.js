@@ -231,19 +231,16 @@ var myNewTabMod = {
 		span.textContent = ' ' + lunar.holiday;
 		node.appendChild(span);
 	},
-	//初始化网页
+	//本地化网页
 	initDocument: function() {
 		document.title = this.PREFS.title;
-		
-		//本地化
-		var indexBundle = Services.strings.createBundle('chrome://mynewtabmod/locale/index.properties');
-		$id('my_nav').textContent = indexBundle.GetStringFromName('nav');
-		$id('nav_edit').setAttribute('title', indexBundle.GetStringFromName('edit.title'));
-		$id('nav_edit2').textContent = indexBundle.GetStringFromName('edit');
-		$id('nav_openfolder').setAttribute('title', indexBundle.GetStringFromName('open.title'));
-		$id('nav_openfolder2').textContent = indexBundle.GetStringFromName('open');
-		$id('nav_random').setAttribute('title', indexBundle.GetStringFromName('change.title'));
-		$id('nav_random2').textContent = indexBundle.GetStringFromName('change');
+		$id('my_nav').textContent = $s('nav');
+		$id('nav_edit').setAttribute('title', $s('edit.title'));
+		$id('nav_edit2').textContent = $s('edit');
+		$id('nav_openfolder').setAttribute('title', $s('open.title'));
+		$id('nav_openfolder2').textContent = $s('open');
+		$id('nav_random').setAttribute('title', $s('change.title'));
+		$id('nav_random2').textContent = $s('change');
 	},
 	//初始化导航网址
 	initSite: function() {
