@@ -11,12 +11,18 @@ Cu.import('resource://gre/modules/Downloads.jsm');
 Cu.import('resource://gre/modules/osfile.jsm');
 Cu.import('resource://gre/modules/Services.jsm');
 const is47Up = Services.vc.compare(Services.appinfo.platformVersion, '47') >= 0;
+const stringBundle = Services.strings.createBundle('chrome://mynewtabmod/locale/global.properties');   //本地化
+
+//简化函数
+const $s = stringBundle.GetStringFromName;
+const $id = id => {
+	return document.getElementById(id);
+};
 
 var myNewTabMod = {
 	bingIndex: 0,   //Bing图片历史天数
 	dataFolder: null,   //扩展数据文件夹
 	dataFile: null,   //导航网址数据文件
-	stringBundle: Services.strings.createBundle('chrome://mynewtabmod/locale/global.properties'),   //本地化
 	prefs: Services.prefs.getBranch('extensions.myNewTabMod.'),
 	PREFS: {
 		jsonData: '',
@@ -83,7 +89,7 @@ var myNewTabMod = {
 			return;
 		}
 		var fp = Cc['@mozilla.org/filepicker;1'].createInstance(Ci.nsIFilePicker);
-		fp.init(window, this.stringBundle.GetStringFromName('title.setImage'), fp.modeOpen);
+		fp.init(window, $s('title.setImage'), fp.modeOpen);
 		fp.appendFilters(fp.filterImages);
 		var fpCallback = {
 			done: aResult => {
@@ -103,7 +109,7 @@ var myNewTabMod = {
 			folder.initWithPath(this.dataFolder);
 			folder.reveal();
 		} catch(e) {
-			this.notify(this.stringBundle.GetStringFromName('notify.pathError'), this.dataFolder);
+			this.notify($s('notify.pathError'), this.dataFolder);
 			this.log(e);
 		}
 	},
@@ -116,9 +122,9 @@ var myNewTabMod = {
 					var file = Cc['@mozilla.org/file/local;1'].createInstance(Ci.nsILocalFile);
 					file.initWithPath(editor);
 					resolve(file);
-				} else if (confirm(this.stringBundle.GetStringFromName('confirm.editor')) == false) {
+				} else if (confirm($s('confirm.editor')) == false) {
 					var fp = Cc['@mozilla.org/filepicker;1'].createInstance(Ci.nsIFilePicker);
-					fp.init(window, this.stringBundle.GetStringFromName('title.setEditor'), fp.modeOpen);
+					fp.init(window, $s('title.setEditor'), fp.modeOpen);
 					fp.appendFilters(fp.filterApps);
 					var fpCallback = {
 						done: aResult => {
@@ -159,7 +165,7 @@ var myNewTabMod = {
 	
 	//获取参数
 	getPrefs: function() {
-		this.PREFS.title = this.stringBundle.GetStringFromName('prefs.title');
+		this.PREFS.title = $s('prefs.title');
 		for (var key in this.PREFS) {
 			if (!this.prefs.prefHasUserValue(key)) {   //使用默认参数
 				continue;
@@ -198,7 +204,7 @@ var myNewTabMod = {
 	//初始化日期
 	initDate: function() {
 		var solar = Solar.getSolar(new Date());
-		var node = document.getElementById('solar');
+		var node = $id('solar');
 		var span = document.createElement('span');
 		span.textContent = solar.date;
 		node.appendChild(span);
@@ -212,7 +218,7 @@ var myNewTabMod = {
 		node.appendChild(span);
 		
 		var lunar = Lunar.getLunar(new Date());
-		node = document.getElementById('lunar');
+		node = $id('lunar');
 		span = document.createElement('span');
 		span.textContent = lunar.date;
 		node.appendChild(span);
@@ -231,17 +237,17 @@ var myNewTabMod = {
 		
 		//本地化
 		var indexBundle = Services.strings.createBundle('chrome://mynewtabmod/locale/index.properties');
-		document.getElementById('my_nav').textContent = indexBundle.GetStringFromName('nav');
-		document.getElementById('nav_edit').setAttribute('title', indexBundle.GetStringFromName('edit.title'));
-		document.getElementById('nav_edit2').textContent = indexBundle.GetStringFromName('edit');
-		document.getElementById('nav_openfolder').setAttribute('title', indexBundle.GetStringFromName('open.title'));
-		document.getElementById('nav_openfolder2').textContent = indexBundle.GetStringFromName('open');
-		document.getElementById('nav_random').setAttribute('title', indexBundle.GetStringFromName('change.title'));
-		document.getElementById('nav_random2').textContent = indexBundle.GetStringFromName('change');
+		$id('my_nav').textContent = indexBundle.GetStringFromName('nav');
+		$id('nav_edit').setAttribute('title', indexBundle.GetStringFromName('edit.title'));
+		$id('nav_edit2').textContent = indexBundle.GetStringFromName('edit');
+		$id('nav_openfolder').setAttribute('title', indexBundle.GetStringFromName('open.title'));
+		$id('nav_openfolder2').textContent = indexBundle.GetStringFromName('open');
+		$id('nav_random').setAttribute('title', indexBundle.GetStringFromName('change.title'));
+		$id('nav_random2').textContent = indexBundle.GetStringFromName('change');
 	},
 	//初始化导航网址
 	initSite: function() {
-		var table = document.getElementById('navtable');
+		var table = $id('navtable');
 		if (table.children.lenth > 0) {
 			return;
 		}
@@ -262,19 +268,19 @@ var myNewTabMod = {
 				setTimeout(() => {
 					//当主div不占满网页时使其居中偏上
 					var clientHeight = document.documentElement.clientHeight;
-					var offsetHeight = document.getElementById('main').offsetHeight;
+					var offsetHeight = $id('main').offsetHeight;
 					if (offsetHeight < clientHeight) {
-						document.getElementById('main').style.marginTop = (clientHeight - offsetHeight) / 4 + 'px';
+						$id('main').style.marginTop = (clientHeight - offsetHeight) / 4 + 'px';
 					}
 				}, 100);   //延时以避免主界面offsetHeight高度获取的值偏小
-				document.getElementById('navs').style.marginLeft = (document.documentElement.clientWidth - document.getElementById('navs').offsetWidth) / 2 + 'px';
+				$id('navs').style.marginLeft = (document.documentElement.clientWidth - $id('navs').offsetWidth) / 2 + 'px';
 				addEventListener('resize', () => {   //窗口大小改变时相应调整
 					var clientHeight = document.documentElement.clientHeight;
-					var offsetHeight = document.getElementById('main').offsetHeight;
+					var offsetHeight = $id('main').offsetHeight;
 					if (offsetHeight < clientHeight) {
-						document.getElementById('main').style.marginTop = (clientHeight - offsetHeight) / 4 + 'px';
+						$id('main').style.marginTop = (clientHeight - offsetHeight) / 4 + 'px';
 					}
-					document.getElementById('navs').style.marginLeft = (document.documentElement.clientWidth - document.getElementById('navs').offsetWidth) / 2 + 'px';
+					$id('navs').style.marginLeft = (document.documentElement.clientWidth - $id('navs').offsetWidth) / 2 + 'px';
 				}, false);
 				
 				//神秘的代码
@@ -298,9 +304,9 @@ var myNewTabMod = {
 			},
 			aRejectReason => {
 				if (aRejectReason instanceof OS.File.Error && aRejectReason.becauseNoSuchFile) {
-					this.notify(this.stringBundle.GetStringFromName('notify.fileNotExist') + this.dataFile, aRejectReason);
+					this.notify($s('notify.fileNotExist') + this.dataFile, aRejectReason);
 				} else {
-					this.notify(this.stringBundle.GetStringFromName('notify.cannotRead') + this.dataFile, aRejectReason);
+					this.notify($s('notify.cannotRead') + this.dataFile, aRejectReason);
 				}
 			}
 		);
@@ -327,7 +333,7 @@ var myNewTabMod = {
 				if (aExists) {
 					document.body.style.backgroundImage = 'url("' + OS.Path.toFileURI(this.PREFS.backgroundImage) + '")';
 				} else {
-					alert(this.stringBundle.GetStringFromName('alert.setImage'));
+					alert($s('alert.setImage'));
 					this.changeImg();
 				}
 			}).catch(this.log);
@@ -358,7 +364,7 @@ var myNewTabMod = {
 		this.initSite();
 		this.initImage();
 		
-		var weather = document.getElementById('weather');
+		var weather = $id('weather');
 		new Promise((resolve, reject) => {
 			weather.onload = () => {
 				resolve();
@@ -402,7 +408,7 @@ var myNewTabMod = {
 				}
 			};
 			xhr.onerror = () => {
-				reject(new Error(this.stringBundle.GetStringFromName('notify.networkError')));
+				reject(new Error($s('notify.networkError')));
 			};
 			xhr.send(null);
 		}).then(data => {
@@ -429,7 +435,7 @@ var myNewTabMod = {
 			try {
 				file.initWithPath(filePath);
 			} catch(e) {
-				this.notify(this.stringBundle.GetStringFromName('notify.pathError'), filePath);
+				this.notify($s('notify.pathError'), filePath);
 				this.log(e);
 				return;
 			}
@@ -446,7 +452,7 @@ var myNewTabMod = {
 				Downloads.fetch(Services.io.newURI(imageUrl, null, null), file).then(() => {   //Requires Gecko 26.0
 					this.setAndSave(filePath);
 				}, aDownloadError => {
-					this.notify(this.stringBundle.GetStringFromName('notify.downloadError') + imageUrl, aDownloadError);
+					this.notify($s('notify.downloadError') + imageUrl, aDownloadError);
 				});
 			};
 		}, aReject => {
@@ -567,12 +573,12 @@ var myNewTabMod = {
 		try {
 			file.initWithPath(path);
 		} catch(e) {
-			this.notify(this.stringBundle.GetStringFromName('notify.pathError'), path);
+			this.notify($s('notify.pathError'), path);
 			this.log(e);
 			return;
 		}
 		if (!file.exists()) {
-			this.notify(this.stringBundle.GetStringFromName('notify.fileNotExist'), path);
+			this.notify($s('notify.fileNotExist'), path);
 			return;
 		}
 		file.launch();
