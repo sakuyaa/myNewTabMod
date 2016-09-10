@@ -341,23 +341,6 @@ var myNewTabMod = {
 	
 	init: function() {
 		this.getPrefs();
-		
-		var chromeWin = Services.wm.getMostRecentWindow('navigator:browser');
-		chromeWin.BrowserOpenNewTabOrWindow = event => {   //http://bbs.kafan.cn/thread-2040917-1-1.html
-			if (event.shiftKey) {
-				chromeWin.OpenBrowserWindow();
-			} else if (this.prefs.getBoolPref('setNewTab') && this.prefs.getBoolPref('reuseNewTab')) {   //重新判断参数
-				chromeWin.switchToTabHavingURI('about:mynewtabmod', true);
-				var tab = chromeWin.gBrowser.selectedTab;
-				tab.style.fontSize = '150%';
-				setTimeout(() => {
-					tab.style.fontSize = '100%';
-				}, 100);
-			} else {
-				chromeWin.BrowserOpenTab();
-			}
-		}
-		
 		this.initFile();
 		this.initDate();
 		this.initDocument();
@@ -621,5 +604,29 @@ var myNewTabMod = {
 
 addEventListener('load', function onLoad() {
 	removeEventListener('load', onLoad, false);
+	var chromeWin = Services.wm.getMostRecentWindow('navigator:browser');
+	chromeWin.BrowserOpenNewTabOrWindow = event => {   //http://bbs.kafan.cn/thread-2040917-1-1.html
+		if (event.shiftKey) {
+			chromeWin.OpenBrowserWindow();
+		} else if (myNewTabMod.prefs.getBoolPref('setNewTab') && myNewTabMod.prefs.getBoolPref('reuseNewTab')) {   //重新判断参数
+			chromeWin.switchToTabHavingURI('about:mynewtabmod', true);
+			var tab = chromeWin.gBrowser.selectedTab;
+			tab.style.fontSize = '150%';
+			setTimeout(() => {
+				tab.style.fontSize = '100%';
+			}, 100);
+		} else {
+			chromeWin.BrowserOpenTab();
+		}
+	};
+	addEventListener('unload', e => {   //避免扩展禁用或卸载后重启前仍重用标签页
+		chromeWin.BrowserOpenNewTabOrWindow = event => {
+			if (event.shiftKey) {
+				chromeWin.OpenBrowserWindow();
+			} else {
+				chromeWin.BrowserOpenTab();
+			}
+		};
+	}, false);
 	myNewTabMod.init();
 }, false);
