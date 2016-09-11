@@ -55,6 +55,7 @@
 
 ## [XPCOM Interface](https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface)
 * [nsIAboutModule](https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIAboutModule)
+* [nsIAlertsService](https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIAlertsService)
 * [nsIDOMWindowUtils](https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDOMWindowUtils)
 * [nsIFile](https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIFile)
 * [nsIFilePicker](https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIFilePicker)
