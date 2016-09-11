@@ -202,8 +202,12 @@ var startup = function(data, reason) {
 	myNewTabMod.register();
 	myNewTabMod.setNewTab(false);
 	switch (reason) {
-	case ADDON_INSTALL:
 	case ADDON_UPGRADE:
+		if (Services.vc.compare(data.oldVersion, '1.8') < 0) {   //style.css文件需更新时提示
+			Cc['@mozilla.org/alerts-service;1'].getService(Components.interfaces.nsIAlertsService).showAlertNotification('chrome://mynewtabmod/skin/sakuyaa.png', 'myNewTabMod', myNewTabMod.stringBundle.GetStringFromName('notify.upgrade'));
+		}
+		//故意不break
+	case ADDON_INSTALL:
 	case ADDON_DOWNGRADE:
 		//以下代码不写在install里，是因为install调用在Registering manifest之前，无法使用stringBundle
 		var path;
