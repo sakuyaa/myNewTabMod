@@ -204,7 +204,7 @@ var startup = function(data, reason) {
 	switch (reason) {
 	case ADDON_UPGRADE:
 		if (Services.vc.compare(data.oldVersion, '1.8') < 0) {   //style.css文件需更新时提示
-			Cc['@mozilla.org/alerts-service;1'].getService(Components.interfaces.nsIAlertsService).showAlertNotification('chrome://mynewtabmod/skin/sakuyaa.png', 'myNewTabMod', myNewTabMod.stringBundle.GetStringFromName('notify.upgrade'));
+			Cc['@mozilla.org/alerts-service;1'].getService(Ci.nsIAlertsService).showAlertNotification('chrome://mynewtabmod/skin/sakuyaa.png', 'myNewTabMod', myNewTabMod.stringBundle.GetStringFromName('notify.upgrade'));
 		}
 		//故意不break
 	case ADDON_INSTALL:
