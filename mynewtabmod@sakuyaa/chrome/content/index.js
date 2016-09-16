@@ -186,7 +186,10 @@ var myNewTabMod = {
 			this.PREFS.jsonData = JSON.parse(this.PREFS.jsonData);
 		} catch(e) {
 			this.log(e);
-			this.PREFS.jsonData = {};
+			this.PREFS.jsonData = {
+				lastCheckTime: 0,
+				backgroundImage: ''
+			};
 		}
 	},
 	//初始化数据文件
@@ -318,7 +321,7 @@ var myNewTabMod = {
 					document.body.style.backgroundImage = 'url("' + OS.Path.toFileURI(this.PREFS.jsonData.backgroundImage) + '")';
 					var today = new Date();
 					today.setHours(0, 0, 0);   //毫秒就不管了
-					if (this.PREFS.jsonData.lastCheckTime && new Date(this.PREFS.jsonData.lastCheckTime) < today) {
+					if (new Date(this.PREFS.jsonData.lastCheckTime) < today) {
 						this.getBingImage();   //过0点重新获取
 					} else {
 						this.bingIndex++;
