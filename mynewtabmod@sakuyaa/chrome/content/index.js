@@ -201,8 +201,12 @@ var myNewTabMod = {
 		var style = document.createElement('link');
 		style.rel = 'stylesheet';
 		style.type = 'text/css';
-		style.href = OS.Path.toFileURI(OS.Path.join(this.dataFolder, 'style.css'));
-		document.getElementsByTagName('head')[0].appendChild(style);
+		var file = OS.Path.join(this.dataFolder, 'style.css');
+		OS.File.exists(file).then(aExists => {
+			//当扩展数据文件夹存在style.css文件时加载，否则使用默认css文件
+			style.href = aExists ? OS.Path.toFileURI(file) : 'chrome://mynewtabmod/skin/style.css';
+			document.getElementsByTagName('head')[0].appendChild(style);
+		}).catch(this.log);
 	},
 	//初始化日期
 	initDate: function() {
