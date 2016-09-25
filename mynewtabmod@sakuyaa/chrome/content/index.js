@@ -276,8 +276,8 @@ var myNewTabMod = {
 					if (offsetHeight < clientHeight) {
 						$id('main').style.marginTop = (clientHeight - offsetHeight) / 4 + 'px';
 					}
+					$id('navs').style.marginLeft = (document.documentElement.clientWidth - $id('navs').offsetWidth) / 2 + 'px';
 				}, 100);   //延时以避免主界面offsetHeight高度获取的值偏小
-				$id('navs').style.marginLeft = (document.documentElement.clientWidth - $id('navs').offsetWidth) / 2 + 'px';
 				addEventListener('resize', () => {   //窗口大小改变时相应调整
 					var clientHeight = document.documentElement.clientHeight;
 					var offsetHeight = $id('main').offsetHeight;
