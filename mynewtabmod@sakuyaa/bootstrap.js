@@ -232,7 +232,7 @@ var startup = function(data, reason) {
 		}
 		myNewTabMod.copyFile('ico', path, false);
 		myNewTabMod.copyFile('data.txt', path, 'data.txt');
-		myNewTabMod.copyFile('style.css', path, 'style.css');
+		//myNewTabMod.copyFile('style.css', path, 'style.css');
 		
 		//判断完path的路径后再检查style.css文件是否存在，若存在且需更新时提示
 		if (reason == ADDON_UPGRADE) {
