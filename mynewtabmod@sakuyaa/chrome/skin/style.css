@@ -13,11 +13,6 @@
 	left: 0em;
 }
 
-/*去除因主框架右移导致的滚动条*/
-html {
-	overflow-x: hidden;
-} 
-
 body {
 	font-family: "microsoft yahei", sans-serif;
 	background-attachment: fixed;
