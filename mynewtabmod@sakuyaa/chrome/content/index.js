@@ -359,8 +359,13 @@ var myNewTabMod = {
 				weather.src = this.PREFS.weatherSrc;
 			}, 100);
 		}).then(() => {   //为天气iframe设置css
-			var domWindowUtils = weather.contentWindow.QueryInterface(Ci.nsIInterfaceRequestor).getInterface(Ci.nsIDOMWindowUtils);
-			domWindowUtils.loadSheet(Services.io.newURI('chrome://mynewtabmod/skin/weather.css', null, null), domWindowUtils.USER_SHEET);
+			var file = OS.Path.join(this.dataFolder, 'weather.css');
+			OS.File.exists(file).then(aExists => {
+				//当扩展数据文件夹存在weather.css文件时加载，否则使用默认css文件
+				var spec = aExists ? OS.Path.toFileURI(file) : 'chrome://mynewtabmod/skin/weather.css';
+				var domWindowUtils = weather.contentWindow.QueryInterface(Ci.nsIInterfaceRequestor).getInterface(Ci.nsIDOMWindowUtils);
+				domWindowUtils.loadSheet(Services.io.newURI(spec, null, null), domWindowUtils.USER_SHEET);
+			}).catch(this.log);
 		});
 	},
 	
