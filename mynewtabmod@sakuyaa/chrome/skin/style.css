@@ -2,8 +2,7 @@
 * 	myNewTabMod by sakuyaa.
 *	https://github.com/sakuyaa/
 *	
-*	在扩展数据文件夹中创建style.css，
-*	将会替代该文件为主页设置css
+*	在扩展数据文件夹中创建style.css，其优先级高于此css
 *	
 **************************************************/
 /*天气*/
