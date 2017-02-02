@@ -11,6 +11,7 @@ Cu.import('resource://gre/modules/Downloads.jsm');
 Cu.import('resource://gre/modules/osfile.jsm');
 Cu.import('resource://gre/modules/Services.jsm');
 const is47Up = Services.vc.compare(Services.appinfo.platformVersion, '47') >= 0;
+const is51Up = Services.vc.compare(Services.appinfo.platformVersion, '51') >= 0;
 const stringBundle = Services.strings.createBundle('chrome://mynewtabmod/locale/global.properties');   //本地化
 
 //简化函数
@@ -615,9 +616,10 @@ var myNewTabMod = {
 addEventListener('load', function onLoad() {
 	removeEventListener('load', onLoad, false);
 	var chromeWin = Services.wm.getMostRecentWindow('navigator:browser');
-	chromeWin.BrowserOpenNewTabOrWindow = event => {   //http://bbs.kafan.cn/thread-2040917-1-1.html
+	var oldFunc = is51Up ? chromeWin.BrowserOpenTab: chromeWin.BrowserOpenNewTabOrWindow;
+	var newFunc = event => {   //http://bbs.kafan.cn/thread-2040917-1-1.html
 		if (event.shiftKey) {
-			chromeWin.OpenBrowserWindow();
+			oldFunc(event);
 		} else if (myNewTabMod.prefs.getBoolPref('setNewTab') && myNewTabMod.prefs.getBoolPref('reuseNewTab')) {   //重新判断参数
 			chromeWin.switchToTabHavingURI('about:mynewtabmod', true);
 			var tab = chromeWin.gBrowser.selectedTab;
@@ -626,17 +628,12 @@ addEventListener('load', function onLoad() {
 				tab.style.fontSize = '100%';
 			}, 100);
 		} else {
-			chromeWin.BrowserOpenTab();
+			oldFunc(event);
 		}
 	};
+	is51Up ? chromeWin.BrowserOpenTab = newFunc : chromeWin.BrowserOpenNewTabOrWindow = newFunc;
 	addEventListener('unload', e => {   //避免扩展禁用或卸载后重启前仍重用标签页
-		chromeWin.BrowserOpenNewTabOrWindow = event => {
-			if (event.shiftKey) {
-				chromeWin.OpenBrowserWindow();
-			} else {
-				chromeWin.BrowserOpenTab();
-			}
-		};
+		is51Up ? chromeWin.BrowserOpenTab = oldFunc : chromeWin.BrowserOpenNewTabOrWindow = oldFunc;
 	}, false);
 	myNewTabMod.init();
 }, false);
