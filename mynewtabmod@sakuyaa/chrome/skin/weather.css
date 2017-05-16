@@ -12,3 +12,6 @@ a {
 	text-shadow: 0 1px rgba(64, 64, 255, 0.9), 0 1px 1px rgba(64, 64, 255, 0.9), 0 -1px 1px rgba(64, 64, 255, 0.9), 
 		1px 0 1px rgba(64, 64, 255, 0.9), -1px 0 1px rgba(64, 64, 255, 0.9), 0 0 3px rgba(64, 64, 255, 0.9) !important;
 }
+a:hover {
+	text-decoration: none;
+}
