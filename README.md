@@ -1,5 +1,7 @@
 # myNewTabMod by sakuyaa
 
+该扩展的WebExtension版本[myNewTabWE](https://github.com/sakuyaa/myNewTabWE)正在开发中。由于API的限制，部分功能无法实现，新的扩展需要重新进行配置。
+
 首先感谢一下原作者`defpt`和`ywzhaiqi`:clap:，
 这个扩展是根据[myNewTab](http://bbs.kafan.cn/thread-1759418-1-1.html)这个扩展修改而成的
 
